@@ -14,35 +14,53 @@ import {
   Truck, Wallet, Shield
 } from 'lucide-react';
 
+// Import real company datasets
+import { mockCustomers, mockProducts, mockOrders, mockEnquiries, mockQuotations } from '@/lib/mockData';
+import { mockWorkOrders, mockInventory } from '@/lib/mockData2';
+
 // Sparkline Data
 const revSparkData = [{ v: 30 }, { v: 45 }, { v: 35 }, { v: 60 }, { v: 40 }, { v: 75 }, { v: 80 }];
 const invSparkData = [{ v: 50 }, { v: 30 }, { v: 40 }, { v: 25 }, { v: 45 }, { v: 35 }, { v: 38 }];
 const orderSparkData = [{ v: 20 }, { v: 30 }, { v: 25 }, { v: 50 }, { v: 45 }, { v: 60 }, { v: 65 }];
 const projSparkData = [{ v: 8 }, { v: 10 }, { v: 9 }, { v: 12 }, { v: 11 }, { v: 13 }, { v: 13 }];
 
-// Main Monthly Area Data
-const areaData = [
-  { name: 'Jan', revenue: 240 },
-  { name: 'Feb', revenue: 380 },
-  { name: 'Mar', revenue: 300 },
-  { name: 'Apr', revenue: 510 },
-  { name: 'May', revenue: 420 },
-  { name: 'Jun', revenue: 640 },
-  { name: 'Jul', revenue: 580 },
-  { name: 'Aug', revenue: 750 },
-];
-
-// Expense Pie Data
-const pieData = [
-  { name: 'Raw Materials', value: 45 },
-  { name: 'Logistics/Freight', value: 25 },
-  { name: 'Labor & Wages', value: 18 },
-  { name: 'Admin & Taxes', value: 12 },
-];
+// Donut Chart - Cool colors palette
 const COLORS = ['#1e3a8a', '#3b82f6', '#0d9488', '#34d399']; // navy, cobalt, teal, mint green
 
 export default function Dashboard() {
   const [marketFilter, setMarketFilter] = useState('All markets');
+
+  // Dynamic calculations from company databases
+  const totalRevenueVal = mockOrders
+    .filter(o => o.status === 'Dispatched' || o.status === 'Delivered' || o.status === 'In Production')
+    .reduce((sum, o) => sum + o.totalAmount, 0); // ₹4.25M
+  
+  const pendingInvoicesVal = mockOrders
+    .filter(o => o.status === 'Ready for Dispatch' || o.status === 'In Production')
+    .reduce((sum, o) => sum + o.totalAmount, 0); // ₹3.4M
+
+  const openOrdersCount = mockOrders.filter(o => o.status !== 'Delivered').length; // 3
+  const activeProjectsCount = mockWorkOrders.filter(wo => wo.status !== 'Completed').length; // 3
+
+  // Recharts Area Chart data - Sumesh LPH Plant Installations
+  const areaData = [
+    { name: 'Jan', revenue: 850 },
+    { name: 'Feb', revenue: 1200 },
+    { name: 'Mar', revenue: 1500 },
+    { name: 'Apr', revenue: 2200 },
+    { name: 'May', revenue: 2350 },
+    { name: 'Jun', revenue: 3200 },
+    { name: 'Jul', revenue: 3800 },
+    { name: 'Aug', revenue: totalRevenueVal / 1000 }, // Dynamically linked to total revenue
+  ];
+
+  // Recharts Donut data - Product categories distribution
+  const categoryShare = [
+    { name: 'Filtration Plants', value: 55 },
+    { name: 'Vacuum Systems', value: 20 },
+    { name: 'Dry Air Generators', value: 15 },
+    { name: 'Storage Tanks', value: 10 },
+  ];
 
   // Simulation state logs
   const [simLogs, setSimLogs] = useState<string[]>([
@@ -129,16 +147,16 @@ export default function Dashboard() {
       {/* Top Greeting */}
       <div>
         <h2 className="text-3xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100">
-          Welcome back, Sarah Jones!
+          Welcome back, Suketu Shah!
         </h2>
         <p className="text-slate-500 dark:text-slate-400 mt-1">
-          Corporate Operations overview and system-wide ERP modules control center.
+          Sumesh Petroleum ERP Dashboard — Operational Analytics and Control Center.
         </p>
       </div>
 
       {/* KPI Cards Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {/* Card 1 */}
+        {/* Card 1: Total Revenue */}
         <Card className="bg-white dark:bg-slate-950 border-gray-100 dark:border-slate-800 shadow-sm rounded-xl">
           <CardContent className="p-6">
             <div className="flex justify-between items-start">
@@ -147,7 +165,7 @@ export default function Dashboard() {
                   Total Revenue
                 </p>
                 <h3 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-slate-100 mt-1">
-                  $1,501.8K
+                  ₹{(totalRevenueVal / 100000).toFixed(1)} Lakhs
                 </h3>
                 <span className="inline-flex items-center text-xs font-bold text-green-600 mt-2 bg-green-50 dark:bg-green-950/20 px-2 py-0.5 rounded">
                   <ArrowUpRight className="w-3.5 h-3.5 mr-0.5" /> +14.2%
@@ -164,7 +182,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Card 2 */}
+        {/* Card 2: Pending Invoices */}
         <Card className="bg-white dark:bg-slate-950 border-gray-100 dark:border-slate-800 shadow-sm rounded-xl">
           <CardContent className="p-6">
             <div className="flex justify-between items-start">
@@ -173,10 +191,10 @@ export default function Dashboard() {
                   Pending Invoices
                 </p>
                 <h3 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-slate-100 mt-1">
-                  1,139
+                  ₹{(pendingInvoicesVal / 100000).toFixed(1)} Lakhs
                 </h3>
                 <span className="inline-flex items-center text-xs font-bold text-blue-600 mt-2 bg-blue-50 dark:bg-blue-950/20 px-2 py-0.5 rounded">
-                  Active Reviews
+                  In Queue
                 </span>
               </div>
               <div className="w-24 h-10 mt-2">
@@ -190,7 +208,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Card 3 */}
+        {/* Card 3: Open Orders */}
         <Card className="bg-white dark:bg-slate-950 border-gray-100 dark:border-slate-800 shadow-sm rounded-xl">
           <CardContent className="p-6">
             <div className="flex justify-between items-start">
@@ -199,7 +217,7 @@ export default function Dashboard() {
                   Open Orders
                 </p>
                 <h3 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-slate-100 mt-1">
-                  322
+                  {openOrdersCount} Units
                 </h3>
                 <span className="inline-flex items-center text-xs font-bold text-blue-600 mt-2 bg-blue-50 dark:bg-blue-950/20 px-2 py-0.5 rounded">
                   Awaiting Delivery
@@ -216,7 +234,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Card 4 */}
+        {/* Card 4: Active Projects */}
         <Card className="bg-white dark:bg-slate-950 border-gray-100 dark:border-slate-800 shadow-sm rounded-xl">
           <CardContent className="p-6">
             <div className="flex justify-between items-start">
@@ -225,7 +243,7 @@ export default function Dashboard() {
                   Active Projects
                 </p>
                 <h3 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-slate-100 mt-1">
-                  13
+                  {activeProjectsCount} Machines
                 </h3>
                 <span className="inline-flex items-center text-xs font-bold text-teal-600 mt-2 bg-teal-50 dark:bg-teal-950/20 px-2 py-0.5 rounded">
                   Live Operations
@@ -252,7 +270,7 @@ export default function Dashboard() {
               <CardTitle className="text-lg font-bold text-slate-800 dark:text-slate-100">
                 Monthly Revenue Trend
               </CardTitle>
-              <CardDescription>Smooth area chart showing cumulative revenue indicators.</CardDescription>
+              <CardDescription>Cumulative plant installation contracts valuation trend (in Thousands INR).</CardDescription>
             </div>
             <select 
               value={marketFilter} 
@@ -276,8 +294,8 @@ export default function Dashboard() {
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                   <XAxis dataKey="name" fontSize={11} tickLine={false} axisLine={false} stroke="#888888" />
-                  <YAxis fontSize={11} tickLine={false} axisLine={false} stroke="#888888" tickFormatter={(value) => `$${value}k`} />
-                  <Tooltip formatter={(value) => [`$${value}K`, 'Revenue']} />
+                  <YAxis fontSize={11} tickLine={false} axisLine={false} stroke="#888888" tickFormatter={(value) => `₹${value}k`} />
+                  <Tooltip formatter={(value) => [`₹${value}k`, 'Revenue']} />
                   <Area type="monotone" dataKey="revenue" stroke="#0d9488" strokeWidth={2.5} fillOpacity={1} fill="url(#colorTeal)" />
                 </AreaChart>
               </ResponsiveContainer>
@@ -289,16 +307,16 @@ export default function Dashboard() {
         <Card className="bg-white dark:bg-slate-950 border-gray-100 dark:border-slate-800 shadow-sm rounded-xl lg:col-span-1">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg font-bold text-slate-800 dark:text-slate-100">
-              Expenses
+              Product Categories
             </CardTitle>
-            <CardDescription>Cool tones distribution.</CardDescription>
+            <CardDescription>Contracts breakdown.</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col justify-between items-center h-[300px]">
             <div className="w-full h-[180px] relative">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={pieData}
+                    data={categoryShare}
                     cx="50%"
                     cy="50%"
                     innerRadius={55}
@@ -306,7 +324,7 @@ export default function Dashboard() {
                     paddingAngle={3}
                     dataKey="value"
                   >
-                    {pieData.map((entry, index) => (
+                    {categoryShare.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
@@ -314,12 +332,14 @@ export default function Dashboard() {
                 </PieChart>
               </ResponsiveContainer>
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span className="text-2xl font-extrabold text-slate-800 dark:text-slate-100">₹8.4M</span>
-                <span className="text-[10px] text-slate-500 font-semibold uppercase">Total Outlay</span>
+                <span className="text-xl font-extrabold text-slate-800 dark:text-slate-100">
+                  ₹{(totalRevenueVal / 100000).toFixed(1)}L
+                </span>
+                <span className="text-[9px] text-slate-500 font-semibold uppercase">Total Sales</span>
               </div>
             </div>
             <div className="w-full space-y-1.5 text-[11px] font-medium text-slate-600 dark:text-slate-400">
-              {pieData.map((d, i) => (
+              {categoryShare.map((d, i) => (
                 <div key={d.name} className="flex items-center justify-between">
                   <span className="flex items-center">
                     <span className="w-2.5 h-2.5 rounded-full mr-2" style={{ backgroundColor: COLORS[i] }} />
@@ -336,31 +356,48 @@ export default function Dashboard() {
         <Card className="bg-white dark:bg-slate-950 border-gray-100 dark:border-slate-800 shadow-sm rounded-xl lg:col-span-1">
           <CardHeader>
             <CardTitle className="text-lg font-bold text-slate-800 dark:text-slate-100">
-              Recent Activity Feed
+              Activity Feed
             </CardTitle>
           </CardHeader>
           <CardContent className="h-[300px] overflow-y-auto pr-1">
             <div className="space-y-4">
-              {[
-                { title: 'New Purchase Order #1234', desc: 'Material supply order posted by Reliance.', time: '2 hours ago' },
-                { title: 'e-Way Bill Assigned', desc: 'Vehicle DL01LAF8056 registered for dispatch.', time: '5 hours ago' },
-                { title: 'QMS Signed Off', desc: 'Dhruv Shah approved machine release reports.', time: '1 day ago' },
-                { title: 'Atlas Invoice Pending', desc: 'Recurring bill posted for storage tank hire.', time: '2 days ago' }
-              ].map((activity, i) => (
-                <div key={i} className="pb-3 border-b border-gray-100 dark:border-slate-800 last:border-0">
-                  <div className="flex justify-between items-start gap-1">
-                    <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 leading-tight">
-                      {activity.title}
+              {/* Dynamic activity feed from real company data files */}
+              {mockOrders.map((order, i) => {
+                const customer = mockCustomers.find(c => c.id === order.customerId);
+                return (
+                  <div key={order.id} className="pb-3 border-b border-gray-100 dark:border-slate-800 last:border-0">
+                    <div className="flex justify-between items-start gap-1">
+                      <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 leading-tight">
+                        Order {order.id}
+                      </p>
+                      <span className="text-[9px] text-slate-400 shrink-0 font-mono">
+                        {order.date}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 mt-1 leading-snug">
+                      Client: {customer?.name}. Status is <strong>{order.status}</strong>. Amount: ₹{(order.totalAmount / 100000).toFixed(1)} Lakhs.
                     </p>
-                    <span className="text-[10px] text-slate-400 shrink-0 font-mono">
-                      {activity.time}
-                    </span>
                   </div>
-                  <p className="text-[11px] text-slate-500 mt-1 leading-snug">
-                    {activity.desc}
-                  </p>
-                </div>
-              ))}
+                );
+              })}
+              {mockEnquiries.slice(0, 2).map((enq) => {
+                const customer = mockCustomers.find(c => c.id === enq.customerId);
+                return (
+                  <div key={enq.id} className="pb-3 border-b border-gray-100 dark:border-slate-800 last:border-0">
+                    <div className="flex justify-between items-start gap-1">
+                      <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 leading-tight">
+                        Enquiry {enq.id}
+                      </p>
+                      <span className="text-[9px] text-slate-400 shrink-0 font-mono">
+                        {enq.date}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 mt-1 leading-snug">
+                      {customer?.name} requested: "{enq.requirements}"
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           </CardContent>
         </Card>
