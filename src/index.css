@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    --background: 215 30% 97%;      /* Cool Nordic Ice Light Background */
+    --foreground: 222.2 47% 11.2%;  /* Dark Cobalt Deep Blue */
+
+    --card: 0 0% 100%;              /* White Card Contrast */
+    --card-foreground: 222.2 47% 11.2%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47% 11.2%;
+ 
+    --primary: 217.2 91.2% 45%;     /* Deep Cobalt Blue Primary */
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 214 25% 91%;       /* Soft Ice Grey */
+    --secondary-foreground: 222.2 47% 11.2%;
+ 
+    --muted: 214 25% 91%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --accent: 199 89% 45%;          /* Ice Cyan Accent */
+    --accent-foreground: 210 40% 98%;
+ 
+    --destructive: 354 84% 52%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 88%;      /* Ice Border */
+    --input: 214.3 31.8% 88%;
+    --ring: 217.2 91.2% 45%;
+ 
+    --radius: 0.75rem;              /* Softer modern corners */
+  }
+ 
+  .dark {
+    --background: 222 47% 7.5%;     /* Deep Glacier Navy */
+    --foreground: 210 40% 98%;      /* Ice White Text */
+ 
+    --card: 222 47% 10.5%;          /* Dark Glacier Card */
+    --card-foreground: 210 40% 98%;
+ 
+    --popover: 222 47% 10.5%;
+    --popover-foreground: 210 40% 98%;
+ 
+    --primary: 217.2 91.2% 60%;     /* Luminous Cobalt Blue */
+    --primary-foreground: 222 47% 7.5%;
+ 
+    --secondary: 222 30% 14%;       /* Muted Navy */
+    --secondary-foreground: 210 40% 98%;
+ 
+    --muted: 222 30% 14%;
+    --muted-foreground: 215 20.2% 65%;
+ 
+    --accent: 199 89% 55%;          /* Luminous Ice Cyan */
+    --accent-foreground: 222 47% 7.5%;
+ 
+    --destructive: 354 70% 45%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --border: 222 25% 17%;          /* Glacier Dark Border */
+    --input: 222 25% 17%;
+    --ring: 217.2 91.2% 60%;
+  }
+}
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
