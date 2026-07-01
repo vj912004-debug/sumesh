@@ -7,14 +7,17 @@ import { Input } from '@/components/ui/input';
 import { 
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter 
 } from '@/components/ui/dialog';
-import { mockOrders, mockCustomers, mockQuotations, mockProducts } from '@/lib/mockData';
-import { ArrowLeft, Truck, Wrench, Mail } from 'lucide-react';
+import { mockOrders, mockCustomers, mockQuotations, mockProducts, mockPackingLists, getMockOrders, saveMockOrders, triggerDispatchAlerts } from '@/lib/mockData';
+import type { Order } from '@/lib/mockData';
+import { ArrowLeft, Truck, Wrench, Mail, Package } from 'lucide-react';
 
 export default function OrderDetail() {
   const { id } = useParams();
-  const order = mockOrders.find(o => o.id === id);
+  const [orders, setOrders] = useState<Order[]>(() => getMockOrders());
+  const order = orders.find(o => o.id === id);
   const quotation = mockQuotations.find(q => q.id === order?.quotationId);
   const customer = mockCustomers.find(c => c.id === order?.customerId);
+  const packingList = mockPackingLists.find(pl => pl.orderId === order?.id);
 
   // Email States
   const [isEmailOpen, setIsEmailOpen] = useState(false);
@@ -33,6 +36,15 @@ export default function OrderDetail() {
       `Sumesh Petroleum ERP Admin`;
   });
   const [isSending, setIsSending] = useState(false);
+
+  const handleGenerateDispatch = () => {
+    if (!order) return;
+    const updated = orders.map(o => o.id === order.id ? { ...o, status: 'Ready for Dispatch' as const } : o);
+    setOrders(updated);
+    saveMockOrders(updated);
+    triggerDispatchAlerts(order.id);
+    alert(`Automated alerts triggered!\n- SMS/WhatsApp notification dispatched to Admin & Transport Manager.\n- Transactional SMTP Email released regarding Order ${order.id} dispatch readiness.`);
+  };
 
   if (!order || !customer) {
     return <div>Order not found</div>;
@@ -86,10 +98,25 @@ export default function OrderDetail() {
           <p className="text-muted-foreground">Placed on {order.date} from {quotation?.id}</p>
         </div>
         <div className="flex gap-2">
+          {packingList ? (
+            <Link to={`/dispatch/packing-list/${packingList.id}`}>
+              <Button variant="outline" className="text-blue-600 border-blue-200">
+                <Package className="mr-2 h-4 w-4" /> Packing List
+              </Button>
+            </Link>
+          ) : (
+            (order.status === 'Ready for Dispatch' || order.status === 'In Production') && (
+              <Link to="/dispatch/packing-lists">
+                <Button variant="outline">
+                  <Package className="mr-2 h-4 w-4" /> Create Packing List
+                </Button>
+              </Link>
+            )
+          )}
           <Button variant="outline">
             <Wrench className="mr-2 h-4 w-4" /> Issue to Production
           </Button>
-          <Button>
+          <Button onClick={handleGenerateDispatch}>
             <Truck className="mr-2 h-4 w-4" /> Generate Dispatch
           </Button>
         </div>

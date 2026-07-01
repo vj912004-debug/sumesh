@@ -15,10 +15,13 @@ import Products from '@/pages/production/Products';
 import WorkOrders from '@/pages/production/WorkOrders';
 import WorkOrderDetail from '@/pages/production/WorkOrderDetail';
 import QualityControl from '@/pages/production/QualityControl';
+import BOMDetail from '@/pages/production/BOMDetail';
 import Inventory from '@/pages/inventory/Inventory';
 import PurchaseOrders from '@/pages/inventory/PurchaseOrders';
 import Dispatch from '@/pages/dispatch/Dispatch';
 import DeliveryChallan from '@/pages/dispatch/DeliveryChallan';
+import PackingLists from '@/pages/dispatch/PackingLists';
+import PackingListDetail from '@/pages/dispatch/PackingListDetail';
 import AfterSales from '@/pages/after-sales/AfterSales';
 import Accounting from '@/pages/accounting/Accounting';
 import InvoiceDetail from '@/pages/accounting/InvoiceDetail';
@@ -41,11 +44,10 @@ import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { Navigate } from 'react-router-dom';
 
 // New specialized views
-import CNCRateCalculator from '@/pages/sales/CNCRateCalculator';
-import PlateTracking from '@/pages/inventory/PlateTracking';
 import WeighBridge from '@/pages/transport/WeighBridge';
 import MillTestCertificate from '@/pages/production/MillTestCertificate';
 import PlaceholderPage from '@/pages/PlaceholderPage';
+import VisitorRegistry from '@/pages/visitor/VisitorRegistry';
 
 // New modules
 import FinalReports from '@/pages/reports/FinalReports';
@@ -83,6 +85,7 @@ function App() {
           <Route path="/" element={<PrivateRoute><AppLayout /></PrivateRoute>}>
             <Route index element={<Dashboard />} />
             <Route path="tasks" element={<Tasks />} />
+            <Route path="visitor-registry" element={<VisitorRegistry />} />
             
             {/* Master Module */}
             <Route path="master/saved-data" element={<PlaceholderPage title="Master Saved Data" description="System configurations, cutting coefficients, and rate sheets." />} />
@@ -94,9 +97,6 @@ function App() {
 
             {/* Sales Module */}
             <Route path="sales/order-entry" element={<PlaceholderPage title="Order Entry" description="Log a new metal fabrication or raw steel cutting order." actionLabel="New Order Entry" />} />
-            <Route path="sales/cnc-calculator" element={<CNCRateCalculator />} />
-            <Route path="sales/cnc-quotation-new" element={<PlaceholderPage title="CNC Quotation Revision" description="Configure cutting rates, plate allocations, and margins." />} />
-            <Route path="sales/cnc-quotations" element={<Quotations />} />
             <Route path="sales/pending-quotations" element={<PlaceholderPage title="Pending Quotations" description="Follow up on commercial bids sent to clients." />} />
             <Route path="sales/orders" element={<Orders />} />
             <Route path="sales/pending-orders" element={<PlaceholderPage title="Pending Orders" description="Orders awaiting advance payment receipt or technical validation." />} />
@@ -106,21 +106,16 @@ function App() {
             <Route path="sales/reports" element={<ReportsDashboard />} />
 
             {/* Production Module */}
-            <Route path="production/cutting-entry" element={<PlaceholderPage title="Cutting Allocation Entry" description="Allocate parts and cutting layouts onto specific raw steel plates to minimize scrap." actionLabel="New Allocation" />} />
-            <Route path="production/cutting-list" element={<PlaceholderPage title="Cutting Allocation List" description="Historical log of cutting allocations, nests, and plate utilization." />} />
             <Route path="production/worker-cutting" element={<PlaceholderPage title="Worker Cutting List" description="Assign and review worker tasks on CNC cutting beds." />} />
             <Route path="production/ready-dispatch" element={<PlaceholderPage title="Ready For Dispatch" description="Completed fabrication parts certified and waiting loading." />} />
             <Route path="production/list" element={<WorkOrders />} />
+            <Route path="production/bom/:productId" element={<BOMDetail />} />
             <Route path="production/status" element={<PlaceholderPage title="Production Status" description="Real-time status overview of machine schedules and active cutting beds." />} />
             <Route path="production/tc-management" element={<PlaceholderPage title="Test Certificate Management" description="Verify raw plate mill certs and link QA certs to client invoices." />} />
             <Route path="production/mtc" element={<MillTestCertificate />} />
 
             {/* Purchase Module */}
             <Route path="purchase/orders" element={<PurchaseOrders />} />
-            <Route path="purchase/ring-rates" element={<PlaceholderPage title="Ring Rate Entry" description="Record purchasing rates for custom forged flanges and metal rings." />} />
-            <Route path="purchase/ring-rates-list" element={<PlaceholderPage title="Ring Rate Directory" description="Supplier pricing matrix for rings and forgings." />} />
-            <Route path="purchase/plate-quotations" element={<PlaceholderPage title="Plate Sourcing Quotation" description="Log plate quotes received from vendors." />} />
-            <Route path="purchase/plate-quotations-list" element={<PlaceholderPage title="Sourcing Bids Directory" description="Comparative vendor rates for raw plates." />} />
             <Route path="purchase/returns" element={<PlaceholderPage title="Purchase Returns" description="Log raw plate rejections, credit notes, and weight discrepancies." />} />
             <Route path="purchase/ledgers" element={<PlaceholderPage title="Supplier Ledgers" description="Financial ledger records for material suppliers." />} />
             <Route path="purchase/grn" element={<GoodsReceipt />} />
@@ -131,7 +126,6 @@ function App() {
             <Route path="inventory/job-work-out" element={<JobWorkOutward />} />
             <Route path="inventory/job-work-in" element={<JobWorkInward />} />
             <Route path="inventory/job-work-pending" element={<PlaceholderPage title="Job Work Pending Report" description="Track delayed vendor machining and outsourcing." />} />
-            <Route path="inventory/plates" element={<PlateTracking />} />
             <Route path="inventory/returnable-challan" element={<ReturnableChallan />} />
 
             {/* Accounts Module */}
@@ -185,6 +179,8 @@ function App() {
             <Route path="job-work-inward" element={<JobWorkInward />} />
             <Route path="dispatch" element={<Dispatch />} />
             <Route path="dispatch/:id" element={<DeliveryChallan />} />
+            <Route path="dispatch/packing-lists" element={<PackingLists />} />
+            <Route path="dispatch/packing-list/:id" element={<PackingListDetail />} />
             <Route path="eway-bills" element={<EWayBills />} />
             <Route path="after-sales" element={<AfterSales />} />
             <Route path="after-sales/filtration-service" element={<FiltrationService />} />

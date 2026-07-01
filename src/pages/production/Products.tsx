@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { mockProducts } from '@/lib/mockData';
+import { Link } from 'react-router-dom';
 import { PackageSearch, Network } from 'lucide-react';
 
 export default function Products() {
@@ -47,9 +48,11 @@ export default function Products() {
                   </TableCell>
                   <TableCell className="text-right">₹{product.basePrice.toLocaleString('en-IN')}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="sm">
-                      <Network className="mr-2 h-4 w-4" /> View BOM
-                    </Button>
+                    <Link to={`/production/bom/${product.id}`}>
+                      <Button variant="ghost" size="sm">
+                        <Network className="mr-2 h-4 w-4" /> View BOM
+                      </Button>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}

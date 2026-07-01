@@ -17,123 +17,117 @@ const navGroups = [
     items: [
       { name: 'Dashboard', path: '/', icon: LayoutDashboard },
       { name: 'Tasks', path: '/tasks', icon: Bell },
+      { name: 'Visitor Pass & Gate Registry', path: '/visitor-registry', icon: Users },
       { name: 'Communication Alerts', path: '/communication', icon: Mail }
     ]
   },
   {
-    title: 'Master',
+    title: 'Master Data',
     isCollapsible: true,
     icon: Database,
     items: [
-      { name: 'Master Saved Data', path: '/master/saved-data' },
-      { name: 'Party Master', path: '/master/parties' },
-      { name: 'Item Master', path: '/master/items' },
-      { name: 'Grade Master', path: '/master/grades' },
-      { name: 'Worker Master', path: '/master/workers' },
-      { name: 'Transport Master', path: '/master/transports' }
+      { name: 'Master Configurations', path: '/master/saved-data' },
+      { name: 'Client & Party Master', path: '/master/parties' },
+      { name: 'Plant Catalog (Item Master)', path: '/master/items' },
+      { name: 'Grade & Alloy Master', path: '/master/grades' },
+      { name: 'Worker Directory', path: '/master/workers' },
+      { name: 'Transporter Master', path: '/master/transports' }
     ]
   },
   {
-    title: 'Sales & Rentals',
+    title: 'Plant Sales & Service Rentals',
     isCollapsible: true,
     icon: ShoppingCart,
     items: [
-      { name: 'Order Entry', path: '/sales/order-entry' },
-      { name: 'CNC Rate Calculator', path: '/sales/cnc-calculator' },
-      { name: 'CNC Quotation 2', path: '/sales/cnc-quotation-new' },
-      { name: 'CNC Quotation List', path: '/sales/cnc-quotations' },
-      { name: 'Pending Quotation', path: '/sales/pending-quotations' },
-      { name: 'Order List', path: '/sales/orders' },
-      { name: 'Pending Order', path: '/sales/pending-orders' },
+      { name: 'New Plant Order Entry', path: '/sales/order-entry' },
+      { name: 'Pending Quotation Follow-up', path: '/sales/pending-quotations' },
+      { name: 'Plant Order Book', path: '/sales/orders' },
+      { name: 'Pending Advance Orders', path: '/sales/pending-orders' },
       { name: 'Dispatch Entry', path: '/sales/dispatch-entry' },
       { name: 'Despatch Report', path: '/sales/dispatch-reports' },
+      { name: 'Packing Lists', path: '/dispatch/packing-lists' },
       { name: 'Invoice Entry', path: '/sales/invoice-entry' },
       { name: 'Sales Reports', path: '/sales/reports' },
-      { name: 'Sales, Rentals & Billing', path: '/sales-billing' }
+      { name: 'Rental Contracts & Billing', path: '/sales-billing' }
     ]
   },
   {
-    title: 'Production & QC',
+    title: 'Plant Fabrication & FAT Testing',
     isCollapsible: true,
     icon: Factory,
     items: [
-      { name: 'Cutting Allocation Entry', path: '/production/cutting-entry' },
-      { name: 'Cutting Allocation List', path: '/production/cutting-list' },
-      { name: 'Worker Cutting List', path: '/production/worker-cutting' },
+      { name: 'CNC Fabrication List', path: '/production/worker-cutting' },
       { name: 'Ready For Dispatch List', path: '/production/ready-dispatch' },
-      { name: 'Production List', path: '/production/list' },
-      { name: 'Production Status', path: '/production/status' },
+      { name: 'Plant Assembly Orders', path: '/production/list' },
+      { name: 'Products & BOM', path: '/master/items' },
+      { name: 'Production & Bed Status', path: '/production/status' },
       { name: 'TC Management', path: '/production/tc-management' },
-      { name: 'Mill Test Certificate (MTC)', path: '/production/mtc' },
-      { name: 'QMS & Inspections', path: '/qms' }
+      { name: 'MTC & Vacuum Vessel Certs', path: '/production/mtc' },
+      { name: 'FAT & QA Inspection Logs', path: '/qms' }
     ]
   },
   {
-    title: 'Purchase',
+    title: 'Procurement & Sourcing',
     isCollapsible: true,
     icon: ShoppingBag,
     items: [
-      { name: 'Purchase Order', path: '/purchase/orders' },
-      { name: 'Ring Rate Entry', path: '/purchase/ring-rates' },
-      { name: 'Ring Rate List', path: '/purchase/ring-rates-list' },
-      { name: 'Plate Quotation', path: '/purchase/plate-quotations' },
-      { name: 'Plate Quotation List', path: '/purchase/plate-quotations-list' },
-      { name: 'Purchase Return', path: '/purchase/returns' },
+      { name: 'PO (Pumps, Heaters, Spares)', path: '/purchase/orders' },
+      { name: 'Purchase Rejections & Returns', path: '/purchase/returns' },
       { name: 'Supplier Ledger', path: '/purchase/ledgers' },
-      { name: 'GRN Entry', path: '/purchase/grn' }
+      { name: 'Gate GRN & Inward Check', path: '/purchase/grn' }
     ]
   },
   {
-    title: 'Inventory & Trace',
+    title: 'Inventory & Spares Control',
     isCollapsible: true,
     icon: Layers,
     items: [
       { name: 'Stock Summary', path: '/inventory/summary' },
       { name: 'Stock Register', path: '/inventory/register' },
-      { name: 'Job Work Outward', path: '/inventory/job-work-out' },
-      { name: 'Job Work Inward', path: '/inventory/job-work-in' },
+      { name: 'Outsourced Machining (Job Work)', path: '/inventory/job-work-out' },
+      { name: 'Job Work Inward Receipt', path: '/inventory/job-work-in' },
       { name: 'Job Work Pending Report', path: '/inventory/job-work-pending' },
-      { name: 'Plate Tracking', path: '/inventory/plates' },
       { name: 'Returnable Challan', path: '/inventory/returnable-challan' },
       { name: 'Inventory Control', path: '/inventory-control' }
     ]
   },
   {
-    title: 'Accounts & Finance',
+    title: 'Finance, Billing & GST',
     isCollapsible: true,
     icon: Wallet,
     items: [
-      { name: 'Ledger', path: '/accounts/ledger' },
-      { name: 'Outstanding', path: '/accounts/outstanding' },
-      { name: 'Payments', path: '/accounts/payments' },
-      { name: 'Challan', path: '/accounts/challans' },
+      { name: 'Ledger Registry', path: '/accounts/ledger' },
+      { name: 'Outstanding Receivables', path: '/accounts/outstanding' },
+      { name: 'Payments Journal', path: '/accounts/payments' },
+      { name: 'Challan Reconciliation', path: '/accounts/challans' },
       { name: 'Finance & Compliance', path: '/finance' }
     ]
   },
   {
-    title: 'Transport & Logistics',
+    title: 'Heavy Logistics & ODC Cargo',
     isCollapsible: true,
     icon: Truck,
     items: [
-      { name: 'Weight Bridge', path: '/transport/weigh-bridge' },
+      { name: 'Weighbridge Logs', path: '/transport/weigh-bridge' },
+      { name: 'Packing Lists', path: '/dispatch/packing-lists' },
       { name: 'Transport Bill Entry', path: '/transport/bill-entry' },
       { name: 'Transport Bill Register', path: '/transport/bills' },
-      { name: 'Transport Pending Report', path: '/transport/pending' },
+      { name: 'Pending Heavy Freight Dispatch', path: '/transport/pending' },
       { name: 'Transport Wise Summary', path: '/transport/summary' },
-      { name: 'Supply Chain & Fleet', path: '/logistics' }
+      { name: 'Supply Chain & Heavy Fleet', path: '/logistics' }
     ]
   },
   {
-    title: 'After-Sales',
+    title: 'AMC & On-site Filtration',
     isCollapsible: true,
     icon: Headset,
     items: [
-      { name: 'Service Tickets', path: '/after-sales' },
-      { name: 'Filtration Service', path: '/after-sales/filtration-service' }
+      { name: 'AMC Service Tickets', path: '/after-sales' },
+      { name: 'On-site Oil Filtration Log', path: '/after-sales/filtration-service' }
     ]
   },
   {
-    title: 'Reports',
+    title: 'Operational Analytics',
     isCollapsible: true,
     icon: BarChart3,
     items: [
@@ -147,7 +141,7 @@ const navGroups = [
     ]
   },
   {
-    title: 'Settings',
+    title: 'System Preferences',
     isCollapsible: true,
     icon: SettingsIcon,
     items: [
@@ -161,7 +155,7 @@ const navGroups = [
     title: 'System',
     isCollapsible: false,
     items: [
-      { name: 'Documents', path: '/documents', icon: FileText }
+      { name: 'Document Management', path: '/documents', icon: FileText }
     ]
   }
 ];

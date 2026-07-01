@@ -8,7 +8,7 @@ import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter 
 } from '@/components/ui/dialog';
 import { mockWorkOrders, type WorkOrder } from '@/lib/mockData2';
-import { mockProducts } from '@/lib/mockData';
+import { mockProducts, getMockOrders, saveMockOrders, triggerDispatchAlerts } from '@/lib/mockData';
 import { ArrowLeft, CheckCircle2, Factory, FileCheck } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -63,6 +63,14 @@ export default function WorkOrderDetail() {
     
     setWos(updated);
     localStorage.setItem('mockWorkOrders', JSON.stringify(updated));
+
+    if (nextStage === 'Completed') {
+      const salesOrders = getMockOrders();
+      const updatedSales = salesOrders.map(o => o.id === wo.orderId ? { ...o, status: 'Ready for Dispatch' as const } : o);
+      saveMockOrders(updatedSales);
+      triggerDispatchAlerts(wo.orderId);
+      alert(`Job card completed!\n- Linked Sales Order ${wo.orderId} status automatically updated to "Ready for Dispatch".\n- WhatsApp notifications and SMTP emails triggered to Admin and Transport Manager.`);
+    }
   };
 
   const handleLogLabor = (e: React.FormEvent) => {
@@ -198,7 +206,11 @@ export default function WorkOrderDetail() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center bg-muted/50 p-3 rounded-md">
                     <span className="text-sm font-medium">BOM Link:</span>
-                    <span className="text-sm font-bold text-primary cursor-pointer hover:underline">BOM-SP1012</span>
+                    <Link to={`/production/bom/${product.id}`}>
+                      <span className="text-sm font-bold text-primary cursor-pointer hover:underline">
+                        {product.id === 'PROD-001' ? 'BOM-SP1012' : product.id === 'PROD-002' ? 'BOM-SP1013' : product.id === 'PROD-003' ? 'BOM-SP1014' : `BOM-${product.id}`}
+                      </span>
+                    </Link>
                   </div>
                   <table className="w-full text-sm">
                     <thead>

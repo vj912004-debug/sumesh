@@ -9,21 +9,37 @@ import {
 } from 'lucide-react';
 
 export default function CommunicationAlerts() {
-  const [whatsappLogs, setWhatsappLogs] = useState([
-    { id: 'WA-801', recipient: 'Sukhwinder Singh (Driver)', type: 'Transport Alert', message: 'Gate pass GP-9018 issued. Route: Vadodara to Navi Mumbai. e-Way Link: ewb.gov.in/EWB-26-9921', status: 'Delivered', timestamp: '2026-06-30 11:34 AM' },
-    { id: 'WA-802', recipient: 'Tata Power (QA Inspector)', type: 'QC Notification', message: 'Inspections for Transformer Oil Plant complete. Certificate TC-26-085 is ready for review.', status: 'Delivered', timestamp: '2026-06-28 04:32 PM' },
-    { id: 'WA-803', recipient: 'Ketan Shah (Reliance Customer)', type: 'Order Dispatch', message: 'Dear Ketan, Your order SO-26-004 has been dispatched via truck GJ-06-ZZ-4012.', status: 'Read', timestamp: '2026-06-30 11:40 AM' }
-  ]);
+  const [whatsappLogs, setWhatsappLogs] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('whatsappLogs');
+      if (saved) return JSON.parse(saved);
+    }
+    return [
+      { id: 'WA-801', recipient: 'Sukhwinder Singh (Driver)', type: 'Transport Alert', message: 'Gate pass GP-9018 issued. Route: Vadodara to Navi Mumbai. e-Way Link: ewb.gov.in/EWB-26-9921', status: 'Delivered', timestamp: '2026-06-30 11:34 AM' },
+      { id: 'WA-802', recipient: 'Tata Power (QA Inspector)', type: 'QC Notification', message: 'Inspections for Transformer Oil Plant complete. Certificate TC-26-085 is ready for review.', status: 'Delivered', timestamp: '2026-06-28 04:32 PM' },
+      { id: 'WA-803', recipient: 'Ketan Shah (Reliance Customer)', type: 'Order Dispatch', message: 'Dear Ketan, Your order SO-26-004 has been dispatched via truck GJ-06-ZZ-4012.', status: 'Read', timestamp: '2026-06-30 11:40 AM' }
+    ];
+  });
 
-  const [emailLogs, setEmailLogs] = useState([
-    { id: 'EM-190', recipient: 'procurement@tatapower.com', type: 'Tax Invoice & Challan', subject: 'Tax Invoice INV-26-004 & Challan CHL-1084 - Sumesh Petroleum', attachment: 'INV-26-004.pdf, CHL-1084.pdf', status: 'Relayed', timestamp: '2026-06-28 05:00 PM' },
-    { id: 'EM-191', recipient: 'plant.operations@reliance.com', type: 'FAT Drawing Certificate', subject: 'QA Inspection Release Certificate FAT-892 - Sumesh Petroleum', attachment: 'FAT-892_Certified.pdf', status: 'Delayed (SMTP Retry)', timestamp: '2026-06-30 12:00 PM' }
-  ]);
+  const [emailLogs, setEmailLogs] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('emailLogs');
+      if (saved) return JSON.parse(saved);
+    }
+    return [
+      { id: 'EM-190', recipient: 'procurement@tatapower.com', type: 'Tax Invoice & Challan', subject: 'Tax Invoice INV-26-004 & Challan CHL-1084 - Sumesh Petroleum', attachment: 'INV-26-004.pdf, CHL-1084.pdf', status: 'Relayed', timestamp: '2026-06-28 05:00 PM' },
+      { id: 'EM-191', recipient: 'plant.operations@reliance.com', type: 'FAT Drawing Certificate', subject: 'QA Inspection Release Certificate FAT-892 - Sumesh Petroleum', attachment: 'FAT-892_Certified.pdf', status: 'Delayed (SMTP Retry)', timestamp: '2026-06-30 12:00 PM' }
+    ];
+  });
 
   const handleResendMail = (logId: string) => {
-    setEmailLogs(emailLogs.map(log => 
+    const updated = emailLogs.map(log => 
       log.id === logId ? { ...log, status: 'Relayed', timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19) } : log
-    ));
+    );
+    setEmailLogs(updated);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('emailLogs', JSON.stringify(updated));
+    }
   };
 
   return (

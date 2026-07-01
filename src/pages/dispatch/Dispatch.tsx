@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { mockOrders } from '@/lib/mockData';
-import { Truck, Plus } from 'lucide-react';
+import { Truck, Plus, Package } from 'lucide-react';
 
 export default function Dispatch() {
   const dispatchableOrders = mockOrders.filter(o => o.status === 'Ready for Dispatch' || o.status === 'Dispatched');
@@ -18,9 +18,16 @@ export default function Dispatch() {
           <h2 className="text-3xl font-bold tracking-tight">Dispatch & Logistics</h2>
           <p className="text-muted-foreground">Manage delivery challans, e-way bills, and transport.</p>
         </div>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" /> Non-Sale Challan
-        </Button>
+        <div className="flex gap-2">
+          <Link to="/dispatch/packing-lists">
+            <Button variant="outline">
+              <Package className="mr-2 h-4 w-4" /> Packing Lists
+            </Button>
+          </Link>
+          <Button>
+            <Plus className="mr-2 h-4 w-4" /> Non-Sale Challan
+          </Button>
+        </div>
       </div>
 
       <Card>

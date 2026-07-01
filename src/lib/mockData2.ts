@@ -17,6 +17,21 @@ export type InventoryItem = {
   stockSubcon: number;
   uom: string;
   reorderLevel: number;
+  unitCost: number;
+};
+
+export type BOMItem = {
+  inventoryItemId: string;
+  quantity: number;
+};
+
+export type BOM = {
+  id: string;
+  productId: string;
+  version: string;
+  status: 'Draft' | 'Approved' | 'Obsolete';
+  lastUpdated: string;
+  items: BOMItem[];
 };
 
 // Mock Work Orders
@@ -28,9 +43,54 @@ export const mockWorkOrders: WorkOrder[] = [
 
 // Mock Inventory
 export const mockInventory: InventoryItem[] = [
-  { id: 'INV-1001', partNumber: 'MS-PL-10MM', name: 'MS Plate 10mm IS2062', category: 'Raw Material', stockMain: 4500, stockSubcon: 1200, uom: 'Kg', reorderLevel: 2000 },
-  { id: 'INV-1002', partNumber: 'PUMP-GEAR-50', name: 'Gear Pump 50 LPM', category: 'Component', stockMain: 12, stockSubcon: 0, uom: 'Nos', reorderLevel: 5 },
-  { id: 'INV-1003', partNumber: 'HTR-3KW', name: 'Heater Element 3KW', category: 'Component', stockMain: 45, stockSubcon: 0, uom: 'Nos', reorderLevel: 20 },
-  { id: 'INV-1004', partNumber: 'FLT-EL-5M', name: 'Filter Element 5 Micron', category: 'Consumable', stockMain: 150, stockSubcon: 0, uom: 'Nos', reorderLevel: 50 },
-  { id: 'INV-1005', partNumber: 'VLV-BLL-1IN', name: 'Ball Valve 1" SS304', category: 'Component', stockMain: 34, stockSubcon: 5, uom: 'Nos', reorderLevel: 15 },
+  { id: 'INV-1001', partNumber: 'MS-PL-10MM', name: 'MS Plate 10mm IS2062', category: 'Raw Material', stockMain: 4500, stockSubcon: 1200, uom: 'Kg', reorderLevel: 2000, unitCost: 85 },
+  { id: 'INV-1002', partNumber: 'PUMP-GEAR-50', name: 'Gear Pump 50 LPM', category: 'Component', stockMain: 12, stockSubcon: 0, uom: 'Nos', reorderLevel: 5, unitCost: 45000 },
+  { id: 'INV-1003', partNumber: 'HTR-3KW', name: 'Heater Element 3KW', category: 'Component', stockMain: 45, stockSubcon: 0, uom: 'Nos', reorderLevel: 20, unitCost: 1200 },
+  { id: 'INV-1004', partNumber: 'FLT-EL-5M', name: 'Filter Element 5 Micron', category: 'Consumable', stockMain: 150, stockSubcon: 0, uom: 'Nos', reorderLevel: 50, unitCost: 3500 },
+  { id: 'INV-1005', partNumber: 'VLV-BLL-1IN', name: 'Ball Valve 1" SS304', category: 'Component', stockMain: 34, stockSubcon: 5, uom: 'Nos', reorderLevel: 15, unitCost: 1800 },
 ];
+
+// Mock BOMs
+export const mockBOMs: BOM[] = [
+  {
+    id: 'BOM-SP1012',
+    productId: 'PROD-001',
+    version: 'v1.0',
+    status: 'Approved',
+    lastUpdated: '2026-06-22',
+    items: [
+      { inventoryItemId: 'INV-1001', quantity: 800 },
+      { inventoryItemId: 'INV-1002', quantity: 1 },
+      { inventoryItemId: 'INV-1003', quantity: 6 },
+      { inventoryItemId: 'INV-1004', quantity: 3 },
+      { inventoryItemId: 'INV-1005', quantity: 12 }
+    ]
+  },
+  {
+    id: 'BOM-SP1013',
+    productId: 'PROD-002',
+    version: 'v1.1',
+    status: 'Approved',
+    lastUpdated: '2026-06-25',
+    items: [
+      { inventoryItemId: 'INV-1001', quantity: 1200 },
+      { inventoryItemId: 'INV-1002', quantity: 2 },
+      { inventoryItemId: 'INV-1003', quantity: 10 },
+      { inventoryItemId: 'INV-1004', quantity: 5 },
+      { inventoryItemId: 'INV-1005', quantity: 20 }
+    ]
+  },
+  {
+    id: 'BOM-SP1014',
+    productId: 'PROD-003',
+    version: 'v1.0',
+    status: 'Draft',
+    lastUpdated: '2026-06-28',
+    items: [
+      { inventoryItemId: 'INV-1001', quantity: 150 },
+      { inventoryItemId: 'INV-1003', quantity: 4 },
+      { inventoryItemId: 'INV-1005', quantity: 6 }
+    ]
+  }
+];
+
