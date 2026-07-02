@@ -74,3 +74,28 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom scrollbar utility for the sidebar */
+.custom-sidebar-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.25) rgba(15, 23, 42, 0.1);
+}
+
+.custom-sidebar-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-sidebar-scrollbar::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.1);
+}
+
+.custom-sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 9999px;
+}
+
+.custom-sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
+}
+
