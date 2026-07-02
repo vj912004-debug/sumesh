@@ -3,12 +3,13 @@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
-import { mockQuotations, mockCustomers, mockProducts } from '@/lib/mockData';
+import { mockCustomers, mockProducts } from '@/lib/mockData';
+import { getQuotationById } from '@/lib/quotationService';
 import { ArrowLeft, Printer, Send, Edit, FileCheck } from 'lucide-react';
 
 export default function QuotationDetail() {
   const { id } = useParams();
-  const quote = mockQuotations.find(q => q.id === id);
+  const quote = id ? getQuotationById(id) : undefined;
   const customer = mockCustomers.find(c => c.id === quote?.customerId);
 
   if (!quote || !customer) {

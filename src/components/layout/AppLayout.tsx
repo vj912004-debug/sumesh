@@ -41,12 +41,14 @@ const navGroups = [
     items: [
       { name: 'New Plant Order Entry', path: '/sales/order-entry' },
       { name: 'Pending Quotation Follow-up', path: '/sales/pending-quotations' },
+      { name: 'Pre-Build Material Pricing', path: '/production/cost-estimates' },
       { name: 'Plant Order Book', path: '/sales/orders' },
       { name: 'Pending Advance Orders', path: '/sales/pending-orders' },
       { name: 'Dispatch Entry', path: '/sales/dispatch-entry' },
       { name: 'Despatch Report', path: '/sales/dispatch-reports' },
       { name: 'Packing Lists', path: '/dispatch/packing-lists' },
-      { name: 'Invoice Entry', path: '/sales/invoice-entry' },
+      { name: 'Proforma Invoice (PI)', path: '/sales/invoice-entry' },
+      { name: 'Tax Invoice (TI)', path: '/sales/ti-entry' },
       { name: 'Sales Reports', path: '/sales/reports' },
       { name: 'Rental Contracts & Billing', path: '/sales-billing' }
     ]
@@ -58,11 +60,13 @@ const navGroups = [
     items: [
       { name: 'CNC Fabrication List', path: '/production/worker-cutting' },
       { name: 'Ready For Dispatch List', path: '/production/ready-dispatch' },
+      { name: 'Pre-Build Cost Estimate', path: '/production/cost-estimates' },
       { name: 'Plant Assembly Orders', path: '/production/list' },
       { name: 'Products & BOM', path: '/master/items' },
       { name: 'Production & Bed Status', path: '/production/status' },
       { name: 'TC Management', path: '/production/tc-management' },
       { name: 'MTC & Vacuum Vessel Certs', path: '/production/mtc' },
+      { name: 'Build Profit & Loss', path: '/reports/build-profit' },
       { name: 'FAT & QA Inspection Logs', path: '/qms' }
     ]
   },
@@ -100,7 +104,10 @@ const navGroups = [
       { name: 'Outstanding Receivables', path: '/accounts/outstanding' },
       { name: 'Payments Journal', path: '/accounts/payments' },
       { name: 'Challan Reconciliation', path: '/accounts/challans' },
-      { name: 'Finance & Compliance', path: '/finance' }
+      { name: 'Proforma Invoices (PI)', path: '/sales/invoice-entry' },
+      { name: 'Tax Invoices (TI)', path: '/sales/ti-entry' },
+      { name: 'Finance & Compliance', path: '/finance' },
+      { name: 'Build Profit & Loss', path: '/reports/build-profit' }
     ]
   },
   {
@@ -137,7 +144,8 @@ const navGroups = [
       { name: 'Material Receipt Reports', path: '/reports/receipts' },
       { name: 'Material Pending Reports', path: '/reports/pending' },
       { name: 'Sales Dashboard', path: '/reports/sales-dashboard' },
-      { name: 'Final Inspection Reports', path: '/reports/final' }
+      { name: 'Final Inspection Reports', path: '/reports/final' },
+      { name: 'Build Profit & Loss', path: '/reports/build-profit' }
     ]
   },
   {

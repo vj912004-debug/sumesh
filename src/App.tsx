@@ -16,6 +16,8 @@ import WorkOrders from '@/pages/production/WorkOrders';
 import WorkOrderDetail from '@/pages/production/WorkOrderDetail';
 import QualityControl from '@/pages/production/QualityControl';
 import BOMDetail from '@/pages/production/BOMDetail';
+import CostEstimates from '@/pages/production/CostEstimates';
+import CostEstimateDetail from '@/pages/production/CostEstimateDetail';
 import Inventory from '@/pages/inventory/Inventory';
 import PurchaseOrders from '@/pages/inventory/PurchaseOrders';
 import Dispatch from '@/pages/dispatch/Dispatch';
@@ -25,6 +27,7 @@ import PackingListDetail from '@/pages/dispatch/PackingListDetail';
 import AfterSales from '@/pages/after-sales/AfterSales';
 import Accounting from '@/pages/accounting/Accounting';
 import InvoiceDetail from '@/pages/accounting/InvoiceDetail';
+import ProformaInvoiceDetail from '@/pages/accounting/ProformaInvoiceDetail';
 import Settings from '@/pages/settings/Settings';
 import PurchaseOrderDetail from '@/pages/inventory/PurchaseOrderDetail';
 import EWayBills from '@/pages/dispatch/EWayBills';
@@ -51,6 +54,8 @@ import VisitorRegistry from '@/pages/visitor/VisitorRegistry';
 
 // New modules
 import FinalReports from '@/pages/reports/FinalReports';
+import BuildProfitLoss from '@/pages/reports/BuildProfitLoss';
+import BuildProfitDetail from '@/pages/reports/BuildProfitDetail';
 import FiltrationService from '@/pages/after-sales/FiltrationService';
 import ReturnableChallan from '@/pages/inventory/ReturnableChallan';
 
@@ -103,12 +108,15 @@ function App() {
             <Route path="sales/dispatch-entry" element={<Dispatch />} />
             <Route path="sales/dispatch-reports" element={<PlaceholderPage title="Dispatch Reports" description="History of delivery challans, weights, and transport bills." />} />
             <Route path="sales/invoice-entry" element={<Accounting />} />
+            <Route path="sales/ti-entry" element={<Accounting />} />
             <Route path="sales/reports" element={<ReportsDashboard />} />
 
             {/* Production Module */}
             <Route path="production/worker-cutting" element={<PlaceholderPage title="Worker Cutting List" description="Assign and review worker tasks on CNC cutting beds." />} />
             <Route path="production/ready-dispatch" element={<PlaceholderPage title="Ready For Dispatch" description="Completed fabrication parts certified and waiting loading." />} />
             <Route path="production/list" element={<WorkOrders />} />
+            <Route path="production/cost-estimates" element={<CostEstimates />} />
+            <Route path="production/cost-estimate/:id" element={<CostEstimateDetail />} />
             <Route path="production/bom/:productId" element={<BOMDetail />} />
             <Route path="production/status" element={<PlaceholderPage title="Production Status" description="Real-time status overview of machine schedules and active cutting beds." />} />
             <Route path="production/tc-management" element={<PlaceholderPage title="Test Certificate Management" description="Verify raw plate mill certs and link QA certs to client invoices." />} />
@@ -155,6 +163,8 @@ function App() {
             <Route path="reports/pending" element={<PlaceholderPage title="Pending Material Reports" description="List of unallocated raw plates and pending work orders." />} />
             <Route path="reports/sales-dashboard" element={<ReportsDashboard />} />
             <Route path="reports/final" element={<FinalReports />} />
+            <Route path="reports/build-profit" element={<BuildProfitLoss />} />
+            <Route path="reports/build-profit/:workOrderId" element={<BuildProfitDetail />} />
 
             {/* Standard Detail views and fallback compatibility */}
             <Route path="enquiries" element={<Enquiries />} />
@@ -186,6 +196,8 @@ function App() {
             <Route path="after-sales/filtration-service" element={<FiltrationService />} />
             <Route path="accounting" element={<Accounting />} />
             <Route path="accounting/invoice/:id" element={<InvoiceDetail />} />
+            <Route path="accounting/ti/:id" element={<InvoiceDetail />} />
+            <Route path="accounting/proforma/:id" element={<ProformaInvoiceDetail />} />
             <Route path="accounting/reports" element={<AccountingReports />} />
             <Route path="reports" element={<ReportsDashboard />} />
             <Route path="documents" element={<DocumentManagement />} />

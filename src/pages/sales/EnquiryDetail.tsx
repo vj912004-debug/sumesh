@@ -1,18 +1,52 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { mockEnquiries, mockCustomers } from '@/lib/mockData';
-import { ArrowLeft, Edit, FileText } from 'lucide-react';
+import {
+  createEstimateFromEnquiry,
+  getCostEstimateByEnquiryId,
+} from '@/lib/estimateFromEnquiry';
+import { createQuotationFromEstimate } from '@/lib/quotationService';
+import { ArrowLeft, Edit, FileText, Calculator, ExternalLink } from 'lucide-react';
 
 export default function EnquiryDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const enquiry = mockEnquiries.find(e => e.id === id);
   const customer = mockCustomers.find(c => c.id === enquiry?.customerId);
+
+  const linkedEstimate = useMemo(
+    () => (id ? getCostEstimateByEnquiryId(id) : undefined),
+    [id]
+  );
 
   if (!enquiry) {
     return <div>Enquiry not found</div>;
   }
+
+  const handleCreateEstimate = () => {
+    const estimate = createEstimateFromEnquiry(enquiry);
+    navigate(`/production/cost-estimate/${estimate.id}`);
+  };
+
+  const handleGenerateQuote = () => {
+    const estimate = linkedEstimate ?? createEstimateFromEnquiry(enquiry);
+
+    if (estimate.status !== 'Approved' && estimate.status !== 'Reviewed') {
+      const proceed = window.confirm(
+        'Estimate is not yet reviewed/approved. Open the cost estimate to review material pricing before generating a quotation?'
+      );
+      if (proceed) {
+        navigate(`/production/cost-estimate/${estimate.id}`);
+      }
+      return;
+    }
+
+    const quote = createQuotationFromEstimate(estimate);
+    navigate(`/quotations/${quote.id}`);
+  };
 
   return (
     <div className="space-y-6">
@@ -35,11 +69,33 @@ export default function EnquiryDetail() {
           <Button variant="outline">
             <Edit className="mr-2 h-4 w-4" /> Edit
           </Button>
-          <Button>
+          <Button variant="outline" onClick={handleCreateEstimate}>
+            <Calculator className="mr-2 h-4 w-4" />
+            {linkedEstimate ? 'Open Cost Estimate' : 'Pre-Build Estimate'}
+          </Button>
+          <Button onClick={handleGenerateQuote}>
             <FileText className="mr-2 h-4 w-4" /> Generate Quote
           </Button>
         </div>
       </div>
+
+      {linkedEstimate && (
+        <Card className="border-primary/30 bg-primary/5">
+          <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-primary">Linked Material Estimate: {linkedEstimate.id}</p>
+              <p className="text-sm text-muted-foreground">
+                Suggested build price: ₹{linkedEstimate.suggestedPrice.toLocaleString('en-IN')} · Status: {linkedEstimate.status}
+              </p>
+            </div>
+            <Link to={`/production/cost-estimate/${linkedEstimate.id}`}>
+              <Button variant="outline" size="sm">
+                <ExternalLink className="mr-2 h-4 w-4" /> View Estimate
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
@@ -74,7 +130,6 @@ export default function EnquiryDetail() {
         </Card>
       </div>
 
-      {/* Communication Timeline */}
       <Card>
         <CardHeader>
           <CardTitle>Communication History</CardTitle>

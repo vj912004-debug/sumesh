@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Printer, ArrowLeft, Send } from 'lucide-react';
 import { mockOrders, mockCustomers, mockQuotations, mockProducts } from '@/lib/mockData';
+import { getTaxInvoiceByOrder, createTaxInvoice } from '@/lib/billingData';
 
 export default function InvoiceDetail() {
   const { id } = useParams();
@@ -9,8 +10,13 @@ export default function InvoiceDetail() {
   const quotation = mockQuotations.find(q => q.id === order?.quotationId);
   const customer = mockCustomers.find(c => c.id === order?.customerId);
 
-  if (!order || !customer) {
-    return <div>Order/Invoice not found</div>;
+  let ti = order ? getTaxInvoiceByOrder(order.id) : undefined;
+  if (order && !ti) {
+    ti = createTaxInvoice(order.id);
+  }
+
+  if (!order || !customer || !ti) {
+    return <div>Order/Tax Invoice not found</div>;
   }
 
   const handlePrint = () => window.print();
@@ -28,7 +34,8 @@ export default function InvoiceDetail() {
           </Button>
         </Link>
         <div className="flex-1">
-          <h2 className="text-3xl font-bold tracking-tight">Tax Invoice</h2>
+          <h2 className="text-3xl font-bold tracking-tight">Tax Invoice (TI)</h2>
+          <p className="text-muted-foreground text-sm">{ti.id}{ti.linkedPiId ? ` · Linked PI: ${ti.linkedPiId}` : ''}</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={handlePrint}>
@@ -53,6 +60,7 @@ export default function InvoiceDetail() {
           </div>
           <div className="text-right flex flex-col items-end">
             <h2 className="text-2xl font-bold tracking-widest uppercase mb-2">TAX INVOICE</h2>
+            <p className="text-xs font-bold text-primary">(TI)</p>
             {/* Fake IRN QR Code Placeholder */}
             <div className="w-24 h-24 bg-gray-200 border border-zinc-400 p-1 flex items-center justify-center">
               <span className="text-[10px] text-zinc-500 text-center">B2B IRN<br/>QR CODE</span>
@@ -79,12 +87,12 @@ export default function InvoiceDetail() {
           <div className="w-1/2 p-0 flex flex-col">
             <div className="flex border-b border-zinc-400">
               <div className="w-1/2 border-r border-zinc-400 p-2">
-                <span className="text-xs text-zinc-500 block">Invoice No.</span>
-                <span className="font-semibold">INV-26-1240</span>
+                <span className="text-xs text-zinc-500 block">TI No.</span>
+                <span className="font-semibold">{ti.id}</span>
               </div>
               <div className="w-1/2 p-2">
                 <span className="text-xs text-zinc-500 block">Dated</span>
-                <span className="font-semibold">30-Jun-2026</span>
+                <span className="font-semibold">{ti.date}</span>
               </div>
             </div>
             <div className="flex border-b border-zinc-400">

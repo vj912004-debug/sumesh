@@ -176,6 +176,21 @@ export const api = {
       return { data: newEnquiry };
     }
 
+    // Create Quotation
+    if (url === '/sales/quotations') {
+      const quotations = JSON.parse(localStorage.getItem(QUOTATIONS_KEY) || '[]');
+      const newId = `QT-26-${String(quotations.length + 1).padStart(3, '0')}`;
+      const newQuote = {
+        id: newId,
+        date: new Date().toISOString().split('T')[0],
+        status: 'Draft',
+        ...data,
+      };
+      quotations.unshift(newQuote);
+      localStorage.setItem(QUOTATIONS_KEY, JSON.stringify(quotations));
+      return { data: newQuote };
+    }
+
     console.warn(`Mock API POST unhandled URL: ${url}`);
     throw { response: { status: 404, data: { error: `Not found: ${url}` } } };
   },

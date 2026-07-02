@@ -217,9 +217,17 @@ export default function Settings() {
         <TabsContent value="documents">
           <Card>
             <CardHeader><CardTitle>Document Numbering Series</CardTitle></CardHeader>
-            <CardContent className="grid grid-cols-2 gap-4">
+            <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Sales Invoice Prefix</label>
+                <label className="text-sm font-medium">Proforma Invoice (PI)</label>
+                <input className="w-full p-2 border rounded-md bg-muted" defaultValue="PI-26-" readOnly />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Tax Invoice (TI)</label>
+                <input className="w-full p-2 border rounded-md bg-muted" defaultValue="TI-26-" readOnly />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Legacy Invoice Prefix</label>
                 <input className="w-full p-2 border rounded-md bg-muted" defaultValue="INV-26-" readOnly />
               </div>
               <div className="space-y-2">

@@ -12,7 +12,7 @@ import type { Order } from '@/lib/mockData';
 import { processErpEvent } from '@/lib/erpEvents';
 import { sendEmail, sendWhatsApp, openWhatsAppDeepLink } from '@/lib/communicationService';
 import { getIntegrationSettings } from '@/lib/integrationConfig';
-import { ArrowLeft, Truck, Wrench, Mail, Package } from 'lucide-react';
+import { ArrowLeft, Truck, Wrench, Mail, Package, FileText, Receipt } from 'lucide-react';
 
 export default function OrderDetail() {
   const { id } = useParams();
@@ -126,6 +126,18 @@ export default function OrderDetail() {
                 </Button>
               </Link>
             )
+          )}
+          <Link to={`/accounting/proforma/${order.id}`}>
+            <Button variant="outline" className="text-teal-600 border-teal-200">
+              <FileText className="mr-2 h-4 w-4" /> Proforma Invoice (PI)
+            </Button>
+          </Link>
+          {(order.status === 'Dispatched' || order.status === 'Ready for Dispatch') && (
+            <Link to={`/accounting/ti/${order.id}`}>
+              <Button variant="outline" className="text-primary border-primary/30">
+                <Receipt className="mr-2 h-4 w-4" /> Tax Invoice (TI)
+              </Button>
+            </Link>
           )}
           <Button variant="outline">
             <Wrench className="mr-2 h-4 w-4" /> Issue to Production

@@ -10,7 +10,12 @@ import {
 import { mockWorkOrders, type WorkOrder } from '@/lib/mockData2';
 import { mockProducts, getMockOrders, saveMockOrders } from '@/lib/mockData';
 import { processErpEvent } from '@/lib/erpEvents';
-import { ArrowLeft, CheckCircle2, Factory, FileCheck } from 'lucide-react';
+import {
+  finalizeBuildProfit,
+  getBuildProfitByWorkOrder,
+  addLaborHours,
+} from '@/lib/buildProfitLoss';
+import { ArrowLeft, CheckCircle2, Factory, FileCheck, TrendingUp, TrendingDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function WorkOrderDetail() {
@@ -25,6 +30,7 @@ export default function WorkOrderDetail() {
 
   const wo = wos.find(w => w.id === id);
   const product = mockProducts.find(p => p.id === wo?.productId);
+  const profitRecord = wo ? getBuildProfitByWorkOrder(wo.id) : undefined;
 
   const [isHoursOpen, setIsHoursOpen] = useState(false);
   const [loggedHours, setLoggedHours] = useState('');
@@ -75,8 +81,10 @@ export default function WorkOrderDetail() {
       const salesOrders = getMockOrders();
       const updatedSales = salesOrders.map(o => o.id === wo.orderId ? { ...o, status: 'Ready for Dispatch' as const } : o);
       saveMockOrders(updatedSales);
+      const completedWo = updated.find(w => w.id === wo.id)!;
+      finalizeBuildProfit(completedWo);
       const result = await processErpEvent('workorder.completed', { orderId: wo.orderId, workOrderId: wo.id });
-      alert(`Job card completed!\n• Order ${wo.orderId} → Ready for Dispatch\n• ${result.tasksCreated.length} task(s) created\n• ${result.notificationsSent} notification(s) sent`);
+      alert(`Job card completed!\n• Order ${wo.orderId} → Ready for Dispatch\n• Build P&L recorded\n• ${result.tasksCreated.length} task(s) created\n• ${result.notificationsSent} notification(s) sent`);
     }
   };
 
@@ -84,6 +92,8 @@ export default function WorkOrderDetail() {
     e.preventDefault();
     const hours = parseFloat(loggedHours);
     if (isNaN(hours) || hours <= 0) return;
+
+    addLaborHours(wo.id, hours);
 
     // Advance progress slightly on logging labor
     const newProgress = Math.min(99, wo.progress + Math.min(15, Math.ceil(hours * 2)));
@@ -134,6 +144,31 @@ export default function WorkOrderDetail() {
           )}
         </div>
       </div>
+
+      {wo.status === 'Completed' && profitRecord && (
+        <Card className={profitRecord.profitLoss >= 0 ? 'border-emerald-200 bg-emerald-50/40' : 'border-rose-200 bg-rose-50/40'}>
+          <CardContent className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              {profitRecord.profitLoss >= 0
+                ? <TrendingUp className="w-8 h-8 text-emerald-600 shrink-0" />
+                : <TrendingDown className="w-8 h-8 text-rose-600 shrink-0" />}
+              <div>
+                <p className="font-semibold text-lg">
+                  Build {profitRecord.status}: {profitRecord.profitLoss >= 0 ? '+' : ''}
+                  ₹{profitRecord.profitLoss.toLocaleString('en-IN')}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Revenue ₹{profitRecord.revenue.toLocaleString('en-IN')} − Actual cost ₹{profitRecord.totalActualCost.toLocaleString('en-IN')}
+                  {' '}({profitRecord.profitMarginPct.toFixed(1)}% margin)
+                </p>
+              </div>
+            </div>
+            <Link to={`/reports/build-profit/${wo.id}`}>
+              <Button variant="outline" size="sm">View Full P&L Report</Button>
+            </Link>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid gap-4 md:grid-cols-3">
         <Card className="col-span-1">
