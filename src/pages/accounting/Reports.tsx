@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+﻿import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, FileSpreadsheet, PieChart } from 'lucide-react';
 
@@ -46,7 +46,7 @@ This is a prototype simulated export file.`;
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <FileSpreadsheet className="w-5 h-5 text-blue-500" />
+              <FileSpreadsheet className="w-5 h-5 text-teal-500" />
               GST Reports
             </CardTitle>
           </CardHeader>

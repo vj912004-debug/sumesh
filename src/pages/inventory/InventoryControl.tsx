@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -156,7 +156,7 @@ export default function InventoryControl() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                    <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                       <th className="pb-3 text-left">Part Code</th>
                       <th className="pb-3 text-left">Description</th>
                       <th className="pb-3 text-left">Category</th>
@@ -167,18 +167,18 @@ export default function InventoryControl() {
                       <th className="pb-3 text-right">Stock Alert</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                  <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                     {items.map((item) => {
                       const isLow = item.stock <= item.reorder;
                       return (
-                        <tr key={item.code} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                        <tr key={item.code} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                           <td className="py-3 font-semibold text-xs text-primary">{item.code}</td>
                           <td className="py-3 font-medium">{item.name}</td>
                           <td className="py-3 text-xs">{item.category}</td>
                           <td className="py-3 font-mono text-xs">{item.uom}</td>
-                          <td className="py-3 font-mono text-xs text-slate-500">{item.hsn}</td>
+                          <td className="py-3 font-mono text-xs text-zinc-500">{item.hsn}</td>
                           <td className="py-3 text-right font-semibold font-mono text-xs">{item.stock}</td>
-                          <td className="py-3 text-right font-mono text-xs text-slate-400">{item.reorder}</td>
+                          <td className="py-3 text-right font-mono text-xs text-zinc-400">{item.reorder}</td>
                           <td className="py-3 text-right">
                             {isLow ? (
                               <Badge variant="destructive" className="text-[10px] animate-pulse">
@@ -211,7 +211,7 @@ export default function InventoryControl() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                    <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                       <th className="pb-3 text-left">Link ID</th>
                       <th className="pb-3 text-left">Parent Machinery Unit</th>
                       <th className="pb-3 text-left">Sub-Component Part</th>
@@ -220,15 +220,15 @@ export default function InventoryControl() {
                       <th className="pb-3 text-right">Warranty Expiry</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                  <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                     {nestedComponents.map((comp) => (
-                      <tr key={comp.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                      <tr key={comp.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                         <td className="py-3.5 font-semibold text-xs text-primary">{comp.id}</td>
                         <td className="py-3.5 font-medium">{comp.parentMachine}</td>
-                        <td className="py-3.5 font-medium text-slate-800 dark:text-slate-200">{comp.partName}</td>
+                        <td className="py-3.5 font-medium text-zinc-800 dark:text-zinc-200">{comp.partName}</td>
                         <td className="py-3.5">{comp.manufacturer}</td>
-                        <td className="py-3.5 font-mono text-xs text-indigo-600 dark:text-indigo-400 font-bold">{comp.serialNo}</td>
-                        <td className="py-3.5 text-right font-mono text-xs text-slate-400">{comp.warranty}</td>
+                        <td className="py-3.5 font-mono text-xs text-cyan-600 dark:text-cyan-400 font-bold">{comp.serialNo}</td>
+                        <td className="py-3.5 text-right font-mono text-xs text-zinc-400">{comp.warranty}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -249,7 +249,7 @@ export default function InventoryControl() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                    <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                       <th className="pb-3 text-left">Audit ID</th>
                       <th className="pb-3 text-left">Audited Fluid Name</th>
                       <th className="pb-3 text-left">Batch No</th>
@@ -260,18 +260,18 @@ export default function InventoryControl() {
                       <th className="pb-3 text-right">Status Code</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                  <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                     {fluidLedger.map((fluid) => (
-                      <tr key={fluid.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                      <tr key={fluid.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                         <td className="py-3.5 font-semibold text-xs text-primary">{fluid.id}</td>
                         <td className="py-3.5 font-medium">{fluid.fluidName}</td>
                         <td className="py-3.5 font-mono text-xs">{fluid.batchNo}</td>
                         <td className="py-3.5 text-right font-mono text-xs">{fluid.viscosity}</td>
-                        <td className="py-3.5 text-right font-mono text-xs text-indigo-600 dark:text-indigo-400 font-bold">{fluid.moisture}</td>
+                        <td className="py-3.5 text-right font-mono text-xs text-cyan-600 dark:text-cyan-400 font-bold">{fluid.moisture}</td>
                         <td className="py-3.5 text-right font-mono text-xs">{fluid.acidity}</td>
-                        <td className="py-3.5 pl-6 text-xs text-slate-400">{fluid.testDate}</td>
+                        <td className="py-3.5 pl-6 text-xs text-zinc-400">{fluid.testDate}</td>
                         <td className="py-3.5 text-right">
-                          <Badge variant={fluid.status === 'Optimal' ? 'default' : 'secondary'} className={fluid.status === 'Optimal' ? 'text-green-600 border-green-200' : 'text-amber-600 border-amber-200 bg-amber-50 dark:bg-amber-950/20'}>
+                          <Badge variant={fluid.status === 'Optimal' ? 'default' : 'secondary'} className={fluid.status === 'Optimal' ? 'text-green-600 border-green-200' : 'text-teal-600 border-teal-200 bg-teal-50 dark:bg-teal-950/20'}>
                             {fluid.status}
                           </Badge>
                         </td>

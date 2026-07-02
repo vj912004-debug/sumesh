@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   mockPackingLists, mockOrders, mockCustomers, mockQuotations, mockProducts
@@ -152,20 +152,20 @@ export default function PackingLists() {
   return (
     <div className="space-y-6">
       {/* Top Banner with gradient background */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-900 dark:to-indigo-950 p-6 md:p-8 rounded-2xl text-white shadow-lg relative overflow-hidden">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-gradient-to-r from-teal-600 to-orange-700 dark:from-teal-900 dark:to-orange-950 p-6 md:p-8 rounded-2xl text-white shadow-lg relative overflow-hidden">
         <div className="absolute right-0 top-0 opacity-10 pointer-events-none transform translate-x-10 -translate-y-6 scale-150">
           <PackageIcon className="w-64 h-64" />
         </div>
         <div className="relative z-10 space-y-1">
           <h2 className="text-3xl font-extrabold tracking-tight">Packing & Packaging Lists</h2>
-          <p className="text-blue-100 max-w-xl text-sm md:text-base">
+          <p className="text-teal-100 max-w-xl text-sm md:text-base">
             Create, manage, and print packing lists. Group order items into customized boxes, crates, or bags with dimensions and weights for shipping.
           </p>
         </div>
         <div className="relative z-10 flex-shrink-0">
           <Button 
             onClick={() => setIsCreateOpen(true)}
-            className="bg-white text-blue-700 hover:bg-blue-50 font-bold border-0 shadow-md transition-all scale-100 hover:scale-105 active:scale-95"
+            className="bg-white text-teal-700 hover:bg-teal-50 font-bold border-0 shadow-md transition-all scale-100 hover:scale-105 active:scale-95"
           >
             <Plus className="mr-2 h-5 w-5 font-bold" /> New Packing List
           </Button>
@@ -178,9 +178,9 @@ export default function PackingLists() {
           <CardContent className="p-6 flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Total Packing Lists</p>
-              <h3 className="text-3xl font-bold mt-1 text-slate-800 dark:text-slate-100">{packingLists.length}</h3>
+              <h3 className="text-3xl font-bold mt-1 text-zinc-800 dark:text-zinc-100">{packingLists.length}</h3>
             </div>
-            <div className="p-3 bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 rounded-xl">
+            <div className="p-3 bg-teal-100 dark:bg-teal-950 text-teal-600 dark:text-teal-400 rounded-xl">
               <PackageIcon className="w-6 h-6" />
             </div>
           </CardContent>
@@ -190,9 +190,9 @@ export default function PackingLists() {
           <CardContent className="p-6 flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Total Packages Packed</p>
-              <h3 className="text-3xl font-bold mt-1 text-slate-800 dark:text-slate-100">{totalPackages}</h3>
+              <h3 className="text-3xl font-bold mt-1 text-zinc-800 dark:text-zinc-100">{totalPackages}</h3>
             </div>
-            <div className="p-3 bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 rounded-xl">
+            <div className="p-3 bg-orange-100 dark:bg-orange-950 text-cyan-600 dark:text-cyan-400 rounded-xl">
               <ShoppingBag className="w-6 h-6" />
             </div>
           </CardContent>
@@ -202,9 +202,9 @@ export default function PackingLists() {
           <CardContent className="p-6 flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Total Gross Weight</p>
-              <h3 className="text-3xl font-bold mt-1 text-slate-800 dark:text-slate-100">{totalWeight.toLocaleString()} kg</h3>
+              <h3 className="text-3xl font-bold mt-1 text-zinc-800 dark:text-zinc-100">{totalWeight.toLocaleString()} kg</h3>
             </div>
-            <div className="p-3 bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 rounded-xl">
+            <div className="p-3 bg-teal-100 dark:bg-teal-950 text-teal-600 dark:text-teal-400 rounded-xl">
               <Truck className="w-6 h-6" />
             </div>
           </CardContent>
@@ -214,7 +214,7 @@ export default function PackingLists() {
           <CardContent className="p-6 flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Pending Shipped</p>
-              <h3 className="text-3xl font-bold mt-1 text-slate-800 dark:text-slate-100">{draftCount + packingLists.filter(p => p.status === 'Finalized').length}</h3>
+              <h3 className="text-3xl font-bold mt-1 text-zinc-800 dark:text-zinc-100">{draftCount + packingLists.filter(p => p.status === 'Finalized').length}</h3>
             </div>
             <div className="p-3 bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 rounded-xl">
               <CheckCircle2 className="w-6 h-6" />
@@ -238,20 +238,20 @@ export default function PackingLists() {
                   placeholder="Search PL ID, Order, Client..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-900 border rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full bg-zinc-50 dark:bg-zinc-900 border rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20"
                 />
               </div>
 
               {/* Status Tab Filters */}
-              <div className="flex bg-slate-100 dark:bg-slate-950 p-1 rounded-lg border text-xs font-medium">
+              <div className="flex bg-zinc-100 dark:bg-zinc-950 p-1 rounded-lg border text-xs font-medium">
                 {(['All', 'Draft', 'Finalized', 'Shipped'] as const).map(tab => (
                   <button
                     key={tab}
                     onClick={() => setStatusFilter(tab)}
                     className={`px-3 py-1.5 rounded-md transition-colors ${
                       statusFilter === tab 
-                        ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-sm font-semibold' 
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                        ? 'bg-white dark:bg-zinc-800 text-teal-600 dark:text-teal-400 shadow-sm font-semibold' 
+                        : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900'
                     }`}
                   >
                     {tab}
@@ -263,7 +263,7 @@ export default function PackingLists() {
         </CardHeader>
         <CardContent className="p-0">
           <Table>
-            <TableHeader className="bg-slate-50/50 dark:bg-slate-900/50">
+            <TableHeader className="bg-zinc-50/50 dark:bg-zinc-900/50">
               <TableRow>
                 <TableHead className="font-semibold py-4 pl-6">Packing ID</TableHead>
                 <TableHead className="font-semibold">Date</TableHead>
@@ -289,25 +289,25 @@ export default function PackingLists() {
                   const plWeight = pl.packages.reduce((sum, pkg) => sum + pkg.grossWeight, 0);
                   
                   return (
-                    <TableRow key={pl.id} className="hover:bg-slate-50/40 dark:hover:bg-slate-900/40 transition-colors">
-                      <TableCell className="font-semibold py-4 pl-6 text-blue-600 dark:text-blue-400">
+                    <TableRow key={pl.id} className="hover:bg-zinc-50/40 dark:hover:bg-zinc-900/40 transition-colors">
+                      <TableCell className="font-semibold py-4 pl-6 text-teal-600 dark:text-teal-400">
                         {pl.id}
                       </TableCell>
-                      <TableCell className="text-slate-600 dark:text-slate-300 text-sm">
+                      <TableCell className="text-zinc-600 dark:text-zinc-300 text-sm">
                         {pl.date}
                       </TableCell>
-                      <TableCell className="font-medium text-slate-800 dark:text-slate-200">
+                      <TableCell className="font-medium text-zinc-800 dark:text-zinc-200">
                         {pl.orderId}
                       </TableCell>
-                      <TableCell className="text-slate-700 dark:text-slate-300 max-w-[200px] truncate">
+                      <TableCell className="text-zinc-700 dark:text-zinc-300 max-w-[200px] truncate">
                         {customer?.name}
                       </TableCell>
                       <TableCell className="text-center font-semibold">
-                        <Badge variant="outline" className="bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                        <Badge variant="outline" className="bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
                           {pkgCount} Pkg
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-right font-medium text-slate-800 dark:text-slate-200">
+                      <TableCell className="text-right font-medium text-zinc-800 dark:text-zinc-200">
                         {plWeight} kg
                       </TableCell>
                       <TableCell className="text-center">
@@ -317,15 +317,15 @@ export default function PackingLists() {
                           'outline'
                         } className={
                           pl.status === 'Shipped' ? 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200 dark:bg-green-950 dark:text-green-200' :
-                          pl.status === 'Finalized' ? 'bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-200 dark:bg-blue-950 dark:text-blue-200' :
-                          'bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-200 dark:bg-amber-950 dark:text-amber-200'
+                          pl.status === 'Finalized' ? 'bg-teal-100 text-teal-800 border-teal-200 hover:bg-teal-200 dark:bg-teal-950 dark:text-teal-200' :
+                          'bg-teal-100 text-teal-800 border-teal-200 hover:bg-teal-200 dark:bg-teal-950 dark:text-teal-200'
                         }>
                           {pl.status}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right pr-6 space-x-1">
                         <Link to={`/dispatch/packing-list/${pl.id}`}>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-slate-800 dark:hover:text-white" title="Print/View Details">
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-zinc-800 dark:hover:text-white" title="Print/View Details">
                             <Eye className="h-4 w-4" />
                           </Button>
                         </Link>
@@ -344,7 +344,7 @@ export default function PackingLists() {
                           <Button 
                             variant="ghost" 
                             size="icon" 
-                            className="h-8 w-8 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 dark:hover:bg-indigo-950" 
+                            className="h-8 w-8 text-cyan-600 hover:text-orange-800 hover:bg-orange-50 dark:hover:bg-orange-950" 
                             title="Ship Carrier"
                             onClick={() => handleUpdateStatus(pl.id, 'Shipped')}
                           >
@@ -376,7 +376,7 @@ export default function PackingLists() {
           <form onSubmit={handleCreatePackingList}>
             <DialogHeader>
               <DialogTitle className="text-xl font-bold flex items-center gap-2">
-                <PackageIcon className="w-5 h-5 text-blue-500" />
+                <PackageIcon className="w-5 h-5 text-teal-500" />
                 Configure New Packing List
               </DialogTitle>
               <DialogDescription>
@@ -388,7 +388,7 @@ export default function PackingLists() {
               {/* Order Selection */}
               <div className="space-y-4 md:col-span-1">
                 <div>
-                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1.5">Select Sales Order *</label>
+                  <label className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase block mb-1.5">Select Sales Order *</label>
                   <select 
                     value={selectedOrderId} 
                     onChange={(e) => {
@@ -397,7 +397,7 @@ export default function PackingLists() {
                       setPackedItems({});
                     }}
                     required
-                    className="w-full bg-slate-50 dark:bg-slate-900 border rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    className="w-full bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20"
                   >
                     <option value="">-- Choose Order --</option>
                     {availableOrders.map(o => (
@@ -407,17 +407,17 @@ export default function PackingLists() {
                 </div>
 
                 {selectedOrder && (
-                  <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border text-xs space-y-2">
-                    <p className="font-bold text-slate-800 dark:text-slate-200">Customer Details</p>
-                    <p className="font-semibold text-blue-600 dark:text-blue-400">{selectedCustomer?.name}</p>
-                    <p className="text-slate-500">{selectedCustomer?.city}, {selectedCustomer?.state}</p>
-                    <p className="text-slate-400">GSTIN: {selectedCustomer?.gstin}</p>
+                  <div className="bg-zinc-50 dark:bg-zinc-900 p-3 rounded-lg border text-xs space-y-2">
+                    <p className="font-bold text-zinc-800 dark:text-zinc-200">Customer Details</p>
+                    <p className="font-semibold text-teal-600 dark:text-teal-400">{selectedCustomer?.name}</p>
+                    <p className="text-zinc-500">{selectedCustomer?.city}, {selectedCustomer?.state}</p>
+                    <p className="text-zinc-400">GSTIN: {selectedCustomer?.gstin}</p>
                   </div>
                 )}
 
                 <div className="space-y-3 pt-2">
                   <div>
-                    <label className="text-xs font-bold text-slate-500 block mb-1">Carrier / Transporter</label>
+                    <label className="text-xs font-bold text-zinc-500 block mb-1">Carrier / Transporter</label>
                     <Input 
                       placeholder="e.g. VRL Logistics" 
                       value={carrierName} 
@@ -425,7 +425,7 @@ export default function PackingLists() {
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-slate-500 block mb-1">Vehicle Number</label>
+                    <label className="text-xs font-bold text-zinc-500 block mb-1">Vehicle Number</label>
                     <Input 
                       placeholder="e.g. GJ-06-XX-5678" 
                       value={vehicleNo} 
@@ -433,7 +433,7 @@ export default function PackingLists() {
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-slate-500 block mb-1">LR Number (Consignment No)</label>
+                    <label className="text-xs font-bold text-zinc-500 block mb-1">LR Number (Consignment No)</label>
                     <Input 
                       placeholder="e.g. LR-4091" 
                       value={lrNumber} 
@@ -445,17 +445,17 @@ export default function PackingLists() {
 
               {/* Package Builder and items mapping */}
               <div className="space-y-4 md:col-span-2">
-                <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200">Package Configuration Builder</h4>
+                <h4 className="text-sm font-bold text-zinc-800 dark:text-zinc-200">Package Configuration Builder</h4>
                 
                 {selectedOrder ? (
-                  <div className="border rounded-xl p-4 bg-slate-50/40 dark:bg-slate-900/40 space-y-4">
+                  <div className="border rounded-xl p-4 bg-zinc-50/40 dark:bg-zinc-900/40 space-y-4">
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       <div>
-                        <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Pkg Type</label>
+                        <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">Pkg Type</label>
                         <select 
                           value={currentPackageType} 
                           onChange={(e) => setCurrentPackageType(e.target.value)}
-                          className="w-full bg-white dark:bg-slate-950 border rounded-lg p-2 text-xs focus:outline-none"
+                          className="w-full bg-white dark:bg-zinc-950 border rounded-lg p-2 text-xs focus:outline-none"
                         >
                           <option value="Wooden Box">Wooden Box</option>
                           <option value="Crate">Crate</option>
@@ -465,7 +465,7 @@ export default function PackingLists() {
                         </select>
                       </div>
                       <div>
-                        <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Dimensions (LxWxH)</label>
+                        <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">Dimensions (LxWxH)</label>
                         <Input 
                           placeholder="e.g. 100x100x120 cm" 
                           value={currentDimensions} 
@@ -474,7 +474,7 @@ export default function PackingLists() {
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Gross Wt (kg)</label>
+                        <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">Gross Wt (kg)</label>
                         <Input 
                           type="number" 
                           value={currentGrossWeight} 
@@ -483,7 +483,7 @@ export default function PackingLists() {
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Net Wt (kg)</label>
+                        <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">Net Wt (kg)</label>
                         <Input 
                           type="number" 
                           value={currentNetWeight} 
@@ -495,7 +495,7 @@ export default function PackingLists() {
 
                     {/* Order items packing selectors */}
                     <div className="space-y-2 pt-2 border-t">
-                      <p className="text-xs font-bold text-slate-500 mb-1">Assign Items to this Package:</p>
+                      <p className="text-xs font-bold text-zinc-500 mb-1">Assign Items to this Package:</p>
                       
                       {selectedQuotation?.items.map((item) => {
                         const product = mockProducts.find(p => p.id === item.productId);
@@ -507,13 +507,13 @@ export default function PackingLists() {
                         const remaining = item.quantity - alreadyPacked;
 
                         return (
-                          <div key={item.productId} className="flex items-center justify-between bg-white dark:bg-slate-950 p-2.5 rounded-lg border text-xs">
+                          <div key={item.productId} className="flex items-center justify-between bg-white dark:bg-zinc-950 p-2.5 rounded-lg border text-xs">
                             <div>
-                              <p className="font-semibold text-slate-800 dark:text-slate-200">{product?.name}</p>
-                              <p className="text-slate-400">Total Ordered: {item.quantity} | Remaining: {remaining}</p>
+                              <p className="font-semibold text-zinc-800 dark:text-zinc-200">{product?.name}</p>
+                              <p className="text-zinc-400">Total Ordered: {item.quantity} | Remaining: {remaining}</p>
                             </div>
                             <div className="flex items-center gap-2">
-                              <span className="text-[10px] font-medium text-slate-400">Pack Qty:</span>
+                              <span className="text-[10px] font-medium text-zinc-400">Pack Qty:</span>
                               <input 
                                 type="number" 
                                 min={0}
@@ -526,7 +526,7 @@ export default function PackingLists() {
                                     [item.productId]: val
                                   }));
                                 }}
-                                className="w-16 bg-slate-50 border rounded px-2 py-1 text-center font-bold"
+                                className="w-16 bg-zinc-50 border rounded px-2 py-1 text-center font-bold"
                               />
                             </div>
                           </div>
@@ -537,14 +537,14 @@ export default function PackingLists() {
                     <Button 
                       type="button" 
                       onClick={handleAddPackage}
-                      className="w-full bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs h-8"
+                      className="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-medium text-xs h-8"
                     >
                       + Add this Package to List
                     </Button>
                   </div>
                 ) : (
-                  <div className="h-44 border-2 border-dashed rounded-xl flex flex-col items-center justify-center text-slate-400 text-xs">
-                    <AlertCircle className="w-8 h-8 mb-2 text-slate-300" />
+                  <div className="h-44 border-2 border-dashed rounded-xl flex flex-col items-center justify-center text-zinc-400 text-xs">
+                    <AlertCircle className="w-8 h-8 mb-2 text-zinc-300" />
                     Select a Sales Order on the left to configure packages.
                   </div>
                 )}
@@ -552,18 +552,18 @@ export default function PackingLists() {
                 {/* Displaying configured packages */}
                 {packages.length > 0 && (
                   <div className="space-y-2">
-                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Configured Packages List ({packages.length})</p>
+                    <p className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Configured Packages List ({packages.length})</p>
                     <div className="border rounded-xl divide-y max-h-40 overflow-y-auto">
                       {packages.map((pkg, idx) => (
-                        <div key={idx} className="p-3 flex items-center justify-between text-xs hover:bg-slate-50 dark:hover:bg-slate-900 bg-white dark:bg-slate-950">
+                        <div key={idx} className="p-3 flex items-center justify-between text-xs hover:bg-zinc-50 dark:hover:bg-zinc-900 bg-white dark:bg-zinc-950">
                           <div>
-                            <span className="font-bold text-blue-600 dark:text-blue-400 mr-2">{pkg.packageNo}</span>
-                            <span className="text-slate-500">({pkg.type} | {pkg.dimensions})</span>
-                            <div className="flex gap-4 text-[10px] text-slate-400 mt-1">
+                            <span className="font-bold text-teal-600 dark:text-teal-400 mr-2">{pkg.packageNo}</span>
+                            <span className="text-zinc-500">({pkg.type} | {pkg.dimensions})</span>
+                            <div className="flex gap-4 text-[10px] text-zinc-400 mt-1">
                               <span>Gross Wt: <b>{pkg.grossWeight} kg</b></span>
                               <span>Net Wt: <b>{pkg.netWeight} kg</b></span>
                             </div>
-                            <div className="mt-1 text-[10px] font-medium text-slate-600 dark:text-slate-300">
+                            <div className="mt-1 text-[10px] font-medium text-zinc-600 dark:text-zinc-300">
                               Packed: {pkg.items.map(pi => {
                                 const prod = mockProducts.find(p => p.id === pi.productId);
                                 return `${prod?.name} (${pi.quantity} Nos)`;

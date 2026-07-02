@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -74,42 +74,42 @@ export default function MillTestCertificate() {
                 </div>
               </div>
               
-              <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider pt-2 border-t">Chemical Analysis (%)</h4>
+              <h4 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider pt-2 border-t">Chemical Analysis (%)</h4>
               <div className="grid grid-cols-3 gap-2">
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-slate-500">Carbon (C)</label>
+                  <label className="text-xs font-medium text-zinc-500">Carbon (C)</label>
                   <Input value={carbon} onChange={e => setCarbon(e.target.value)} className="h-8 text-xs" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-slate-500">Manganese (Mn)</label>
+                  <label className="text-xs font-medium text-zinc-500">Manganese (Mn)</label>
                   <Input value={manganese} onChange={e => setManganese(e.target.value)} className="h-8 text-xs" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-slate-500">Silicon (Si)</label>
+                  <label className="text-xs font-medium text-zinc-500">Silicon (Si)</label>
                   <Input value={silicon} onChange={e => setSilicon(e.target.value)} className="h-8 text-xs" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-slate-500">Phosphorus (P)</label>
+                  <label className="text-xs font-medium text-zinc-500">Phosphorus (P)</label>
                   <Input value={phosphorus} onChange={e => setPhosphorus(e.target.value)} className="h-8 text-xs" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-slate-500">Sulfur (S)</label>
+                  <label className="text-xs font-medium text-zinc-500">Sulfur (S)</label>
                   <Input value={sulfur} onChange={e => setSulfur(e.target.value)} className="h-8 text-xs" />
                 </div>
               </div>
 
-              <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider pt-2 border-t">Mechanical Properties</h4>
+              <h4 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider pt-2 border-t">Mechanical Properties</h4>
               <div className="grid grid-cols-3 gap-2">
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-slate-500">Yield (MPa)</label>
+                  <label className="text-xs font-medium text-zinc-500">Yield (MPa)</label>
                   <Input value={yieldStrength} onChange={e => setYieldStrength(e.target.value)} className="h-8 text-xs" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-slate-500">Tensile (MPa)</label>
+                  <label className="text-xs font-medium text-zinc-500">Tensile (MPa)</label>
                   <Input value={tensileStrength} onChange={e => setTensileStrength(e.target.value)} className="h-8 text-xs" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-slate-500">Elong (%)</label>
+                  <label className="text-xs font-medium text-zinc-500">Elong (%)</label>
                   <Input value={elongation} onChange={e => setElongation(e.target.value)} className="h-8 text-xs" />
                 </div>
               </div>
@@ -123,7 +123,7 @@ export default function MillTestCertificate() {
 
         {/* Certificate Display */}
         <Card className="col-span-2">
-          <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-100">
+          <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-zinc-100">
             <CardTitle className="text-lg">Certificate Preview</CardTitle>
             {mtcData && (
               <Button size="sm" variant="outline">
@@ -133,15 +133,15 @@ export default function MillTestCertificate() {
           </CardHeader>
           <CardContent className="pt-6">
             {mtcData ? (
-              <div className="border border-slate-300 p-8 rounded-lg bg-white shadow-sm space-y-6 text-slate-800 font-sans max-w-2xl mx-auto">
+              <div className="border border-zinc-300 p-8 rounded-lg bg-white shadow-sm space-y-6 text-zinc-800 font-sans max-w-2xl mx-auto">
                 {/* Header */}
                 <div className="text-center space-y-1 border-b pb-4">
                   <div className="flex justify-center items-center gap-1.5 text-primary text-xl font-bold">
                     <Shield className="h-6 w-6" /> SUMESH PETROLEUM LABS
                   </div>
-                  <p className="text-xs text-slate-500">Makarpara Industrial Estate, Vadodara, Gujarat - 390010</p>
-                  <p className="text-sm font-semibold tracking-wide text-slate-700 pt-2">MATERIAL TEST CERTIFICATE (MTC)</p>
-                  <p className="text-xs text-slate-500">AS PER EN 10204 3.1</p>
+                  <p className="text-xs text-zinc-500">Makarpara Industrial Estate, Vadodara, Gujarat - 390010</p>
+                  <p className="text-sm font-semibold tracking-wide text-zinc-700 pt-2">MATERIAL TEST CERTIFICATE (MTC)</p>
+                  <p className="text-xs text-zinc-500">AS PER EN 10204 3.1</p>
                 </div>
 
                 {/* Metadata */}
@@ -156,9 +156,9 @@ export default function MillTestCertificate() {
 
                 {/* Chemistry Table */}
                 <div className="space-y-2">
-                  <h4 className="text-xs font-semibold text-slate-600 border-b pb-1">1. CHEMICAL ANALYSIS</h4>
+                  <h4 className="text-xs font-semibold text-zinc-600 border-b pb-1">1. CHEMICAL ANALYSIS</h4>
                   <table className="w-full text-xs text-center border divide-y">
-                    <thead className="bg-slate-50 text-slate-500 font-medium">
+                    <thead className="bg-zinc-50 text-zinc-500 font-medium">
                       <tr>
                         <th className="py-2 border-r">Element</th>
                         <th className="py-2 border-r">C</th>
@@ -170,7 +170,7 @@ export default function MillTestCertificate() {
                     </thead>
                     <tbody>
                       <tr>
-                        <td className="py-2 font-medium border-r bg-slate-50">Actual (%)</td>
+                        <td className="py-2 font-medium border-r bg-zinc-50">Actual (%)</td>
                         <td className="py-2 border-r">{mtcData.chemistry.C}%</td>
                         <td className="py-2 border-r">{mtcData.chemistry.Mn}%</td>
                         <td className="py-2 border-r">{mtcData.chemistry.Si}%</td>
@@ -183,9 +183,9 @@ export default function MillTestCertificate() {
 
                 {/* Mechanical Table */}
                 <div className="space-y-2">
-                  <h4 className="text-xs font-semibold text-slate-600 border-b pb-1">2. MECHANICAL PROPERTIES</h4>
+                  <h4 className="text-xs font-semibold text-zinc-600 border-b pb-1">2. MECHANICAL PROPERTIES</h4>
                   <table className="w-full text-xs text-center border divide-y">
-                    <thead className="bg-slate-50 text-slate-500 font-medium">
+                    <thead className="bg-zinc-50 text-zinc-500 font-medium">
                       <tr>
                         <th className="py-2 border-r">Test Parameter</th>
                         <th className="py-2 border-r">Yield Strength (MPa)</th>
@@ -195,7 +195,7 @@ export default function MillTestCertificate() {
                     </thead>
                     <tbody>
                       <tr>
-                        <td className="py-2 font-medium border-r bg-slate-50">Actual Value</td>
+                        <td className="py-2 font-medium border-r bg-zinc-50">Actual Value</td>
                         <td className="py-2 border-r">{mtcData.mechanical.yield} MPa</td>
                         <td className="py-2 border-r">{mtcData.mechanical.tensile} MPa</td>
                         <td className="py-2">{mtcData.mechanical.elongation}%</td>
@@ -210,17 +210,17 @@ export default function MillTestCertificate() {
                     <div className="flex items-center gap-1 text-emerald-600 font-semibold">
                       <CheckCircle className="h-4 w-4" /> Lab Certified Traceable
                     </div>
-                    <p className="text-slate-400">UID Signature Valid</p>
+                    <p className="text-zinc-400">UID Signature Valid</p>
                   </div>
                   <div className="text-center space-y-4">
-                    <div className="w-32 border-b border-dashed border-slate-400"></div>
-                    <p className="font-semibold text-slate-600">QA Incharge Signature</p>
+                    <div className="w-32 border-b border-dashed border-zinc-400"></div>
+                    <p className="font-semibold text-zinc-600">QA Incharge Signature</p>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-24 text-slate-400">
-                <FileText className="h-12 w-12 text-slate-200 mb-3 animate-pulse" />
+              <div className="flex flex-col items-center justify-center py-24 text-zinc-400">
+                <FileText className="h-12 w-12 text-zinc-200 mb-3 animate-pulse" />
                 <p>Configure material tests on the left and click generate to review MTC certificate.</p>
               </div>
             )}

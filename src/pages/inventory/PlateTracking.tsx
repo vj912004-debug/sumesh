@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -149,7 +149,7 @@ export default function PlateTracking() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Plates In Stock</CardTitle>
+            <CardTitle className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Total Plates In Stock</CardTitle>
             <Layers className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
@@ -158,8 +158,8 @@ export default function PlateTracking() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Steel Tonnage</CardTitle>
-            <Shield className="h-4 w-4 text-blue-500" />
+            <CardTitle className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Total Steel Tonnage</CardTitle>
+            <Shield className="h-4 w-4 text-teal-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold tracking-tight">842.1 Tons</div>
@@ -167,7 +167,7 @@ export default function PlateTracking() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-semibold text-slate-500 uppercase tracking-wider">MTC Certificates Linked</CardTitle>
+            <CardTitle className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">MTC Certificates Linked</CardTitle>
             <FileText className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
@@ -177,11 +177,11 @@ export default function PlateTracking() {
       </div>
 
       <Card>
-        <CardHeader className="border-b border-slate-100 flex flex-row items-center justify-between pb-4">
-          <CardTitle className="text-lg font-medium text-slate-800">Plate Inventory Registry</CardTitle>
+        <CardHeader className="border-b border-zinc-100 flex flex-row items-center justify-between pb-4">
+          <CardTitle className="text-lg font-medium text-zinc-800">Plate Inventory Registry</CardTitle>
           <div className="flex items-center gap-2">
             <div className="relative w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-400" />
               <Input
                 placeholder="Search plate or grade..."
                 value={searchTerm}
@@ -198,7 +198,7 @@ export default function PlateTracking() {
           <div className="overflow-x-auto w-full">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                   <th className="pb-3 text-left">Plate No</th>
                   <th className="pb-3 text-left">Material Grade</th>
                   <th className="pb-3 text-left">Dimensions (W x L x T)</th>
@@ -208,9 +208,9 @@ export default function PlateTracking() {
                   <th className="pb-3 text-center">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y text-slate-700">
+              <tbody className="divide-y text-zinc-700">
                 {filteredPlates.map(p => (
-                  <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
+                  <tr key={p.id} className="hover:bg-zinc-50/50 transition-colors">
                     <td className="py-3.5 font-medium text-xs">{p.plateNo}</td>
                     <td className="py-3.5">{p.grade}</td>
                     <td className="py-3.5 text-xs font-mono">{p.dimensions} mm</td>

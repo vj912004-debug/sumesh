@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { 
   Card, CardContent, CardHeader, CardTitle 
 } from '@/components/ui/card';
@@ -220,12 +220,12 @@ export default function FiltrationService() {
       {/* Title Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-slate-800">Filtration Service Management</h2>
-          <p className="text-slate-500">Log, monitor, and analyze on-site transformer oil dehydration, degasification, and purification operations.</p>
+          <h2 className="text-3xl font-bold tracking-tight text-zinc-800">Filtration Service Management</h2>
+          <p className="text-zinc-500">Log, monitor, and analyze on-site transformer oil dehydration, degasification, and purification operations.</p>
         </div>
         <Dialog open={isNewJobModalOpen} onOpenChange={setIsNewJobModalOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition-transform active:scale-95">
+            <Button className="bg-teal-600 hover:bg-teal-700 text-white shadow-sm transition-transform active:scale-95">
               <Plus className="mr-2 h-4 w-4" /> Schedule On-Site Job
             </Button>
           </DialogTrigger>
@@ -238,7 +238,7 @@ export default function FiltrationService() {
               <div className="space-y-4 py-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-slate-600">Customer Name</label>
+                    <label className="text-sm font-semibold text-zinc-600">Customer Name</label>
                     <Input 
                       placeholder="e.g. NTPC Ramagundam" 
                       value={newCustomer} 
@@ -247,7 +247,7 @@ export default function FiltrationService() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-slate-600">Site Location</label>
+                    <label className="text-sm font-semibold text-zinc-600">Site Location</label>
                     <Input 
                       placeholder="e.g. Karimnagar, TS" 
                       value={newLocation} 
@@ -259,7 +259,7 @@ export default function FiltrationService() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-slate-600">Transformer Serial No</label>
+                    <label className="text-sm font-semibold text-zinc-600">Transformer Serial No</label>
                     <Input 
                       placeholder="e.g. CGL-60MVA-04" 
                       value={newTransSno} 
@@ -268,7 +268,7 @@ export default function FiltrationService() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-slate-600">Oil Capacity (Liters)</label>
+                    <label className="text-sm font-semibold text-zinc-600">Oil Capacity (Liters)</label>
                     <Input 
                       type="number" 
                       placeholder="15000" 
@@ -281,9 +281,9 @@ export default function FiltrationService() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-slate-600">Mobile Plant Assigned</label>
+                    <label className="text-sm font-semibold text-zinc-600">Mobile Plant Assigned</label>
                     <select 
-                      className="w-full bg-slate-50 border border-slate-200 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      className="w-full bg-zinc-50 border border-zinc-200 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
                       value={newPlant}
                       onChange={e => setNewPlant(e.target.value)}
                     >
@@ -293,7 +293,7 @@ export default function FiltrationService() {
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-slate-600">Lead Field Engineer</label>
+                    <label className="text-sm font-semibold text-zinc-600">Lead Field Engineer</label>
                     <Input 
                       placeholder="e.g. S. G. Vyas" 
                       value={newEngineer} 
@@ -304,7 +304,7 @@ export default function FiltrationService() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-slate-600">Job Start Date</label>
+                  <label className="text-sm font-semibold text-zinc-600">Job Start Date</label>
                   <Input 
                     type="date" 
                     value={newStartDate} 
@@ -314,7 +314,7 @@ export default function FiltrationService() {
               </div>
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setIsNewJobModalOpen(false)}>Cancel</Button>
-                <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">Create Job Schedule</Button>
+                <Button type="submit" className="bg-teal-600 hover:bg-teal-700 text-white">Create Job Schedule</Button>
               </DialogFooter>
             </form>
           </DialogContent>
@@ -325,40 +325,40 @@ export default function FiltrationService() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-500">Active Filtration Sites</CardTitle>
-            <Activity className="h-4 w-4 text-blue-500 animate-pulse" />
+            <CardTitle className="text-sm font-semibold text-zinc-500">Active Filtration Sites</CardTitle>
+            <Activity className="h-4 w-4 text-teal-500 animate-pulse" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-slate-800">{activeJobsCount}</div>
-            <p className="text-xs text-slate-400">Plants actively circulating oil</p>
+            <div className="text-3xl font-bold text-zinc-800">{activeJobsCount}</div>
+            <p className="text-xs text-zinc-400">Plants actively circulating oil</p>
           </CardContent>
         </Card>
 
         <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-500">Total Volume Serviced</CardTitle>
+            <CardTitle className="text-sm font-semibold text-zinc-500">Total Volume Serviced</CardTitle>
             <Droplet className="h-4 w-4 text-cyan-500" />
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-cyan-600">{totalLitersProcessed.toLocaleString('en-IN')} L</div>
-            <p className="text-xs text-slate-400">Aggregated transformer oil capacity</p>
+            <p className="text-xs text-zinc-400">Aggregated transformer oil capacity</p>
           </CardContent>
         </Card>
 
         <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-500">Avg BDV Value (Initial)</CardTitle>
-            <Wrench className="h-4 w-4 text-slate-400" />
+            <CardTitle className="text-sm font-semibold text-zinc-500">Avg BDV Value (Initial)</CardTitle>
+            <Wrench className="h-4 w-4 text-zinc-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-slate-600">{avgInitialBdv.toFixed(1)} kV</div>
-            <p className="text-xs text-slate-400">Initial breakdown voltage</p>
+            <div className="text-3xl font-bold text-zinc-600">{avgInitialBdv.toFixed(1)} kV</div>
+            <p className="text-xs text-zinc-400">Initial breakdown voltage</p>
           </CardContent>
         </Card>
 
         <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-500">Avg BDV Value (Current)</CardTitle>
+            <CardTitle className="text-sm font-semibold text-zinc-500">Avg BDV Value (Current)</CardTitle>
             <ShieldCheck className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
@@ -376,26 +376,26 @@ export default function FiltrationService() {
       <Card>
         <CardHeader className="border-b pb-4">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <CardTitle className="text-lg font-semibold text-slate-800">Filtration Operations Logs</CardTitle>
+            <CardTitle className="text-lg font-semibold text-zinc-800">Filtration Operations Logs</CardTitle>
             <div className="flex items-center gap-2">
               <div className="relative w-64">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-400" />
                 <input
                   type="text"
                   placeholder="Search site, client, or engineer..."
-                  className="w-full bg-slate-50 border border-slate-200 rounded-md pl-9 pr-4 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-md pl-9 pr-4 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                 />
               </div>
-              <div className="flex bg-slate-100 p-1 rounded-md text-xs">
+              <div className="flex bg-zinc-100 p-1 rounded-md text-xs">
                 {(['All', 'Scheduled', 'Active', 'Completed'] as const).map(status => (
                   <button
                     key={status}
                     className={`px-3 py-1.5 rounded-md font-medium transition-all ${
                       statusFilter === status 
-                        ? 'bg-white text-slate-800 shadow-sm font-semibold' 
-                        : 'text-slate-500 hover:text-slate-800'
+                        ? 'bg-white text-zinc-800 shadow-sm font-semibold' 
+                        : 'text-zinc-500 hover:text-zinc-800'
                     }`}
                     onClick={() => setStatusFilter(status)}
                   >
@@ -426,41 +426,41 @@ export default function FiltrationService() {
                 const lastLog = job.passLogs[job.passLogs.length - 1];
                 const initialLog = job.passLogs[0];
                 return (
-                  <TableRow key={job.id} className="hover:bg-slate-50/50">
-                    <TableCell className="font-semibold text-blue-600 text-xs">{job.id}</TableCell>
+                  <TableRow key={job.id} className="hover:bg-zinc-50/50">
+                    <TableCell className="font-semibold text-teal-600 text-xs">{job.id}</TableCell>
                     <TableCell>
-                      <div className="font-medium text-slate-800">{job.customerName}</div>
-                      <div className="text-[10px] text-slate-400">{job.location}</div>
+                      <div className="font-medium text-zinc-800">{job.customerName}</div>
+                      <div className="text-[10px] text-zinc-400">{job.location}</div>
                     </TableCell>
                     <TableCell className="text-xs">
-                      <div className="font-medium text-slate-700">{job.transformerSno}</div>
-                      <div className="text-[10px] text-slate-400">{job.oilCapacity.toLocaleString('en-IN')} Liters</div>
+                      <div className="font-medium text-zinc-700">{job.transformerSno}</div>
+                      <div className="text-[10px] text-zinc-400">{job.oilCapacity.toLocaleString('en-IN')} Liters</div>
                     </TableCell>
-                    <TableCell className="text-slate-600 text-xs font-medium">{job.mobilePlant}</TableCell>
-                    <TableCell className="text-center font-bold text-slate-700">{job.passLogs.length - 1}</TableCell>
+                    <TableCell className="text-zinc-600 text-xs font-medium">{job.mobilePlant}</TableCell>
+                    <TableCell className="text-center font-bold text-zinc-700">{job.passLogs.length - 1}</TableCell>
                     <TableCell className="text-xs">
                       {lastLog ? (
                         <div className="space-y-0.5">
                           <div>
-                            <span className="font-semibold text-slate-700">BDV:</span>{' '}
-                            <span className={lastLog.bdv >= 70 ? 'text-emerald-600 font-bold' : 'text-slate-600'}>
+                            <span className="font-semibold text-zinc-700">BDV:</span>{' '}
+                            <span className={lastLog.bdv >= 70 ? 'text-emerald-600 font-bold' : 'text-zinc-600'}>
                               {lastLog.bdv} kV
                             </span>
-                            <span className="text-[10px] text-slate-400 ml-1">(init {initialLog?.bdv}kV)</span>
+                            <span className="text-[10px] text-zinc-400 ml-1">(init {initialLog?.bdv}kV)</span>
                           </div>
                           <div>
-                            <span className="font-semibold text-slate-700">Moisture:</span>{' '}
-                            <span className={lastLog.moisture <= 5 ? 'text-emerald-600 font-bold' : 'text-slate-600'}>
+                            <span className="font-semibold text-zinc-700">Moisture:</span>{' '}
+                            <span className={lastLog.moisture <= 5 ? 'text-emerald-600 font-bold' : 'text-zinc-600'}>
                               {lastLog.moisture} PPM
                             </span>
-                            <span className="text-[10px] text-slate-400 ml-1">(init {initialLog?.moisture}ppm)</span>
+                            <span className="text-[10px] text-zinc-400 ml-1">(init {initialLog?.moisture}ppm)</span>
                           </div>
                         </div>
                       ) : (
-                        <span className="text-slate-400">No logs yet</span>
+                        <span className="text-zinc-400">No logs yet</span>
                       )}
                     </TableCell>
-                    <TableCell className="text-slate-600 font-medium text-xs">{job.leadEngineer}</TableCell>
+                    <TableCell className="text-zinc-600 font-medium text-xs">{job.leadEngineer}</TableCell>
                     <TableCell>
                       <Badge variant={
                         job.status === 'Completed' ? 'default' : 
@@ -473,7 +473,7 @@ export default function FiltrationService() {
                       <Button 
                         size="sm" 
                         variant={job.status === 'Active' ? 'default' : 'ghost'} 
-                        className={job.status === 'Active' ? 'bg-slate-800 hover:bg-slate-900 text-white' : ''}
+                        className={job.status === 'Active' ? 'bg-zinc-800 hover:bg-zinc-900 text-white' : ''}
                         onClick={() => handleOpenLogModal(job)}
                       >
                         {job.status === 'Active' ? 'Log & Track' : 'View Logs'}
@@ -484,7 +484,7 @@ export default function FiltrationService() {
               })}
               {filteredJobs.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={9} className="text-center py-8 text-slate-400">
+                  <TableCell colSpan={9} className="text-center py-8 text-zinc-400">
                     No filtration service jobs found.
                   </TableCell>
                 </TableRow>
@@ -501,19 +501,19 @@ export default function FiltrationService() {
             <div>
               <DialogHeader>
                 <DialogTitle className="text-xl flex items-center gap-2">
-                  <Activity className="h-5 w-5 text-blue-500 animate-pulse" />
+                  <Activity className="h-5 w-5 text-teal-500 animate-pulse" />
                   Filtration Parameters & Performance Chart
                 </DialogTitle>
                 <DialogDescription>
-                  Site: <span className="font-semibold text-slate-800">{activeJobForLog.customerName}</span> | Plant: {activeJobForLog.mobilePlant}
+                  Site: <span className="font-semibold text-zinc-800">{activeJobForLog.customerName}</span> | Plant: {activeJobForLog.mobilePlant}
                 </DialogDescription>
               </DialogHeader>
 
               <div className="grid grid-cols-3 gap-6 py-4">
                 {/* Left: Chart Visualization */}
                 <div className="col-span-2 space-y-4">
-                  <div className="border p-4 rounded-lg bg-slate-50/50 shadow-inner h-[280px]">
-                    <h4 className="text-xs font-bold text-slate-600 mb-2 uppercase text-center tracking-wide">
+                  <div className="border p-4 rounded-lg bg-zinc-50/50 shadow-inner h-[280px]">
+                    <h4 className="text-xs font-bold text-zinc-600 mb-2 uppercase text-center tracking-wide">
                       Oil Filtration Pass Curve (BDV vs Moisture)
                     </h4>
                     <ResponsiveContainer width="100%" height="90%">
@@ -555,7 +555,7 @@ export default function FiltrationService() {
                   {/* Logs History Table */}
                   <div className="border rounded-md max-h-[150px] overflow-y-auto">
                     <table className="w-full text-xs text-center">
-                      <thead className="bg-slate-100 font-semibold sticky top-0">
+                      <thead className="bg-zinc-100 font-semibold sticky top-0">
                         <tr>
                           <th className="py-1.5 border-b">Pass</th>
                           <th className="py-1.5 border-b">BDV (kV)</th>
@@ -565,11 +565,11 @@ export default function FiltrationService() {
                       </thead>
                       <tbody className="divide-y">
                         {activeJobForLog.passLogs.map((log) => (
-                          <tr key={log.passNo} className={log.passNo === 0 ? 'bg-slate-50 font-medium' : ''}>
+                          <tr key={log.passNo} className={log.passNo === 0 ? 'bg-zinc-50 font-medium' : ''}>
                             <td className="py-1.5">{log.passNo === 0 ? 'Initial Test' : `Pass ${log.passNo}`}</td>
-                            <td className={`py-1.5 font-bold ${log.bdv >= 70 ? 'text-emerald-600' : 'text-slate-700'}`}>{log.bdv} kV</td>
-                            <td className={`py-1.5 font-bold ${log.moisture <= 5 ? 'text-emerald-600' : 'text-slate-700'}`}>{log.moisture} PPM</td>
-                            <td className="py-1.5 text-slate-500">{log.vacuum} Torr</td>
+                            <td className={`py-1.5 font-bold ${log.bdv >= 70 ? 'text-emerald-600' : 'text-zinc-700'}`}>{log.bdv} kV</td>
+                            <td className={`py-1.5 font-bold ${log.moisture <= 5 ? 'text-emerald-600' : 'text-zinc-700'}`}>{log.moisture} PPM</td>
+                            <td className="py-1.5 text-zinc-500">{log.vacuum} Torr</td>
                           </tr>
                         ))}
                       </tbody>
@@ -581,11 +581,11 @@ export default function FiltrationService() {
                 <div className="col-span-1 border rounded-lg p-4 bg-white shadow-sm space-y-4">
                   {activeJobForLog.status === 'Active' ? (
                     <form onSubmit={handleLogPassSubmit} className="space-y-3">
-                      <h4 className="text-xs font-bold text-slate-700 uppercase border-b pb-1">
+                      <h4 className="text-xs font-bold text-zinc-700 uppercase border-b pb-1">
                         Log Pass #{inputPassNo} Results
                       </h4>
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-semibold text-slate-500 uppercase">Pass Number</label>
+                        <label className="text-[10px] font-semibold text-zinc-500 uppercase">Pass Number</label>
                         <Input 
                           type="number" 
                           value={inputPassNo} 
@@ -595,7 +595,7 @@ export default function FiltrationService() {
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-semibold text-slate-500 uppercase">Breakdown Voltage (kV)</label>
+                        <label className="text-[10px] font-semibold text-zinc-500 uppercase">Breakdown Voltage (kV)</label>
                         <Input 
                           type="number" 
                           value={inputBdv} 
@@ -605,7 +605,7 @@ export default function FiltrationService() {
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-semibold text-slate-500 uppercase">Moisture Content (PPM)</label>
+                        <label className="text-[10px] font-semibold text-zinc-500 uppercase">Moisture Content (PPM)</label>
                         <Input 
                           type="number" 
                           value={inputMoisture} 
@@ -615,7 +615,7 @@ export default function FiltrationService() {
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-semibold text-slate-500 uppercase">Degassing Vacuum (Torr)</label>
+                        <label className="text-[10px] font-semibold text-zinc-500 uppercase">Degassing Vacuum (Torr)</label>
                         <Input 
                           type="number" 
                           step="0.01"
@@ -625,15 +625,15 @@ export default function FiltrationService() {
                           required 
                         />
                       </div>
-                      <Button type="submit" className="w-full h-8 mt-2 text-xs bg-blue-600 hover:bg-blue-700 text-white">
+                      <Button type="submit" className="w-full h-8 mt-2 text-xs bg-teal-600 hover:bg-teal-700 text-white">
                         Record Pass Parameters
                       </Button>
                     </form>
                   ) : (
-                    <div className="h-full flex flex-col items-center justify-center text-center p-2 text-slate-400 space-y-2">
+                    <div className="h-full flex flex-col items-center justify-center text-center p-2 text-zinc-400 space-y-2">
                       <CheckCircle2 className="h-10 w-10 text-emerald-500" />
                       <div>
-                        <p className="font-semibold text-slate-700 text-xs">Job Completed</p>
+                        <p className="font-semibold text-zinc-700 text-xs">Job Completed</p>
                         <p className="text-[10px] mt-0.5">Parameters are locked as oil reaches target specifications.</p>
                       </div>
                     </div>

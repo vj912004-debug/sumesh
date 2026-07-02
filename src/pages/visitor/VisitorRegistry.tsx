@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -129,9 +129,9 @@ export default function VisitorRegistry() {
           <CardContent className="p-6 flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Active Visitors On-Site</p>
-              <h3 className="text-3xl font-bold mt-1 text-slate-800 dark:text-slate-100">{activeCount}</h3>
+              <h3 className="text-3xl font-bold mt-1 text-zinc-800 dark:text-zinc-100">{activeCount}</h3>
             </div>
-            <div className="p-3 bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 rounded-xl">
+            <div className="p-3 bg-teal-100 dark:bg-teal-950 text-teal-600 dark:text-teal-400 rounded-xl">
               <UserCheck className="w-6 h-6" />
             </div>
           </CardContent>
@@ -141,7 +141,7 @@ export default function VisitorRegistry() {
           <CardContent className="p-6 flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Total Visitors Today</p>
-              <h3 className="text-3xl font-bold mt-1 text-slate-800 dark:text-slate-100">{totalToday}</h3>
+              <h3 className="text-3xl font-bold mt-1 text-zinc-800 dark:text-zinc-100">{totalToday}</h3>
             </div>
             <div className="p-3 bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 rounded-xl">
               <Users className="w-6 h-6" />
@@ -157,7 +157,7 @@ export default function VisitorRegistry() {
                 100% Cleared
               </Badge>
             </div>
-            <div className="p-3 bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 rounded-xl">
+            <div className="p-3 bg-orange-100 dark:bg-orange-950 text-cyan-600 dark:text-cyan-400 rounded-xl">
               <Calendar className="w-6 h-6" />
             </div>
           </CardContent>
@@ -179,20 +179,20 @@ export default function VisitorRegistry() {
                   placeholder="Search Visitor, Company, Host..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-900 border rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full bg-zinc-50 dark:bg-zinc-900 border rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20"
                 />
               </div>
 
               {/* Status Tab Filters */}
-              <div className="flex bg-slate-100 dark:bg-slate-950 p-1 rounded-lg border text-xs font-medium">
+              <div className="flex bg-zinc-100 dark:bg-zinc-950 p-1 rounded-lg border text-xs font-medium">
                 {(['All', 'Checked-In', 'Checked-Out'] as const).map(tab => (
                   <button
                     key={tab}
                     onClick={() => setStatusFilter(tab)}
                     className={`px-3 py-1.5 rounded-md transition-colors ${
                       statusFilter === tab 
-                        ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-sm font-semibold' 
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                        ? 'bg-white dark:bg-zinc-800 text-teal-600 dark:text-teal-400 shadow-sm font-semibold' 
+                        : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900'
                     }`}
                   >
                     {tab}
@@ -204,7 +204,7 @@ export default function VisitorRegistry() {
         </CardHeader>
         <CardContent className="p-0">
           <Table>
-            <TableHeader className="bg-slate-50/50 dark:bg-slate-900/50">
+            <TableHeader className="bg-zinc-50/50 dark:bg-zinc-900/50">
               <TableRow>
                 <TableHead className="font-semibold py-4 pl-6 w-28">Pass ID</TableHead>
                 <TableHead className="font-semibold">Visitor Name</TableHead>
@@ -226,22 +226,22 @@ export default function VisitorRegistry() {
                 </TableRow>
               ) : (
                 filteredVisitors.map((v) => (
-                  <TableRow key={v.passId} className="hover:bg-slate-50/30 dark:hover:bg-slate-900/30 transition-colors">
-                    <td className="font-mono font-bold text-xs pl-6 py-3.5 text-blue-600 dark:text-blue-400">{v.passId}</td>
-                    <td className="font-bold text-sm text-slate-800 dark:text-slate-200">
+                  <TableRow key={v.passId} className="hover:bg-zinc-50/30 dark:hover:bg-zinc-900/30 transition-colors">
+                    <td className="font-mono font-bold text-xs pl-6 py-3.5 text-teal-600 dark:text-teal-400">{v.passId}</td>
+                    <td className="font-bold text-sm text-zinc-800 dark:text-zinc-200">
                       <p>{v.name}</p>
-                      <p className="text-[10px] text-slate-400 font-medium">{v.phone}</p>
+                      <p className="text-[10px] text-zinc-400 font-medium">{v.phone}</p>
                     </td>
-                    <td className="text-slate-700 dark:text-slate-300 font-medium text-xs">{v.company}</td>
+                    <td className="text-zinc-700 dark:text-zinc-300 font-medium text-xs">{v.company}</td>
                     <td className="text-xs">
-                      <Badge variant="outline" className="text-slate-600 dark:text-slate-400">{v.purpose}</Badge>
+                      <Badge variant="outline" className="text-zinc-600 dark:text-zinc-400">{v.purpose}</Badge>
                     </td>
-                    <td className="text-xs font-semibold text-slate-800 dark:text-slate-200">{v.host}</td>
-                    <td className="text-xs font-mono text-slate-400">{v.entryTime}</td>
-                    <td className="text-xs font-mono text-slate-400">{v.exitTime || '-'}</td>
+                    <td className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">{v.host}</td>
+                    <td className="text-xs font-mono text-zinc-400">{v.entryTime}</td>
+                    <td className="text-xs font-mono text-zinc-400">{v.exitTime || '-'}</td>
                     <td className="text-center">
                       <Badge variant={v.status === 'Checked-In' ? 'default' : 'secondary'} className={
-                        v.status === 'Checked-In' ? 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950 dark:text-amber-200' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'
+                        v.status === 'Checked-In' ? 'bg-teal-100 text-teal-800 border-teal-200 dark:bg-teal-950 dark:text-teal-200' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
                       }>
                         {v.status === 'Checked-In' ? 'On Site' : 'Checked Out'}
                       </Badge>
@@ -250,7 +250,7 @@ export default function VisitorRegistry() {
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className="h-8 w-8 text-slate-400 hover:text-slate-800 dark:hover:text-white" 
+                        className="h-8 w-8 text-zinc-400 hover:text-zinc-800 dark:hover:text-white" 
                         title="Print visitor pass"
                         onClick={() => setSelectedVisitor(v)}
                       >
@@ -282,7 +282,7 @@ export default function VisitorRegistry() {
           <form onSubmit={handleCheckin}>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-blue-500" /> Security Gate Check-In
+                <Users className="w-5 h-5 text-teal-500" /> Security Gate Check-In
               </DialogTitle>
               <DialogDescription>
                 Register guest details for security clearance and gate logs.
@@ -292,26 +292,26 @@ export default function VisitorRegistry() {
             <div className="space-y-4 py-4 border-b border-t my-3 text-xs">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="font-bold text-slate-500 block">Visitor Full Name *</label>
+                  <label className="font-bold text-zinc-500 block">Visitor Full Name *</label>
                   <Input placeholder="e.g. Ramesh Shah" value={name} onChange={e => setName(e.target.value)} required />
                 </div>
                 <div className="space-y-2">
-                  <label className="font-bold text-slate-500 block">Contact Phone *</label>
+                  <label className="font-bold text-zinc-500 block">Contact Phone *</label>
                   <Input placeholder="e.g. 98765 XXXXX" value={phone} onChange={e => setPhone(e.target.value)} required />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="font-bold text-slate-500 block">Company Name *</label>
+                  <label className="font-bold text-zinc-500 block">Company Name *</label>
                   <Input placeholder="e.g. Reliance, VRL Transports" value={company} onChange={e => setCompany(e.target.value)} required />
                 </div>
                 <div className="space-y-2">
-                  <label className="font-bold text-slate-500 block">Purpose of Visit *</label>
+                  <label className="font-bold text-zinc-500 block">Purpose of Visit *</label>
                   <select 
                     value={purpose} 
                     onChange={e => setPurpose(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-900 border rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    className="w-full bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20"
                   >
                     <option value="Client Meeting">Client Meeting</option>
                     <option value="Vendor Delivery">Vendor Delivery</option>
@@ -324,12 +324,12 @@ export default function VisitorRegistry() {
               </div>
 
               <div className="space-y-2">
-                <label className="font-bold text-slate-500 block">Host Person / Dept *</label>
+                <label className="font-bold text-zinc-500 block">Host Person / Dept *</label>
                 <Input placeholder="e.g. Suketu Shah, Purchasing Team" value={host} onChange={e => setHost(e.target.value)} required />
               </div>
 
               <div className="space-y-2">
-                <label className="font-bold text-slate-500 block">Special Remarks / Security Instructions</label>
+                <label className="font-bold text-zinc-500 block">Special Remarks / Security Instructions</label>
                 <Input placeholder="e.g. Carry laptop, requires visitor escort badge" value={remarks} onChange={e => setRemarks(e.target.value)} />
               </div>
             </div>
@@ -355,45 +355,45 @@ export default function VisitorRegistry() {
               </DialogHeader>
 
               {/* Printable Visitor Pass Card */}
-              <div className="border border-slate-900 bg-white text-black p-6 rounded-lg text-center space-y-4 font-sans max-w-sm mx-auto shadow-sm">
+              <div className="border border-zinc-900 bg-white text-black p-6 rounded-lg text-center space-y-4 font-sans max-w-sm mx-auto shadow-sm">
                 <div className="border-b-2 pb-2">
                   <h3 className="font-bold text-lg leading-tight uppercase">Sumesh Petroleum Pvt. Ltd.</h3>
-                  <p className="text-[9px] text-slate-500 tracking-wider">MAKARPURA GIDC, VADODARA</p>
+                  <p className="text-[9px] text-zinc-500 tracking-wider">MAKARPURA GIDC, VADODARA</p>
                 </div>
                 
                 <div className="inline-block border border-red-500 bg-red-50 text-red-600 font-extrabold px-4 py-0.5 rounded text-xs uppercase tracking-wider">
                   Visitor Pass
                 </div>
 
-                <div className="py-2 border rounded-lg bg-slate-50/50 flex flex-col items-center">
-                  <span className="text-[10px] text-slate-400 font-bold uppercase">Pass Identifier</span>
-                  <span className="font-mono text-base font-extrabold text-blue-600">{selectedVisitor.passId}</span>
+                <div className="py-2 border rounded-lg bg-zinc-50/50 flex flex-col items-center">
+                  <span className="text-[10px] text-zinc-400 font-bold uppercase">Pass Identifier</span>
+                  <span className="font-mono text-base font-extrabold text-teal-600">{selectedVisitor.passId}</span>
                 </div>
 
                 <div className="space-y-1.5 text-xs text-left">
                   <div className="flex border-b pb-1">
-                    <span className="w-24 text-slate-400 font-bold">Visitor:</span>
-                    <span className="font-bold text-slate-950">{selectedVisitor.name}</span>
+                    <span className="w-24 text-zinc-400 font-bold">Visitor:</span>
+                    <span className="font-bold text-zinc-950">{selectedVisitor.name}</span>
                   </div>
                   <div className="flex border-b pb-1">
-                    <span className="w-24 text-slate-400 font-bold">Company:</span>
+                    <span className="w-24 text-zinc-400 font-bold">Company:</span>
                     <span className="font-semibold">{selectedVisitor.company}</span>
                   </div>
                   <div className="flex border-b pb-1">
-                    <span className="w-24 text-slate-400 font-bold">Host Person:</span>
+                    <span className="w-24 text-zinc-400 font-bold">Host Person:</span>
                     <span className="font-bold">{selectedVisitor.host}</span>
                   </div>
                   <div className="flex border-b pb-1">
-                    <span className="w-24 text-slate-400 font-bold">Purpose:</span>
+                    <span className="w-24 text-zinc-400 font-bold">Purpose:</span>
                     <span>{selectedVisitor.purpose}</span>
                   </div>
                   <div className="flex pb-1">
-                    <span className="w-24 text-slate-400 font-bold">Checked-In:</span>
+                    <span className="w-24 text-zinc-400 font-bold">Checked-In:</span>
                     <span className="font-mono text-[10px]">{selectedVisitor.entryTime}</span>
                   </div>
                 </div>
 
-                <div className="text-[8px] text-slate-400 border-t pt-2 font-medium">
+                <div className="text-[8px] text-zinc-400 border-t pt-2 font-medium">
                   Valid on check-in date only. Must display this badge at all times on site. Return pass at gate exit.
                 </div>
               </div>

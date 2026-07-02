@@ -38,7 +38,7 @@ export default function Login() {
         <CardHeader className="space-y-2 text-center">
           <div className="flex justify-center mb-4">
             <div className="h-12 w-12 bg-primary rounded-lg flex items-center justify-center">
-              <Factory className="h-6 w-6 text-accent" />
+              <Factory className="h-6 w-6 text-primary-foreground" />
             </div>
           </div>
           <CardTitle className="text-2xl font-bold tracking-tight">Sumesh Petroleum</CardTitle>

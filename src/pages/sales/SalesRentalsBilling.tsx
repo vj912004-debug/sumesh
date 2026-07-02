@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -175,7 +175,7 @@ export default function SalesRentalsBilling() {
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-semibold block text-indigo-600 font-bold">1. BILL TO ADDRESS (HQ Coordinates) *</label>
+                        <label className="text-sm font-semibold block text-cyan-600 font-bold">1. BILL TO ADDRESS (HQ Coordinates) *</label>
                         <textarea 
                           className="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm"
                           value={cBillTo} 
@@ -207,7 +207,7 @@ export default function SalesRentalsBilling() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                    <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                       <th className="pb-3 text-left">Customer ID</th>
                       <th className="pb-3 text-left">Company Name</th>
                       <th className="pb-3 text-left font-mono">GSTIN</th>
@@ -216,18 +216,18 @@ export default function SalesRentalsBilling() {
                       <th className="pb-3 text-left">Ship To Destination</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                  <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                     {customers.map((c) => (
-                      <tr key={c.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                      <tr key={c.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                         <td className="py-3.5 font-semibold text-xs text-primary">{c.id}</td>
-                        <td className="py-3.5 font-bold text-slate-800 dark:text-slate-200">{c.name}</td>
-                        <td className="py-3.5 font-mono text-xs text-indigo-600 dark:text-indigo-400 font-semibold">{c.gstin}</td>
+                        <td className="py-3.5 font-bold text-zinc-800 dark:text-zinc-200">{c.name}</td>
+                        <td className="py-3.5 font-mono text-xs text-cyan-600 dark:text-cyan-400 font-semibold">{c.gstin}</td>
                         <td className="py-3.5">
                           <p className="font-medium">{c.contact}</p>
-                          <p className="text-[10px] text-slate-400 font-mono">{c.email}</p>
+                          <p className="text-[10px] text-zinc-400 font-mono">{c.email}</p>
                         </td>
-                        <td className="py-3.5 text-xs text-slate-500 max-w-[150px] truncate" title={c.billToAddress}>{c.billToAddress}</td>
-                        <td className="py-3.5 text-xs text-slate-500 max-w-[150px] truncate font-semibold" title={c.shipToAddress}>{c.shipToAddress}</td>
+                        <td className="py-3.5 text-xs text-zinc-500 max-w-[150px] truncate" title={c.billToAddress}>{c.billToAddress}</td>
+                        <td className="py-3.5 text-xs text-zinc-500 max-w-[150px] truncate font-semibold" title={c.shipToAddress}>{c.shipToAddress}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -248,7 +248,7 @@ export default function SalesRentalsBilling() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                    <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                       <th className="pb-3 text-left">Contract ID</th>
                       <th className="pb-3 text-left">Client Leaseholder</th>
                       <th className="pb-3 text-left">Asset description</th>
@@ -259,18 +259,18 @@ export default function SalesRentalsBilling() {
                       <th className="pb-3 text-right">Lease Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                  <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                     {contracts.map((c) => (
-                      <tr key={c.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                      <tr key={c.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                         <td className="py-3.5 font-semibold text-xs text-primary">{c.id}</td>
                         <td className="py-3.5 font-bold">{c.customer}</td>
                         <td className="py-3.5 text-xs">{c.asset}</td>
-                        <td className="py-3.5 text-right font-semibold text-indigo-600 dark:text-indigo-400 font-mono text-xs">{c.rate}</td>
-                        <td className="py-3.5 pl-6 text-slate-500 text-xs font-mono">{c.start}</td>
-                        <td className="py-3.5 text-slate-500 text-xs font-mono">{c.end}</td>
+                        <td className="py-3.5 text-right font-semibold text-cyan-600 dark:text-cyan-400 font-mono text-xs">{c.rate}</td>
+                        <td className="py-3.5 pl-6 text-zinc-500 text-xs font-mono">{c.start}</td>
+                        <td className="py-3.5 text-zinc-500 text-xs font-mono">{c.end}</td>
                         <td className="py-3.5 text-xs">{c.billingCycle}</td>
                         <td className="py-3.5 text-right">
-                          <Badge variant={c.status === 'Active' ? 'default' : 'secondary'} className={c.status === 'Active' ? 'text-green-600 border-green-200 bg-green-50' : 'text-slate-400'}>
+                          <Badge variant={c.status === 'Active' ? 'default' : 'secondary'} className={c.status === 'Active' ? 'text-green-600 border-green-200 bg-green-50' : 'text-zinc-400'}>
                             {c.status}
                           </Badge>
                         </td>
@@ -342,7 +342,7 @@ export default function SalesRentalsBilling() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                    <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                       <th className="pb-3 text-left">Invoice No</th>
                       <th className="pb-3 text-left">Billing Date</th>
                       <th className="pb-3 text-left">Client Company</th>
@@ -352,33 +352,33 @@ export default function SalesRentalsBilling() {
                       <th className="pb-3 text-right">Audit Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                  <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                     {linkages.map((link) => (
-                      <tr key={link.invoiceNo} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                      <tr key={link.invoiceNo} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                         <td className="py-3.5 font-semibold text-xs text-primary">{link.invoiceNo}</td>
-                        <td className="py-3.5 text-slate-500 text-xs font-mono">{link.date}</td>
+                        <td className="py-3.5 text-zinc-500 text-xs font-mono">{link.date}</td>
                         <td className="py-3.5 font-bold">{link.customer}</td>
-                        <td className="py-3.5 pl-6 font-mono text-xs text-slate-800 dark:text-slate-200 font-semibold">{link.clientPoRef}</td>
-                        <td className="py-3.5 text-xs text-slate-500">
+                        <td className="py-3.5 pl-6 font-mono text-xs text-zinc-800 dark:text-zinc-200 font-semibold">{link.clientPoRef}</td>
+                        <td className="py-3.5 text-xs text-zinc-500">
                           {link.manufacturingFile !== 'Not Attached' ? (
-                            <span className="inline-flex items-center text-xs text-blue-600 font-semibold gap-1">
-                              <Paperclip className="w-3 h-3 text-blue-500" /> {link.manufacturingFile}
+                            <span className="inline-flex items-center text-xs text-teal-600 font-semibold gap-1">
+                              <Paperclip className="w-3 h-3 text-teal-500" /> {link.manufacturingFile}
                             </span>
                           ) : (
-                            <span className="text-slate-400 font-medium italic">No Drawing Bound</span>
+                            <span className="text-zinc-400 font-medium italic">No Drawing Bound</span>
                           )}
                         </td>
                         <td className="py-3.5">
                           {link.serialArray.length > 0 ? (
                             <div className="flex flex-wrap gap-1">
                               {link.serialArray.map((ser, index) => (
-                                <span key={index} className="inline-flex items-center text-[10px] font-bold font-mono text-indigo-700 bg-indigo-50 border border-indigo-200 px-1.5 py-0.5 rounded">
-                                  <Barcode className="w-2.5 h-2.5 mr-0.5 text-indigo-500" /> {ser}
+                                <span key={index} className="inline-flex items-center text-[10px] font-bold font-mono text-orange-700 bg-orange-50 border border-orange-200 px-1.5 py-0.5 rounded">
+                                  <Barcode className="w-2.5 h-2.5 mr-0.5 text-cyan-500" /> {ser}
                                 </span>
                               ))}
                             </div>
                           ) : (
-                            <span className="text-slate-400 text-xs italic">Awaiting Serials</span>
+                            <span className="text-zinc-400 text-xs italic">Awaiting Serials</span>
                           )}
                         </td>
                         <td className="py-3.5 text-right">

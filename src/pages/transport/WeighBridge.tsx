@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -122,7 +122,7 @@ export default function WeighBridge() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Active Slips Today</CardTitle>
+            <CardTitle className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Active Slips Today</CardTitle>
             <Scale className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
@@ -131,7 +131,7 @@ export default function WeighBridge() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Net Weight Dispatched</CardTitle>
+            <CardTitle className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Net Weight Dispatched</CardTitle>
             <Scale className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
@@ -140,8 +140,8 @@ export default function WeighBridge() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Average Tare Time</CardTitle>
-            <Scale className="h-4 w-4 text-amber-500" />
+            <CardTitle className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Average Tare Time</CardTitle>
+            <Scale className="h-4 w-4 text-teal-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold tracking-tight">18 mins</div>
@@ -150,11 +150,11 @@ export default function WeighBridge() {
       </div>
 
       <Card>
-        <CardHeader className="border-b border-slate-100 flex flex-row items-center justify-between pb-4">
-          <CardTitle className="text-lg font-medium text-slate-800">Weighment Slips Directory</CardTitle>
+        <CardHeader className="border-b border-zinc-100 flex flex-row items-center justify-between pb-4">
+          <CardTitle className="text-lg font-medium text-zinc-800">Weighment Slips Directory</CardTitle>
           <div className="flex items-center gap-2">
             <div className="relative w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-400" />
               <Input
                 placeholder="Search vehicle or driver..."
                 value={searchTerm}
@@ -171,7 +171,7 @@ export default function WeighBridge() {
           <div className="overflow-x-auto w-full">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                   <th className="pb-3 text-left">Slip No</th>
                   <th className="pb-3 text-left">Vehicle No</th>
                   <th className="pb-3 text-left">Driver</th>
@@ -183,9 +183,9 @@ export default function WeighBridge() {
                   <th className="pb-3 text-right">Print</th>
                 </tr>
               </thead>
-              <tbody className="divide-y text-slate-700">
+              <tbody className="divide-y text-zinc-700">
                 {filteredSlips.map(s => (
-                  <tr key={s.id} className="hover:bg-slate-50/50 transition-colors">
+                  <tr key={s.id} className="hover:bg-zinc-50/50 transition-colors">
                     <td className="py-3.5 font-medium text-xs">{s.slipNo}</td>
                     <td className="py-3.5 font-mono text-xs">{s.vehicleNo}</td>
                     <td className="py-3.5">{s.driver}</td>
@@ -195,7 +195,7 @@ export default function WeighBridge() {
                     <td className="py-3.5 text-right font-semibold text-primary">{s.net.toLocaleString()}</td>
                     <td className="py-3.5 pl-6 text-xs">{s.date}</td>
                     <td className="py-3.5 text-right">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-slate-900">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-zinc-900">
                         <Printer className="h-4 w-4" />
                       </Button>
                     </td>

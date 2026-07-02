@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+﻿import { useParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Printer, ArrowLeft, Download, Send } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -60,15 +60,15 @@ export default function PurchaseOrderDetail() {
             <table className="text-sm text-left ml-auto">
               <tbody>
                 <tr>
-                  <th className="pr-4 py-1 font-semibold text-gray-700">PO No:</th>
+                  <th className="pr-4 py-1 font-semibold text-zinc-700">PO No:</th>
                   <td className="text-gray-900 font-medium">{poId}</td>
                 </tr>
                 <tr>
-                  <th className="pr-4 py-1 font-semibold text-gray-700">Date:</th>
+                  <th className="pr-4 py-1 font-semibold text-zinc-700">Date:</th>
                   <td className="text-gray-900">25-Jun-2026</td>
                 </tr>
                 <tr>
-                  <th className="pr-4 py-1 font-semibold text-gray-700">Delivery Date:</th>
+                  <th className="pr-4 py-1 font-semibold text-zinc-700">Delivery Date:</th>
                   <td className="text-gray-900">05-Jul-2026</td>
                 </tr>
               </tbody>
@@ -78,7 +78,7 @@ export default function PurchaseOrderDetail() {
 
         {/* Vendor Details */}
         <div className="mb-8">
-          <h3 className="font-semibold text-gray-700 border-b border-gray-200 pb-1 mb-2">Vendor Details:</h3>
+          <h3 className="font-semibold text-zinc-700 border-b border-gray-200 pb-1 mb-2">Vendor Details:</h3>
           <p className="font-bold text-gray-900">{vendor.name}</p>
           <p className="text-sm text-gray-600 whitespace-pre-line">{vendor.address}</p>
           <p className="text-sm text-gray-600 mt-2"><strong>Contact:</strong> {vendor.contact}</p>
@@ -88,7 +88,7 @@ export default function PurchaseOrderDetail() {
         {/* Line Items */}
         <div className="mb-8 border border-gray-200 rounded-md overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200 text-gray-700">
+            <thead className="bg-gray-50 border-b border-gray-200 text-zinc-700">
               <tr>
                 <th className="py-3 px-4 text-left font-semibold">Sr.</th>
                 <th className="py-3 px-4 text-left font-semibold">Item Description</th>
@@ -122,7 +122,7 @@ export default function PurchaseOrderDetail() {
                 <td colSpan={4} className="py-3 px-4 text-right font-bold text-gray-900">GST (18%):</td>
                 <td className="py-3 px-4 text-right font-bold text-gray-900">₹98,460</td>
               </tr>
-              <tr className="border-t border-gray-200 bg-gray-100">
+              <tr className="border-t border-gray-200 bg-zinc-100">
                 <td colSpan={4} className="py-3 px-4 text-right font-bold text-gray-900 text-lg">Grand Total:</td>
                 <td className="py-3 px-4 text-right font-bold text-gray-900 text-lg">₹6,45,460</td>
               </tr>
@@ -144,10 +144,10 @@ export default function PurchaseOrderDetail() {
         {/* Signatures */}
         <div className="flex justify-end pt-12 border-t border-gray-200">
           <div className="text-center w-64">
-            <p className="text-gray-500 text-sm mb-16">For Sumesh Petroleum Pvt. Ltd.</p>
-            <div className="border-t border-gray-400"></div>
+            <p className="text-zinc-500 text-sm mb-16">For Sumesh Petroleum Pvt. Ltd.</p>
+            <div className="border-t border-zinc-400"></div>
             <p className="text-gray-800 font-semibold mt-2 text-sm">Authorized Signatory</p>
-            <p className="text-gray-500 text-xs">Purchase Department</p>
+            <p className="text-zinc-500 text-xs">Purchase Department</p>
           </div>
         </div>
 

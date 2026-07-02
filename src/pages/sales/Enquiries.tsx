@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
@@ -46,6 +46,7 @@ export default function Enquiries() {
       await api.post('/crm/enquiries', payload);
       setIsDialogOpen(false);
       fetchEnquiries();
+      alert('Enquiry created! A follow-up task and WhatsApp/email alerts were auto-generated. Check Tasks and Communication pages.');
     } catch (error) {
       console.error('Failed to create enquiry:', error);
     } finally {
@@ -116,7 +117,7 @@ export default function Enquiries() {
                       <TableCell>₹{enq.expectedValue?.toLocaleString('en-IN')}</TableCell>
                       <TableCell>
                         {enq.nextFollowUp ? (
-                          <span className="text-orange-600 font-medium text-sm">
+                          <span className="text-cyan-600 font-medium text-sm">
                             {format(new Date(enq.nextFollowUp), 'dd MMM yyyy')}
                           </span>
                         ) : '-'}

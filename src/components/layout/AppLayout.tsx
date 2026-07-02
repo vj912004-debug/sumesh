@@ -254,7 +254,7 @@ export function AppLayout() {
       <>
         {parts.map((part, i) => 
           part.toLowerCase() === query.toLowerCase()
-            ? <mark key={i} className="bg-blue-500/35 text-white font-semibold rounded-[2px] px-0.5">{part}</mark>
+            ? <mark key={i} className="bg-teal-500/35 text-white font-semibold rounded-[2px] px-0.5">{part}</mark>
             : part
         )}
       </>
@@ -302,15 +302,15 @@ export function AppLayout() {
   const renderSidebarContent = () => (
     <>
       {/* Brand Logo area */}
-      <div className="h-16 flex items-center justify-between px-6 border-b border-slate-700 flex-shrink-0 bg-slate-900">
+      <div className="h-16 flex items-center justify-between px-6 border-b border-zinc-700 flex-shrink-0 bg-zinc-900">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="h-6 w-6 text-blue-400" />
+          <ShieldCheck className="h-6 w-6 text-teal-400" />
           <span className="text-xl font-extrabold tracking-wider text-white">CORP-ERP</span>
         </div>
         <Button 
           variant="ghost" 
           size="icon" 
-          className="md:hidden text-slate-400 hover:text-white"
+          className="md:hidden text-zinc-400 hover:text-white"
           onClick={() => setIsMobileMenuOpen(false)}
         >
           <X className="h-5 w-5" />
@@ -318,26 +318,26 @@ export function AppLayout() {
       </div>
 
       {/* Search Input Box */}
-      <div className="px-4 pt-4 pb-2 flex-shrink-0 bg-slate-800">
+      <div className="px-4 pt-4 pb-2 flex-shrink-0 bg-zinc-800">
         <div className="relative">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400" />
           <input
             ref={searchInputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Quick search... (Ctrl+K or /)"
-            className="w-full bg-slate-700/35 border border-slate-700/60 rounded-lg pl-9 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40 text-slate-200 placeholder:text-slate-500 transition-all animate-none"
+            className="w-full bg-zinc-700/35 border border-zinc-700/60 rounded-lg pl-9 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/40 text-zinc-200 placeholder:text-zinc-500 transition-all animate-none"
           />
           {searchQuery ? (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 top-2.5 text-slate-400 hover:text-white transition-colors"
+              className="absolute right-2.5 top-2.5 text-zinc-400 hover:text-white transition-colors"
             >
               <X className="h-4 w-4" />
             </button>
           ) : (
-            <span className="absolute right-2.5 top-2.5 text-[10px] bg-slate-700 text-slate-400 border border-slate-600 rounded px-1.5 py-0.5 select-none hidden sm:inline-block">
+            <span className="absolute right-2.5 top-2.5 text-[10px] bg-zinc-700 text-zinc-400 border border-zinc-600 rounded px-1.5 py-0.5 select-none hidden sm:inline-block">
               /
             </span>
           )}
@@ -348,9 +348,9 @@ export function AppLayout() {
       <div className="flex-1 overflow-y-auto py-4 space-y-4 px-3 custom-sidebar-scrollbar">
         {/* Pinned / Favorites Section */}
         {!searchQuery && uniquePinnedItems.length > 0 && (
-          <div className="space-y-1 pb-3 mb-2 border-b border-slate-700/30">
-            <div className="py-2 px-3 text-[10px] font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-              <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+          <div className="space-y-1 pb-3 mb-2 border-b border-zinc-700/30">
+            <div className="py-2 px-3 text-[10px] font-bold text-teal-400 uppercase tracking-wider flex items-center gap-1.5">
+              <Star className="h-3.5 w-3.5 fill-teal-400 text-teal-400" />
               Pinned Pages
             </div>
             <div className="space-y-0.5 pl-2">
@@ -364,21 +364,21 @@ export function AppLayout() {
                     to={item.path}
                     className={`group/link flex items-center justify-between px-3 py-1.5 text-sm font-medium transition-colors border-l-4 rounded-r-md ${
                       isActive
-                        ? 'bg-slate-700/50 text-white border-blue-500 font-semibold'
-                        : 'text-slate-300 border-transparent hover:bg-slate-700/20 hover:text-white'
+                        ? 'bg-zinc-700/50 text-white border-teal-500 font-semibold'
+                        : 'text-zinc-300 border-transparent hover:bg-zinc-700/20 hover:text-white'
                     }`}
                   >
                     <div className="flex items-center min-w-0">
-                      {ItemIcon && <ItemIcon className="mr-3 h-4 w-4 text-slate-400 flex-shrink-0" />}
+                      {ItemIcon && <ItemIcon className="mr-3 h-4 w-4 text-zinc-400 flex-shrink-0" />}
                       <span className="truncate">{item.name}</span>
                     </div>
                     <button
                       type="button"
                       onClick={(e) => togglePin(item.path, e)}
-                      className="opacity-100 p-1 text-amber-400 hover:text-amber-300 transition-opacity ml-2"
+                      className="opacity-100 p-1 text-teal-400 hover:text-teal-300 transition-opacity ml-2"
                       title="Unpin page"
                     >
-                      <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                      <Star className="h-3.5 w-3.5 fill-teal-400 text-teal-400" />
                     </button>
                   </Link>
                 );
@@ -388,20 +388,20 @@ export function AppLayout() {
         )}
 
         {/* Category Controls / Menu title */}
-        <div className="flex items-center justify-between px-3 py-1 text-[10px] font-bold text-slate-500 border-b border-slate-700/30 pb-2 mb-2">
+        <div className="flex items-center justify-between px-3 py-1 text-[10px] font-bold text-zinc-500 border-b border-zinc-700/30 pb-2 mb-2">
           <span className="uppercase tracking-wider">NAVIGATION</span>
           <div className="flex items-center gap-2">
             <button
               onClick={expandAll}
               title="Expand All Groups"
-              className="p-1 hover:text-white hover:bg-slate-700/50 rounded transition-colors"
+              className="p-1 hover:text-white hover:bg-zinc-700/50 rounded transition-colors"
             >
               <ChevronsUpDown className="h-3.5 w-3.5" />
             </button>
             <button
               onClick={collapseAll}
               title="Collapse All Groups"
-              className="p-1 hover:text-white hover:bg-slate-700/50 rounded transition-colors"
+              className="p-1 hover:text-white hover:bg-zinc-700/50 rounded transition-colors"
             >
               <ChevronsDownUp className="h-3.5 w-3.5" />
             </button>
@@ -410,7 +410,7 @@ export function AppLayout() {
 
         {/* Filtered navigation groups */}
         {filteredGroups.length === 0 ? (
-          <div className="px-3 py-8 text-center text-sm text-slate-500">
+          <div className="px-3 py-8 text-center text-sm text-zinc-500">
             No matches found for "{searchQuery}"
           </div>
         ) : (
@@ -423,26 +423,26 @@ export function AppLayout() {
                 {group.isCollapsible ? (
                   <button
                     onClick={() => toggleGroup(group.title)}
-                    className="w-full flex items-center justify-between py-2 px-3 text-xs font-semibold text-slate-400 hover:text-white uppercase tracking-wider transition-colors"
+                    className="w-full flex items-center justify-between py-2 px-3 text-xs font-semibold text-zinc-400 hover:text-white uppercase tracking-wider transition-colors"
                   >
                     <span className="flex items-center gap-2">
-                      {GroupIcon && <GroupIcon className="h-4 w-4 text-slate-500" />}
+                      {GroupIcon && <GroupIcon className="h-4 w-4 text-zinc-500" />}
                       {highlightMatch(group.title, searchQuery)}
                     </span>
                     {isCollapsed ? (
-                      <ChevronDown className="h-3.5 w-3.5 text-slate-500" />
+                      <ChevronDown className="h-3.5 w-3.5 text-zinc-500" />
                     ) : (
-                      <ChevronUp className="h-3.5 w-3.5 text-slate-500" />
+                      <ChevronUp className="h-3.5 w-3.5 text-zinc-500" />
                     )}
                   </button>
                 ) : (
-                  <div className="py-2 px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  <div className="py-2 px-3 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                     {highlightMatch(group.title, searchQuery)}
                   </div>
                 )}
 
                 {!isCollapsed && (
-                  <div className="space-y-0.5 pl-2 border-l border-slate-700/50 ml-3">
+                  <div className="space-y-0.5 pl-2 border-l border-zinc-700/50 ml-3">
                     {group.items.map((item) => {
                       const isActive = location.pathname === item.path || 
                                        (item.path !== '/' && location.pathname.startsWith(item.path));
@@ -454,23 +454,23 @@ export function AppLayout() {
                           to={item.path}
                           className={`group/link flex items-center justify-between px-3 py-1.5 text-sm font-medium transition-colors border-l-4 rounded-r-md ${
                             isActive
-                              ? 'bg-slate-700/50 text-white border-blue-500 font-semibold'
-                              : 'text-slate-300 border-transparent hover:bg-slate-700/20 hover:text-white'
+                              ? 'bg-zinc-700/50 text-white border-teal-500 font-semibold'
+                              : 'text-zinc-300 border-transparent hover:bg-zinc-700/20 hover:text-white'
                           }`}
                         >
                           <div className="flex items-center min-w-0">
-                            {ItemIcon && <ItemIcon className="mr-3 h-4 w-4 text-slate-400 flex-shrink-0" />}
+                            {ItemIcon && <ItemIcon className="mr-3 h-4 w-4 text-zinc-400 flex-shrink-0" />}
                             <span className="truncate">{highlightMatch(item.name, searchQuery)}</span>
                           </div>
                           <button
                             type="button"
                             onClick={(e) => togglePin(item.path, e)}
-                            className={`opacity-0 group-hover/link:opacity-100 focus:opacity-100 p-1 hover:text-amber-400 transition-opacity ml-2 ${
-                              isPinned ? 'opacity-100 text-amber-400' : 'text-slate-500'
+                            className={`opacity-0 group-hover/link:opacity-100 focus:opacity-100 p-1 hover:text-teal-400 transition-opacity ml-2 ${
+                              isPinned ? 'opacity-100 text-teal-400' : 'text-zinc-500'
                             }`}
                             title={isPinned ? 'Unpin page' : 'Pin page'}
                           >
-                            <Star className={`h-3.5 w-3.5 ${isPinned ? 'fill-amber-400 text-amber-400' : ''}`} />
+                            <Star className={`h-3.5 w-3.5 ${isPinned ? 'fill-teal-400 text-teal-400' : ''}`} />
                           </button>
                         </Link>
                       );
@@ -484,17 +484,17 @@ export function AppLayout() {
       </div>
 
       {/* Bottom Profile Panel */}
-      <div className="p-4 border-t border-slate-700 bg-slate-900/60 flex items-center justify-between flex-shrink-0 text-slate-300">
+      <div className="p-4 border-t border-zinc-700 bg-zinc-900/60 flex items-center justify-between flex-shrink-0 text-zinc-300">
         <div className="flex items-center gap-3">
-          <div className="bg-slate-700 p-2 rounded-full text-blue-400">
+          <div className="bg-zinc-700 p-2 rounded-full text-teal-400">
             <Sliders className="h-4 w-4" />
           </div>
           <div>
             <p className="text-sm font-semibold text-white leading-none">Suketu Shah</p>
-            <p className="text-xs text-slate-500 mt-1">v2.1 Stable</p>
+            <p className="text-xs text-zinc-500 mt-1">v2.1 Stable</p>
           </div>
         </div>
-        <Button variant="ghost" size="sm" onClick={logout} className="text-xs text-slate-400 hover:text-white h-8 px-2 hover:bg-slate-700/50">
+        <Button variant="ghost" size="sm" onClick={logout} className="text-xs text-zinc-400 hover:text-white h-8 px-2 hover:bg-zinc-700/50">
           Logout
         </Button>
       </div>
@@ -502,22 +502,22 @@ export function AppLayout() {
   );
 
   return (
-    <div className="flex h-screen bg-slate-50 dark:bg-slate-900 antialiased text-slate-900 dark:text-slate-100 font-sans">
-      {/* Desktop Sidebar - Dark navy background */}
-      <aside className="w-64 bg-slate-800 border-r border-slate-700 flex flex-col hidden md:flex text-slate-200 flex-shrink-0">
+    <div className="flex h-screen bg-background antialiased text-foreground font-sans">
+      {/* Desktop Sidebar */}
+      <aside className="w-64 bg-zinc-900 border-r border-zinc-800 max-md:hidden md:flex flex-col text-zinc-200 flex-shrink-0">
         {renderSidebarContent()}
       </aside>
 
       {/* Mobile Drawer Overlay */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex md:hidden">
+        <div className="fixed inset-0 z-50 max-md:flex md:hidden">
           {/* Backdrop */}
           <div 
             className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
             onClick={() => setIsMobileMenuOpen(false)}
           />
           {/* Drawer Content */}
-          <aside className="relative w-64 bg-slate-800 border-r border-slate-700 text-slate-200 flex flex-col z-10 animate-in slide-in-from-left duration-200">
+          <aside className="relative w-64 bg-zinc-900 border-r border-zinc-800 text-zinc-200 flex flex-col z-10 animate-in slide-in-from-left duration-200">
             {renderSidebarContent()}
           </aside>
         </div>
@@ -526,13 +526,13 @@ export function AppLayout() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Header - White background */}
-        <header className="h-16 bg-white dark:bg-slate-950 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between px-6 lg:px-8 shadow-sm z-10">
+        <header className="h-16 bg-card border-b border-border flex items-center justify-between px-6 lg:px-8 shadow-sm z-10">
           <div className="flex items-center flex-1">
             {/* Hamburger Button for mobile */}
             <Button 
               variant="ghost" 
               size="icon" 
-              className="md:hidden mr-3 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+              className="md:hidden mr-3 text-muted-foreground hover:text-foreground"
               onClick={() => setIsMobileMenuOpen(true)}
             >
               <Menu className="h-5 w-5" />
@@ -541,11 +541,11 @@ export function AppLayout() {
             
             {/* Wide Search Bar in the Center */}
             <div className="relative w-full max-w-lg hidden sm:block">
-              <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <input
                 type="text"
                 placeholder="Search resources, documents, or systems..."
-                className="w-full bg-gray-100 dark:bg-slate-900 border-0 rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all text-slate-800 dark:text-slate-200 placeholder:text-gray-400"
+                className="w-full bg-muted border-0 rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-foreground placeholder:text-muted-foreground"
               />
             </div>
           </div>
@@ -556,48 +556,48 @@ export function AppLayout() {
               variant="ghost" 
               size="icon" 
               onClick={toggleTheme} 
-              className="text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200"
+              className="text-muted-foreground hover:text-foreground"
             >
               {theme === 'light' ? (
                 <Moon className="h-5 w-5" />
               ) : (
-                <Sun className="h-5 w-5 text-amber-400" />
+                <Sun className="h-5 w-5 text-teal-400" />
               )}
               <span className="sr-only">Toggle theme</span>
             </Button>
 
             {/* Mail Icon */}
-            <Button variant="ghost" size="icon" className="text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200 relative">
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
               <Mail className="h-5 w-5" />
               <span className="sr-only">Messages</span>
-              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-blue-500"></span>
+              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary"></span>
             </Button>
 
             {/* Notification Bell with red unread badge */}
-            <Button variant="ghost" size="icon" className="text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200 relative">
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
               <Bell className="h-5 w-5" />
               <span className="sr-only">Notifications</span>
-              <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center border border-white dark:border-slate-950">
+              <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center border border-white dark:border-zinc-950">
                 3
               </span>
             </Button>
 
             {/* User Profile Avatar with dropdown */}
-            <div className="flex items-center gap-2 border-l border-gray-100 dark:border-slate-800 pl-4 cursor-pointer hover:opacity-85">
-              <div className="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+            <div className="flex items-center gap-2 border-l border-border pl-4 cursor-pointer hover:opacity-85">
+              <div className="h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs shadow-sm">
                 SS
               </div>
               <div className="hidden lg:block text-left">
-                <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 leading-none">Suketu Shah</p>
-                <p className="text-[10px] text-gray-400 mt-0.5">Admin Director</p>
+                <p className="text-xs font-semibold text-foreground leading-none">Suketu Shah</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">Admin Director</p>
               </div>
-              <ChevronDown className="h-3.5 h-3.5 text-gray-400" />
+              <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
             </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <div className="flex-1 overflow-auto bg-slate-50 dark:bg-slate-900 p-6 lg:p-8">
+        <div className="flex-1 overflow-auto bg-background p-6 lg:p-8">
           <div className="max-w-7xl mx-auto space-y-8">
             <Outlet />
           </div>

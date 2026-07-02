@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -152,7 +152,7 @@ export default function CNCRateCalculator() {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg">Price Breakdown</CardTitle>
             {results && (
-              <Badge variant="outline" className="bg-blue-50 text-blue-700">
+              <Badge variant="outline" className="bg-teal-50 text-teal-700">
                 Estimation Mode
               </Badge>
             )}
@@ -161,25 +161,25 @@ export default function CNCRateCalculator() {
             {results ? (
               <div className="space-y-6">
                 <div className="grid grid-cols-2 gap-6">
-                  <div className="p-4 bg-slate-50 rounded-lg">
-                    <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Estimated Weight</span>
+                  <div className="p-4 bg-zinc-50 rounded-lg">
+                    <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider block">Estimated Weight</span>
                     <span className="text-3xl font-extrabold">{results.weight} kg</span>
                   </div>
-                  <div className="p-4 bg-slate-50 rounded-lg">
-                    <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Cutting Time</span>
+                  <div className="p-4 bg-zinc-50 rounded-lg">
+                    <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider block">Cutting Time</span>
                     <span className="text-3xl font-extrabold">{results.estTime} mins</span>
                   </div>
                 </div>
 
                 <div className="border rounded-lg overflow-hidden">
                   <table className="w-full text-sm">
-                    <thead className="bg-slate-50 text-slate-500 font-medium">
+                    <thead className="bg-zinc-50 text-zinc-500 font-medium">
                       <tr>
                         <th className="py-2.5 px-4 text-left">Cost Component</th>
                         <th className="py-2.5 px-4 text-right">Amount (₹)</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y text-slate-700">
+                    <tbody className="divide-y text-zinc-700">
                       <tr>
                         <td className="py-3 px-4">Raw Material Cost ({material})</td>
                         <td className="py-3 px-4 text-right">₹{results.materialCost.toLocaleString('en-IN')}</td>
@@ -192,7 +192,7 @@ export default function CNCRateCalculator() {
                         <td className="py-3 px-4">Piercing Charge ({holes} holes)</td>
                         <td className="py-3 px-4 text-right">₹{results.piercingCost.toLocaleString('en-IN')}</td>
                       </tr>
-                      <tr className="bg-slate-50/50 font-medium text-slate-900">
+                      <tr className="bg-zinc-50/50 font-medium text-zinc-900">
                         <td className="py-3 px-4">Total Production Cost</td>
                         <td className="py-3 px-4 text-right">₹{results.totalBaseCost.toLocaleString('en-IN')}</td>
                       </tr>
@@ -214,8 +214,8 @@ export default function CNCRateCalculator() {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-20 text-slate-400">
-                <Play className="h-12 w-12 text-slate-200 mb-3 animate-pulse" />
+              <div className="flex flex-col items-center justify-center py-20 text-zinc-400">
+                <Play className="h-12 w-12 text-zinc-200 mb-3 animate-pulse" />
                 <p>Configure variables on the left and click calculate to estimate rates.</p>
               </div>
             )}

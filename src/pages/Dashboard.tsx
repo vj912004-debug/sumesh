@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -25,7 +25,7 @@ const orderSparkData = [{ v: 20 }, { v: 30 }, { v: 25 }, { v: 50 }, { v: 45 }, {
 const projSparkData = [{ v: 8 }, { v: 10 }, { v: 9 }, { v: 12 }, { v: 11 }, { v: 13 }, { v: 13 }];
 
 // Donut Chart - Cool colors palette
-const COLORS = ['#1e3a8a', '#3b82f6', '#0d9488', '#34d399']; // navy, cobalt, teal, mint green
+const COLORS = ['#134e4a', '#14b8a6', '#0ea5e9', '#34d399']; // teal, cyan, emerald
 
 export default function Dashboard() {
   const [marketFilter, setMarketFilter] = useState('All markets');
@@ -146,10 +146,10 @@ export default function Dashboard() {
     <div className="space-y-6">
       {/* Top Greeting */}
       <div>
-        <h2 className="text-3xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100">
+        <h2 className="text-3xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-100">
           Welcome back, Suketu Shah!
         </h2>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">
+        <p className="text-zinc-500 dark:text-zinc-400 mt-1">
           Sumesh Petroleum ERP Dashboard — Operational Analytics and Control Center.
         </p>
       </div>
@@ -157,14 +157,14 @@ export default function Dashboard() {
       {/* KPI Cards Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {/* Card 1: Total Revenue */}
-        <Card className="bg-white dark:bg-slate-950 border-gray-100 dark:border-slate-800 shadow-sm rounded-xl">
+        <Card className="bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl">
           <CardContent className="p-6">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Total Revenue
                 </p>
-                <h3 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-slate-100 mt-1">
+                <h3 className="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mt-1">
                   ₹{(totalRevenueVal / 100000).toFixed(1)} Lakhs
                 </h3>
                 <span className="inline-flex items-center text-xs font-bold text-green-600 mt-2 bg-green-50 dark:bg-green-950/20 px-2 py-0.5 rounded">
@@ -183,17 +183,17 @@ export default function Dashboard() {
         </Card>
 
         {/* Card 2: Pending Invoices */}
-        <Card className="bg-white dark:bg-slate-950 border-gray-100 dark:border-slate-800 shadow-sm rounded-xl">
+        <Card className="bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl">
           <CardContent className="p-6">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Pending Invoices
                 </p>
-                <h3 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-slate-100 mt-1">
+                <h3 className="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mt-1">
                   ₹{(pendingInvoicesVal / 100000).toFixed(1)} Lakhs
                 </h3>
-                <span className="inline-flex items-center text-xs font-bold text-blue-600 mt-2 bg-blue-50 dark:bg-blue-950/20 px-2 py-0.5 rounded">
+                <span className="inline-flex items-center text-xs font-bold text-teal-600 mt-2 bg-teal-50 dark:bg-teal-950/20 px-2 py-0.5 rounded">
                   In Queue
                 </span>
               </div>
@@ -209,17 +209,17 @@ export default function Dashboard() {
         </Card>
 
         {/* Card 3: Open Orders */}
-        <Card className="bg-white dark:bg-slate-950 border-gray-100 dark:border-slate-800 shadow-sm rounded-xl">
+        <Card className="bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl">
           <CardContent className="p-6">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Open Orders
                 </p>
-                <h3 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-slate-100 mt-1">
+                <h3 className="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mt-1">
                   {openOrdersCount} Units
                 </h3>
-                <span className="inline-flex items-center text-xs font-bold text-blue-600 mt-2 bg-blue-50 dark:bg-blue-950/20 px-2 py-0.5 rounded">
+                <span className="inline-flex items-center text-xs font-bold text-teal-600 mt-2 bg-teal-50 dark:bg-teal-950/20 px-2 py-0.5 rounded">
                   Awaiting Delivery
                 </span>
               </div>
@@ -235,14 +235,14 @@ export default function Dashboard() {
         </Card>
 
         {/* Card 4: Active Projects */}
-        <Card className="bg-white dark:bg-slate-950 border-gray-100 dark:border-slate-800 shadow-sm rounded-xl">
+        <Card className="bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl">
           <CardContent className="p-6">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Active Projects
                 </p>
-                <h3 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-slate-100 mt-1">
+                <h3 className="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mt-1">
                   {activeProjectsCount} Machines
                 </h3>
                 <span className="inline-flex items-center text-xs font-bold text-teal-600 mt-2 bg-teal-50 dark:bg-teal-950/20 px-2 py-0.5 rounded">
@@ -264,10 +264,10 @@ export default function Dashboard() {
       {/* Main Charts & Activity Section */}
       <div className="grid gap-6 grid-cols-1 lg:grid-cols-5">
         {/* Monthly Revenue Trend - Spans 60% (3/5 cols) */}
-        <Card className="bg-white dark:bg-slate-950 border-gray-100 dark:border-slate-800 shadow-sm rounded-xl lg:col-span-3">
+        <Card className="bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl lg:col-span-3">
           <CardHeader className="flex flex-row items-center justify-between pb-4">
             <div>
-              <CardTitle className="text-lg font-bold text-slate-800 dark:text-slate-100">
+              <CardTitle className="text-lg font-bold text-zinc-800 dark:text-zinc-100">
                 Monthly Revenue Trend
               </CardTitle>
               <CardDescription>Cumulative plant installation contracts valuation trend (in Thousands INR).</CardDescription>
@@ -275,7 +275,7 @@ export default function Dashboard() {
             <select 
               value={marketFilter} 
               onChange={e => setMarketFilter(e.target.value)}
-              className="text-xs bg-slate-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded px-2.5 py-1 text-slate-600 dark:text-slate-400 focus:outline-none"
+              className="text-xs bg-zinc-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded px-2.5 py-1 text-zinc-600 dark:text-zinc-400 focus:outline-none"
             >
               <option value="All markets">All markets</option>
               <option value="Domestic">Domestic</option>
@@ -304,9 +304,9 @@ export default function Dashboard() {
         </Card>
 
         {/* Expense Breakdown Donut Chart - Spans 20% (1/5 cols) */}
-        <Card className="bg-white dark:bg-slate-950 border-gray-100 dark:border-slate-800 shadow-sm rounded-xl lg:col-span-1">
+        <Card className="bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl lg:col-span-1">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-bold text-slate-800 dark:text-slate-100">
+            <CardTitle className="text-lg font-bold text-zinc-800 dark:text-zinc-100">
               Product Categories
             </CardTitle>
             <CardDescription>Contracts breakdown.</CardDescription>
@@ -332,13 +332,13 @@ export default function Dashboard() {
                 </PieChart>
               </ResponsiveContainer>
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span className="text-xl font-extrabold text-slate-800 dark:text-slate-100">
+                <span className="text-xl font-extrabold text-zinc-800 dark:text-zinc-100">
                   ₹{(totalRevenueVal / 100000).toFixed(1)}L
                 </span>
-                <span className="text-[9px] text-slate-500 font-semibold uppercase">Total Sales</span>
+                <span className="text-[9px] text-zinc-500 font-semibold uppercase">Total Sales</span>
               </div>
             </div>
-            <div className="w-full space-y-1.5 text-[11px] font-medium text-slate-600 dark:text-slate-400">
+            <div className="w-full space-y-1.5 text-[11px] font-medium text-zinc-600 dark:text-zinc-400">
               {categoryShare.map((d, i) => (
                 <div key={d.name} className="flex items-center justify-between">
                   <span className="flex items-center">
@@ -353,9 +353,9 @@ export default function Dashboard() {
         </Card>
 
         {/* Recent Activity Feed - Spans 20% (1/5 cols) */}
-        <Card className="bg-white dark:bg-slate-950 border-gray-100 dark:border-slate-800 shadow-sm rounded-xl lg:col-span-1">
+        <Card className="bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl lg:col-span-1">
           <CardHeader>
-            <CardTitle className="text-lg font-bold text-slate-800 dark:text-slate-100">
+            <CardTitle className="text-lg font-bold text-zinc-800 dark:text-zinc-100">
               Activity Feed
             </CardTitle>
           </CardHeader>
@@ -365,16 +365,16 @@ export default function Dashboard() {
               {mockOrders.map((order, i) => {
                 const customer = mockCustomers.find(c => c.id === order.customerId);
                 return (
-                  <div key={order.id} className="pb-3 border-b border-gray-100 dark:border-slate-800 last:border-0">
+                  <div key={order.id} className="pb-3 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
                     <div className="flex justify-between items-start gap-1">
-                      <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 leading-tight">
+                      <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 leading-tight">
                         Order {order.id}
                       </p>
-                      <span className="text-[9px] text-slate-400 shrink-0 font-mono">
+                      <span className="text-[9px] text-zinc-400 shrink-0 font-mono">
                         {order.date}
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-500 mt-1 leading-snug">
+                    <p className="text-[11px] text-zinc-500 mt-1 leading-snug">
                       Client: {customer?.name}. Status is <strong>{order.status}</strong>. Amount: ₹{(order.totalAmount / 100000).toFixed(1)} Lakhs.
                     </p>
                   </div>
@@ -383,16 +383,16 @@ export default function Dashboard() {
               {mockEnquiries.slice(0, 2).map((enq) => {
                 const customer = mockCustomers.find(c => c.id === enq.customerId);
                 return (
-                  <div key={enq.id} className="pb-3 border-b border-gray-100 dark:border-slate-800 last:border-0">
+                  <div key={enq.id} className="pb-3 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
                     <div className="flex justify-between items-start gap-1">
-                      <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 leading-tight">
+                      <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 leading-tight">
                         Enquiry {enq.id}
                       </p>
-                      <span className="text-[9px] text-slate-400 shrink-0 font-mono">
+                      <span className="text-[9px] text-zinc-400 shrink-0 font-mono">
                         {enq.date}
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-500 mt-1 leading-snug">
+                    <p className="text-[11px] text-zinc-500 mt-1 leading-snug">
                       {customer?.name} requested: "{enq.requirements}"
                     </p>
                   </div>
@@ -404,11 +404,11 @@ export default function Dashboard() {
       </div>
 
       {/* Interactive Workflow Simulator widget */}
-      <Card className="bg-white dark:bg-slate-950 border-gray-100 dark:border-slate-800 shadow-sm rounded-xl">
-        <CardHeader className="border-b border-gray-100 dark:border-slate-800 pb-4">
+      <Card className="bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl">
+        <CardHeader className="border-b border-zinc-100 dark:border-zinc-800 pb-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <CardTitle className="text-lg font-bold text-slate-800 dark:text-slate-100">
+              <CardTitle className="text-lg font-bold text-zinc-800 dark:text-zinc-100">
                 ERP Integration & Communication Workflows Simulator
               </CardTitle>
               <CardDescription>
@@ -429,11 +429,11 @@ export default function Dashboard() {
             <div className="lg:col-span-8 space-y-6">
               
               {/* Pathway 1: QMS */}
-              <div className="p-4 border rounded-xl bg-slate-50/50 dark:bg-slate-900/10 space-y-3">
+              <div className="p-4 border rounded-xl bg-zinc-50/50 dark:bg-zinc-900/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <ShieldCheck className="w-5 h-5 text-green-600" />
-                    <h4 className="font-bold text-sm text-slate-800 dark:text-slate-200">
+                    <h4 className="font-bold text-sm text-zinc-800 dark:text-zinc-200">
                       1. QMS trial run & Release sign-off
                     </h4>
                   </div>
@@ -441,7 +441,7 @@ export default function Dashboard() {
                     {qmsStep === 0 ? 'Idle' : qmsStep === 1 ? 'Task Assigned' : qmsStep === 2 ? 'PDF Emailed' : 'Complete'}
                   </Badge>
                 </div>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-zinc-500">
                   Engineering trial run ➡️ QC task for Dhruv Shah ➡️ Auto-compile 6 sheets to PDF ➡️ Send to Powergrid.
                 </p>
                 <div className="flex gap-2">
@@ -461,19 +461,19 @@ export default function Dashboard() {
                   <div className="mt-3 space-y-2 text-xs">
                     <div className="flex items-center gap-2">
                       <span className={`w-2.5 h-2.5 rounded-full ${qmsStep >= 1 ? 'bg-green-500' : 'bg-gray-300'}`} />
-                      <span className={qmsStep >= 1 ? 'text-slate-800 dark:text-slate-200' : 'text-slate-400'}>
+                      <span className={qmsStep >= 1 ? 'text-zinc-800 dark:text-zinc-200' : 'text-zinc-400'}>
                         Hardik Patel logged "Satisfactory" trial run on SP/DHV/T/717.
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className={`w-2.5 h-2.5 rounded-full ${qmsStep >= 2 ? 'bg-green-500' : 'bg-gray-300'}`} />
-                      <span className={qmsStep >= 2 ? 'text-slate-800 dark:text-slate-200' : 'text-slate-400'}>
+                      <span className={qmsStep >= 2 ? 'text-zinc-800 dark:text-zinc-200' : 'text-zinc-400'}>
                         Dhruv Shah signed. System generated <strong>Final reports 717_2.pdf</strong>.
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className={`w-2.5 h-2.5 rounded-full ${qmsStep >= 3 ? 'bg-green-500' : 'bg-gray-300'}`} />
-                      <span className={qmsStep >= 3 ? 'text-slate-800 dark:text-slate-200 text-green-600' : 'text-slate-400'}>
+                      <span className={qmsStep >= 3 ? 'text-green-600 dark:text-green-400' : 'text-zinc-400'}>
                         WhatsApp notification dispatched to project supervisor.
                       </span>
                     </div>
@@ -482,19 +482,19 @@ export default function Dashboard() {
               </div>
 
               {/* Pathway 2: Logistics */}
-              <div className="p-4 border rounded-xl bg-slate-50/50 dark:bg-slate-900/10 space-y-3">
+              <div className="p-4 border rounded-xl bg-zinc-50/50 dark:bg-zinc-900/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Truck className="w-5 h-5 text-blue-600" />
-                    <h4 className="font-bold text-sm text-slate-800 dark:text-slate-200">
+                    <Truck className="w-5 h-5 text-teal-600" />
+                    <h4 className="font-bold text-sm text-zinc-800 dark:text-zinc-200">
                       2. Logistics, Dispatch & Gate Pass
                     </h4>
                   </div>
-                  <Badge variant={logStep === 3 ? 'default' : 'secondary'} className={logStep === 3 ? 'bg-blue-50 text-blue-700' : ''}>
+                  <Badge variant={logStep === 3 ? 'default' : 'secondary'} className={logStep === 3 ? 'bg-teal-50 text-teal-700' : ''}>
                     {logStep === 0 ? 'Idle' : logStep === 1 ? 'e-Way Task' : logStep === 2 ? 'Driver Notified' : 'Complete'}
                   </Badge>
                 </div>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-zinc-500">
                   Ready to Dispatch ➡️ Logistics task (Challan R000003810) ➡️ Assign truck DL01LAF8056 ➡️ Driver WhatsApp alert.
                 </p>
                 <div className="flex gap-2">
@@ -513,20 +513,20 @@ export default function Dashboard() {
                 {logStep > 0 && (
                   <div className="mt-3 space-y-2 text-xs">
                     <div className="flex items-center gap-2">
-                      <span className={`w-2.5 h-2.5 rounded-full ${logStep >= 1 ? 'bg-blue-500' : 'bg-gray-300'}`} />
-                      <span className={logStep >= 1 ? 'text-slate-800 dark:text-slate-200' : 'text-slate-400'}>
+                      <span className={`w-2.5 h-2.5 rounded-full ${logStep >= 1 ? 'bg-teal-500' : 'bg-gray-300'}`} />
+                      <span className={logStep >= 1 ? 'text-zinc-800 dark:text-zinc-200' : 'text-zinc-400'}>
                         Challan R000003810 flagged. Logistics team assigned to routing task.
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className={`w-2.5 h-2.5 rounded-full ${logStep >= 2 ? 'bg-blue-500' : 'bg-gray-300'}`} />
-                      <span className={logStep >= 2 ? 'text-slate-800 dark:text-slate-200' : 'text-slate-400'}>
+                      <span className={`w-2.5 h-2.5 rounded-full ${logStep >= 2 ? 'bg-teal-500' : 'bg-gray-300'}`} />
+                      <span className={logStep >= 2 ? 'text-zinc-800 dark:text-zinc-200' : 'text-zinc-400'}>
                         WhatsApp sent to driver (9887468329): "Hi, you are assigned to vehicle DL01LAF8056..."
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className={`w-2.5 h-2.5 rounded-full ${logStep >= 3 ? 'bg-blue-500' : 'bg-gray-300'}`} />
-                      <span className={logStep >= 3 ? 'text-slate-800 dark:text-slate-200 text-blue-600' : 'text-slate-400'}>
+                      <span className={`w-2.5 h-2.5 rounded-full ${logStep >= 3 ? 'bg-teal-500' : 'bg-gray-300'}`} />
+                      <span className={logStep >= 3 ? 'text-teal-600 dark:text-teal-400' : 'text-zinc-400'}>
                         Gate release confirmed. e-Way bill emailed to receiving@skipperseil.com.
                       </span>
                     </div>
@@ -535,11 +535,11 @@ export default function Dashboard() {
               </div>
 
               {/* Pathway 3: Finance & Rentals */}
-              <div className="p-4 border rounded-xl bg-slate-50/50 dark:bg-slate-900/10 space-y-3">
+              <div className="p-4 border rounded-xl bg-zinc-50/50 dark:bg-zinc-900/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Wallet className="w-5 h-5 text-indigo-600" />
-                    <h4 className="font-bold text-sm text-slate-800 dark:text-slate-200">
+                    <Wallet className="w-5 h-5 text-cyan-600" />
+                    <h4 className="font-bold text-sm text-zinc-800 dark:text-zinc-200">
                       3. Finance, Billing & MSMED Escalations
                     </h4>
                   </div>
@@ -547,7 +547,7 @@ export default function Dashboard() {
                     {finStep === 0 ? 'Idle' : finStep === 1 ? 'Billing Task' : finStep === 2 ? 'Invoice Posted' : 'MSMED Escalated'}
                   </Badge>
                 </div>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-zinc-500">
                   Billing cycle closes on 4th ➡️ accounts review task ➡️ post e-Invoice ➡️ late fee payment follow-up escalation.
                 </p>
                 <div className="flex gap-2">
@@ -566,20 +566,20 @@ export default function Dashboard() {
                 {finStep > 0 && (
                   <div className="mt-3 space-y-2 text-xs">
                     <div className="flex items-center gap-2">
-                      <span className={`w-2.5 h-2.5 rounded-full ${finStep >= 1 ? 'bg-indigo-500' : 'bg-gray-300'}`} />
-                      <span className={finStep >= 1 ? 'text-slate-800 dark:text-slate-200' : 'text-slate-400'}>
+                      <span className={`w-2.5 h-2.5 rounded-full ${finStep >= 1 ? 'bg-cyan-500' : 'bg-gray-300'}`} />
+                      <span className={finStep >= 1 ? 'text-zinc-800 dark:text-zinc-200' : 'text-zinc-400'}>
                         Accounts review task generated for Atlas Filtration (billing cycle 05.03.2026 to 04.04.2026).
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className={`w-2.5 h-2.5 rounded-full ${finStep >= 2 ? 'bg-indigo-500' : 'bg-gray-300'}`} />
-                      <span className={finStep >= 2 ? 'text-slate-800 dark:text-slate-200' : 'text-slate-400'}>
+                      <span className={`w-2.5 h-2.5 rounded-full ${finStep >= 2 ? 'bg-cyan-500' : 'bg-gray-300'}`} />
+                      <span className={finStep >= 2 ? 'text-zinc-800 dark:text-zinc-200' : 'text-zinc-400'}>
                         e-Invoice posted. SWIFT banking details mapped. IRN generated.
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className={`w-2.5 h-2.5 rounded-full ${finStep >= 3 ? 'bg-red-500' : 'bg-gray-300'}`} />
-                      <span className={finStep >= 3 ? 'text-red-600 font-semibold' : 'text-slate-400'}>
+                      <span className={finStep >= 3 ? 'text-red-600 font-semibold' : 'text-zinc-400'}>
                         Payment overdue (3 days). Fired MSMED compliance WhatsApp collection warning.
                       </span>
                     </div>
@@ -591,11 +591,11 @@ export default function Dashboard() {
 
             {/* Simulated Live Logs Terminal */}
             <div className="lg:col-span-4 flex flex-col h-full min-h-[300px]">
-              <div className="flex items-center justify-between bg-slate-900 text-slate-400 px-4 py-2 rounded-t-lg text-xs font-mono">
+              <div className="flex items-center justify-between bg-zinc-900 text-zinc-400 px-4 py-2 rounded-t-lg text-xs font-mono">
                 <span>Integration live logs</span>
                 <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-ping" />
               </div>
-              <div className="bg-slate-950 text-green-400 font-mono p-4 rounded-b-lg flex-1 h-[360px] overflow-y-auto text-[11px] space-y-2.5 select-all">
+              <div className="bg-zinc-950 text-green-400 font-mono p-4 rounded-b-lg flex-1 h-[360px] overflow-y-auto text-[11px] space-y-2.5 select-all">
                 {simLogs.map((log, i) => (
                   <p key={i} className="leading-relaxed border-l border-green-950 pl-2">
                     {log}
@@ -609,23 +609,23 @@ export default function Dashboard() {
       </Card>
 
       {/* Developer Guidelines Tabbed Spec Sheet Card */}
-      <Card className="bg-white dark:bg-slate-950 border-gray-100 dark:border-slate-800 shadow-sm rounded-xl">
+      <Card className="bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl">
         <CardHeader>
-          <CardTitle className="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
-            <Code className="w-4 h-4 text-blue-600" /> CORP-ERP Developer System Guidelines
+          <CardTitle className="text-base font-bold text-zinc-800 dark:text-zinc-100 flex items-center gap-1.5">
+            <Code className="w-4 h-4 text-teal-600" /> CORP-ERP Developer System Guidelines
           </CardTitle>
           <CardDescription>Statutory schema guidelines, messaging webhooks, and SMTP relay specs for engineers.</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="db" className="w-full">
-            <TabsList className="mb-4 bg-slate-100 dark:bg-slate-900 p-1 rounded-lg">
+            <TabsList className="mb-4 bg-zinc-100 dark:bg-zinc-900 p-1 rounded-lg">
               <TabsTrigger value="db" className="text-xs">Database Schema</TabsTrigger>
               <TabsTrigger value="webhooks" className="text-xs">WhatsApp API Webhooks</TabsTrigger>
               <TabsTrigger value="smtp" className="text-xs">Email PDF Generation</TabsTrigger>
             </TabsList>
             
             <TabsContent value="db">
-              <div className="p-4 border rounded-lg bg-slate-50 dark:bg-slate-900/30 text-xs font-mono space-y-2 whitespace-pre-wrap">
+              <div className="p-4 border rounded-lg bg-zinc-50 dark:bg-zinc-900/30 text-xs font-mono space-y-2 whitespace-pre-wrap">
 {`-- Centralized Tasks Schema
 CREATE TABLE tasks (
   id VARCHAR(50) PRIMARY KEY,
@@ -653,9 +653,9 @@ CREATE TABLE msmed_escalation_logs (
             </TabsContent>
 
             <TabsContent value="webhooks">
-              <div className="p-4 border rounded-lg bg-slate-50 dark:bg-slate-900/30 text-xs font-mono space-y-2">
-                <p className="font-semibold text-slate-800 dark:text-slate-200">Webhook Listener (Meta API Endpoints):</p>
-                <div className="p-3 bg-slate-950 text-green-400 rounded">
+              <div className="p-4 border rounded-lg bg-zinc-50 dark:bg-zinc-900/30 text-xs font-mono space-y-2">
+                <p className="font-semibold text-zinc-800 dark:text-zinc-200">Webhook Listener (Meta API Endpoints):</p>
+                <div className="p-3 bg-zinc-950 text-green-400 rounded">
 {`POST /webhooks/whatsapp/inbound
 Request Body:
 {
@@ -672,21 +672,21 @@ Request Body:
   }]
 }`}
                 </div>
-                <p className="text-slate-500 leading-relaxed mt-2 text-[11px]">
+                <p className="text-zinc-500 leading-relaxed mt-2 text-[11px]">
                   <strong>System Action:</strong> The webhook intercepts the inbound message body, queries the `tasks` table for an active delivery mapping matching phone number `9887468329`, and logs the text response under that specific dispatch run in real-time.
                 </p>
               </div>
             </TabsContent>
 
             <TabsContent value="smtp">
-              <div className="p-4 border rounded-lg bg-slate-50 dark:bg-slate-900/30 text-xs space-y-3">
-                <div className="flex items-center gap-2 text-indigo-700 dark:text-indigo-400 font-semibold font-mono">
+              <div className="p-4 border rounded-lg bg-zinc-50 dark:bg-zinc-900/30 text-xs space-y-3">
+                <div className="flex items-center gap-2 text-orange-700 dark:text-cyan-400 font-semibold font-mono">
                   <Shield className="w-4 h-4" /> Amazon SES Security Rule
                 </div>
-                <p className="text-slate-600 dark:text-slate-400 text-xs leading-relaxed">
+                <p className="text-zinc-600 dark:text-zinc-400 text-xs leading-relaxed">
                   <strong>Strict Attachment Verification Policy:</strong> Manual attachments are completely disabled in code to avoid operators uploading incorrect audit sheets or invoices. 
                 </p>
-                <div className="p-3 bg-slate-950 text-green-400 rounded font-mono text-[11px]">
+                <div className="p-3 bg-zinc-950 text-green-400 rounded font-mono text-[11px]">
 {`// Transactional Document Generation Code (Amazon SES integration)
 async function dispatchDocument(invoiceId) {
   const schemaDetails = await db.fetchInvoiceWithItems(invoiceId);

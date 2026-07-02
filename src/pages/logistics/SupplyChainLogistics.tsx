@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -260,7 +260,7 @@ export default function SupplyChainLogistics() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                    <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                       <th className="pb-3 text-left">Challan No</th>
                       <th className="pb-3 text-left">Type</th>
                       <th className="pb-3 text-left">Consignee Customer</th>
@@ -271,24 +271,24 @@ export default function SupplyChainLogistics() {
                       <th className="pb-3 text-right">Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                  <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                     {challans.map((c) => (
-                      <tr key={c.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                      <tr key={c.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                         <td className="py-3 font-semibold text-xs text-primary">{c.id}</td>
                         <td className="py-3">
-                          <Badge variant={c.type === 'Returnable' ? 'outline' : 'default'} className={c.type === 'Returnable' ? 'text-indigo-600 border-indigo-200 bg-indigo-50/20' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}>
+                          <Badge variant={c.type === 'Returnable' ? 'outline' : 'default'} className={c.type === 'Returnable' ? 'text-cyan-600 border-orange-200 bg-orange-50/20' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'}>
                             {c.type}
                           </Badge>
                         </td>
                         <td className="py-3 font-bold">{c.customer}</td>
                         <td className="py-3 text-xs">{c.item}</td>
                         <td className="py-3 text-right font-mono text-xs">{c.qty}</td>
-                        <td className="py-3 pl-6 font-mono text-xs text-slate-500">{c.vehicleNo || '-'}</td>
+                        <td className="py-3 pl-6 font-mono text-xs text-zinc-500">{c.vehicleNo || '-'}</td>
                         <td className="py-3">
                           {c.ewayBillNo && c.ewayBillNo !== 'Pending Sync' ? (
                             <Badge className="bg-green-500 text-white font-mono text-[10px]">{c.ewayBillNo}</Badge>
                           ) : (
-                            <Badge variant="secondary" className="text-amber-600 bg-amber-50">Pending Sync</Badge>
+                            <Badge variant="secondary" className="text-teal-600 bg-teal-50">Pending Sync</Badge>
                           )}
                         </td>
                         <td className="py-3 text-right">
@@ -296,7 +296,7 @@ export default function SupplyChainLogistics() {
                             <Button 
                               size="sm" 
                               variant="outline" 
-                              className="h-7 text-xs border-blue-200 text-blue-600 hover:bg-blue-50"
+                              className="h-7 text-xs border-teal-200 text-teal-600 hover:bg-teal-50"
                               onClick={() => triggerEwayRoute(c.id, c.customer, c.vehicleNo)}
                             >
                               <Calculator className="w-3 h-3 mr-1" /> Generate E-Way
@@ -327,7 +327,7 @@ export default function SupplyChainLogistics() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                    <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                       <th className="pb-3 text-left">Fleet ID</th>
                       <th className="pb-3 text-left">Transporter Firm</th>
                       <th className="pb-3 text-left">Vehicle No</th>
@@ -337,14 +337,14 @@ export default function SupplyChainLogistics() {
                       <th className="pb-3 text-right">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                  <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                     {fleet.map((f) => (
-                      <tr key={f.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                      <tr key={f.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                         <td className="py-3.5 font-semibold text-xs text-primary">{f.id}</td>
                         <td className="py-3.5 font-bold">{f.transporter}</td>
                         <td className="py-3.5 font-mono text-xs">{f.vehicleNo}</td>
                         <td className="py-3.5">
-                          <Badge variant="outline" className={f.type.includes('ODC') ? 'text-amber-600 border-amber-200 bg-amber-50/20' : 'text-slate-500'}>
+                          <Badge variant="outline" className={f.type.includes('ODC') ? 'text-teal-600 border-teal-200 bg-teal-50/20' : 'text-zinc-500'}>
                             {f.type}
                           </Badge>
                         </td>
@@ -427,7 +427,7 @@ export default function SupplyChainLogistics() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                    <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                       <th className="pb-3 text-left">Gate Log ID</th>
                       <th className="pb-3 text-left">Traffic Type</th>
                       <th className="pb-3 text-left">Vehicle Registry</th>
@@ -439,12 +439,12 @@ export default function SupplyChainLogistics() {
                       <th className="pb-3 text-right">Yard Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                  <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                     {gateLogs.map((log) => (
-                      <tr key={log.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                      <tr key={log.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                         <td className="py-3.5 font-semibold text-xs text-primary">{log.id}</td>
                         <td className="py-3.5">
-                          <Badge variant={log.type === 'Inward' ? 'outline' : 'default'} className={log.type === 'Inward' ? 'text-green-600 border-green-200 bg-green-50' : 'bg-blue-600 text-white'}>
+                          <Badge variant={log.type === 'Inward' ? 'outline' : 'default'} className={log.type === 'Inward' ? 'text-green-600 border-green-200 bg-green-50' : 'bg-teal-600 text-white'}>
                             {log.type}
                           </Badge>
                         </td>
@@ -452,8 +452,8 @@ export default function SupplyChainLogistics() {
                         <td className="py-3.5 font-medium">{log.driver}</td>
                         <td className="py-3.5 font-mono text-xs">{log.challanRef}</td>
                         <td className="py-3.5 font-mono text-xs text-primary">{log.passNo}</td>
-                        <td className="py-3.5 text-right font-mono text-xs text-indigo-600 dark:text-indigo-400 font-bold">{log.transitDistance} KM</td>
-                        <td className="py-3.5 pl-6 text-slate-500 text-xs font-mono">{log.timestamp}</td>
+                        <td className="py-3.5 text-right font-mono text-xs text-cyan-600 dark:text-cyan-400 font-bold">{log.transitDistance} KM</td>
+                        <td className="py-3.5 pl-6 text-zinc-500 text-xs font-mono">{log.timestamp}</td>
                         <td className="py-3.5 text-right">
                           <Badge variant={log.status === 'Passed Gate' ? 'default' : 'secondary'} className={log.status === 'Passed Gate' ? 'bg-green-100 text-green-800' : ''}>
                             {log.status}
@@ -475,7 +475,7 @@ export default function SupplyChainLogistics() {
           <form onSubmit={calculateEwayBill}>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
-                <QrCode className="w-5 h-5 text-blue-500 animate-pulse" /> NIC e-Way Bill Portal Linkage
+                <QrCode className="w-5 h-5 text-teal-500 animate-pulse" /> NIC e-Way Bill Portal Linkage
               </DialogTitle>
               <DialogDescription>
                 Synchronize dispatch details directly with the national taxation network to authorize transport logistics.
@@ -483,29 +483,29 @@ export default function SupplyChainLogistics() {
             </DialogHeader>
 
             <div className="space-y-4 py-4 text-xs border-t border-b my-3">
-              <div className="p-3 bg-blue-50 rounded-lg text-blue-700 space-y-1">
+              <div className="p-3 bg-teal-50 rounded-lg text-teal-700 space-y-1">
                 <p className="font-bold">Consigner (From Address):</p>
                 <p>Sumesh Petroleum Ltd, 226-227, G.I.D.C Makarpura, Vadodara (GSTIN: 24U29309GJ2018PTC102237)</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="font-semibold text-slate-500">Source Pin Code</label>
+                  <label className="font-semibold text-zinc-500">Source Pin Code</label>
                   <Input value={fromPin} onChange={e => setFromPin(e.target.value)} maxLength={6} required />
                 </div>
                 <div className="space-y-2">
-                  <label className="font-semibold text-slate-500">Destination Pin Code</label>
+                  <label className="font-semibold text-zinc-500">Destination Pin Code</label>
                   <Input value={toPin} onChange={e => setToPin(e.target.value)} maxLength={6} required />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="font-semibold text-slate-500">Carrier Transporter</label>
+                  <label className="font-semibold text-zinc-500">Carrier Transporter</label>
                   <Input value={transporterInput} onChange={e => setTransporterInput(e.target.value)} required />
                 </div>
                 <div className="space-y-2">
-                  <label className="font-semibold text-slate-500">Carrier Vehicle ID</label>
+                  <label className="font-semibold text-zinc-500">Carrier Vehicle ID</label>
                   <Input value={vehicleInput} onChange={e => setVehicleInput(e.target.value)} required />
                 </div>
               </div>
@@ -513,8 +513,8 @@ export default function SupplyChainLogistics() {
               {distance && ewayBillNo && (
                 <div className="p-3 bg-green-50 rounded-lg text-green-700 space-y-1 text-xs border border-green-200">
                   <p className="font-bold flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-green-600" /> Government Sync Complete!</p>
-                  <p>Generated e-Way Bill Code: <span className="font-mono font-bold text-slate-900">{ewayBillNo}</span></p>
-                  <p>NIC Calculated Distance: <span className="font-bold text-slate-900">{distance} Kilometers</span></p>
+                  <p>Generated e-Way Bill Code: <span className="font-mono font-bold text-zinc-900">{ewayBillNo}</span></p>
+                  <p>NIC Calculated Distance: <span className="font-bold text-zinc-900">{distance} Kilometers</span></p>
                   <p className="text-[10px] text-green-600 font-medium">Valid for single transit journey. State border check clearances updated.</p>
                 </div>
               )}

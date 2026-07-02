@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+﻿import { useParams, Link } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -34,7 +34,7 @@ export default function QuotationDetail() {
             <Badge variant={quote.status === 'Accepted' ? 'default' : 'secondary'}>
               {quote.status}
             </Badge>
-            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+            <Badge variant="outline" className="bg-teal-50 text-teal-700 border-teal-200">
               Rev: v3
             </Badge>
           </div>
@@ -69,23 +69,23 @@ export default function QuotationDetail() {
             <p className="text-sm text-gray-600 font-semibold mt-1">GSTIN: 24AAACSXXXXA1Z5</p>
           </div>
           <div className="text-right">
-            <h2 className="text-2xl font-bold text-gray-400 uppercase tracking-widest mb-2">Quotation</h2>
+            <h2 className="text-2xl font-bold text-zinc-400 uppercase tracking-widest mb-2">Quotation</h2>
             <table className="text-sm text-left ml-auto">
               <tbody>
                 <tr>
-                  <th className="pr-4 py-1 font-semibold text-gray-700">Quote No:</th>
+                  <th className="pr-4 py-1 font-semibold text-zinc-700">Quote No:</th>
                   <td className="text-gray-900 font-medium">{quote.id}</td>
                 </tr>
                 <tr>
-                  <th className="pr-4 py-1 font-semibold text-gray-700">Date:</th>
+                  <th className="pr-4 py-1 font-semibold text-zinc-700">Date:</th>
                   <td className="text-gray-900">{quote.date}</td>
                 </tr>
                 <tr>
-                  <th className="pr-4 py-1 font-semibold text-gray-700">Valid Till:</th>
+                  <th className="pr-4 py-1 font-semibold text-zinc-700">Valid Till:</th>
                   <td className="text-gray-900">30 Days</td>
                 </tr>
                 <tr>
-                  <th className="pr-4 py-1 font-semibold text-gray-700">Enquiry Ref:</th>
+                  <th className="pr-4 py-1 font-semibold text-zinc-700">Enquiry Ref:</th>
                   <td className="text-gray-900">{quote.enquiryId}</td>
                 </tr>
               </tbody>
@@ -96,7 +96,7 @@ export default function QuotationDetail() {
         {/* Addresses */}
         <div className="flex flex-col md:flex-row justify-between mb-8 gap-4">
           <div className="w-full md:w-1/2 pr-0 md:pr-4">
-            <h3 className="font-semibold text-gray-700 border-b border-gray-200 pb-1 mb-2">Quoted To:</h3>
+            <h3 className="font-semibold text-zinc-700 border-b border-gray-200 pb-1 mb-2">Quoted To:</h3>
             <p className="font-bold text-gray-900">{customer.name}</p>
             <p className="text-sm text-gray-600 whitespace-pre-line">{customer.address}</p>
             <p className="text-sm text-gray-600">{customer.city}, {customer.state}</p>
@@ -108,7 +108,7 @@ export default function QuotationDetail() {
         {/* Line Items */}
         <div className="mb-8 border border-gray-200 rounded-md overflow-x-auto w-full">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200 text-gray-700">
+            <thead className="bg-gray-50 border-b border-gray-200 text-zinc-700">
               <tr>
                 <th className="py-3 px-4 text-left font-semibold">Sr.</th>
                 <th className="py-3 px-4 text-left font-semibold">Description of Goods</th>
@@ -125,7 +125,7 @@ export default function QuotationDetail() {
                     <td className="py-3 px-4 text-gray-600 align-top">{index + 1}</td>
                     <td className="py-3 px-4 align-top">
                       <p className="font-semibold text-gray-900">{product?.name}</p>
-                      <p className="text-xs text-gray-500 mt-1">Model: {product?.model}</p>
+                      <p className="text-xs text-zinc-500 mt-1">Model: {product?.model}</p>
                       <div className="mt-2 text-xs text-gray-600 border-l-2 pl-2 border-gray-300">
                         <p>Includes:</p>
                         <ul className="list-disc pl-4">
@@ -134,7 +134,7 @@ export default function QuotationDetail() {
                           <li>Control Panel with PLC</li>
                         </ul>
                       </div>
-                      <p className="text-xs text-gray-500 mt-2">Technical specifications attached as per annexure.</p>
+                      <p className="text-xs text-zinc-500 mt-2">Technical specifications attached as per annexure.</p>
                     </td>
                     <td className="py-3 px-4 text-center text-gray-900 align-top">{item.quantity} Nos</td>
                     <td className="py-3 px-4 text-right text-gray-900 align-top">{item.unitPrice.toLocaleString('en-IN')}</td>
@@ -164,11 +164,11 @@ export default function QuotationDetail() {
             <table className="w-full text-sm">
               <tbody>
                 <tr className="border-b border-gray-200">
-                  <td className="py-2 text-gray-700 font-medium">Basic Amount:</td>
+                  <td className="py-2 text-zinc-700 font-medium">Basic Amount:</td>
                   <td className="py-2 text-right text-gray-900">₹{quote.totalAmount.toLocaleString('en-IN')}</td>
                 </tr>
                 <tr className="border-b border-gray-200">
-                  <td className="py-2 text-gray-700 font-medium">Estimated GST (18%):</td>
+                  <td className="py-2 text-zinc-700 font-medium">Estimated GST (18%):</td>
                   <td className="py-2 text-right text-gray-900">₹{(quote.totalAmount * 0.18).toLocaleString('en-IN')}</td>
                 </tr>
                 <tr>
@@ -185,14 +185,14 @@ export default function QuotationDetail() {
         {/* Signatures */}
         <div className="flex justify-between items-end pt-12 border-t border-gray-200 mt-12">
           <div className="text-center">
-            <p className="text-gray-500 text-sm mb-16">Accepted By</p>
-            <div className="w-48 border-t border-gray-400"></div>
+            <p className="text-zinc-500 text-sm mb-16">Accepted By</p>
+            <div className="w-48 border-t border-zinc-400"></div>
             <p className="text-gray-800 font-semibold mt-2 text-sm">Authorized Signatory</p>
-            <p className="text-gray-500 text-xs">{customer.name}</p>
+            <p className="text-zinc-500 text-xs">{customer.name}</p>
           </div>
           <div className="text-center">
-            <p className="text-gray-500 text-sm mb-16">For Sumesh Petroleum Pvt. Ltd.</p>
-            <div className="w-48 border-t border-gray-400"></div>
+            <p className="text-zinc-500 text-sm mb-16">For Sumesh Petroleum Pvt. Ltd.</p>
+            <div className="w-48 border-t border-zinc-400"></div>
             <p className="text-gray-800 font-semibold mt-2 text-sm">Authorized Signatory</p>
           </div>
         </div>

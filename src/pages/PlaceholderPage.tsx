@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,7 +34,7 @@ export default function PlaceholderPage({
   
   const defaultMetrics = metrics || [
     { label: `Total ${title}`, value: '42', icon: FileText, color: 'text-primary' },
-    { label: 'Active Tasks', value: '12', icon: Clock, color: 'text-amber-500' },
+    { label: 'Active Tasks', value: '12', icon: Clock, color: 'text-teal-500' },
     { label: 'Completed Today', value: '8', icon: CheckCircle, color: 'text-green-500' },
     { label: 'Monthly Growth', value: '+14.2%', icon: TrendingUp, color: 'text-emerald-500' },
   ];
@@ -141,9 +141,9 @@ export default function PlaceholderPage({
       case 'Pending':
       case 'Awaiting':
       case 'QC Pending':
-        return <Badge className="bg-amber-50 text-amber-700 hover:bg-amber-50 border-amber-200">{status}</Badge>;
+        return <Badge className="bg-teal-50 text-teal-700 hover:bg-teal-50 border-teal-200">{status}</Badge>;
       case 'In Progress':
-        return <Badge className="bg-blue-50 text-blue-700 hover:bg-blue-50 border-blue-200">{status}</Badge>;
+        return <Badge className="bg-teal-50 text-teal-700 hover:bg-teal-50 border-teal-200">{status}</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -171,10 +171,10 @@ export default function PlaceholderPage({
           return (
             <Card key={i}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <CardTitle className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
                   {m.label}
                 </CardTitle>
-                <Icon className={`h-4 w-4 ${m.color || 'text-slate-400'}`} />
+                <Icon className={`h-4 w-4 ${m.color || 'text-zinc-400'}`} />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold tracking-tight">{m.value}</div>
@@ -186,11 +186,11 @@ export default function PlaceholderPage({
 
       {/* Main Content Grid */}
       <Card>
-        <CardHeader className="border-b border-slate-100 flex flex-row items-center justify-between pb-4">
-          <CardTitle className="text-lg font-medium text-slate-800">Operational Log</CardTitle>
+        <CardHeader className="border-b border-zinc-100 flex flex-row items-center justify-between pb-4">
+          <CardTitle className="text-lg font-medium text-zinc-800">Operational Log</CardTitle>
           <div className="flex items-center gap-2">
             <div className="relative w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-400" />
               <Input
                 placeholder="Search logs..."
                 value={searchTerm}
@@ -207,7 +207,7 @@ export default function PlaceholderPage({
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider">
+                <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider">
                   {tableHeaders.map((header, index) => (
                     <th 
                       key={index} 
@@ -219,10 +219,10 @@ export default function PlaceholderPage({
                   <th className="pb-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y text-slate-700">
+              <tbody className="divide-y text-zinc-700">
                 {filteredData.length > 0 ? (
                   filteredData.map((row) => (
-                    <tr key={row.id} className="hover:bg-slate-50/50 transition-colors">
+                    <tr key={row.id} className="hover:bg-zinc-50/50 transition-colors">
                       {Object.keys(row).filter(key => key !== 'id').map((key, colIndex) => (
                         <td key={key} className={`py-3.5 ${colIndex === Object.keys(row).length - 2 ? 'text-right font-medium' : ''}`}>
                           {key === 'status' ? getStatusBadge(row[key]) : row[key]}
@@ -233,7 +233,7 @@ export default function PlaceholderPage({
                           <Button 
                             variant="ghost" 
                             size="icon" 
-                            className="h-8 w-8 text-slate-400 hover:text-slate-900"
+                            className="h-8 w-8 text-zinc-400 hover:text-zinc-900"
                             onClick={() => {
                               setSelectedRow(row);
                               setIsViewOpen(true);
@@ -244,7 +244,7 @@ export default function PlaceholderPage({
                           <Button 
                             variant="ghost" 
                             size="icon" 
-                            className="h-8 w-8 text-slate-400 hover:text-slate-900"
+                            className="h-8 w-8 text-zinc-400 hover:text-zinc-900"
                             onClick={() => openEditModal(row)}
                           >
                             <Edit2 className="h-4 w-4" />
@@ -255,9 +255,9 @@ export default function PlaceholderPage({
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={tableHeaders.length + 1} className="py-8 text-center text-slate-400">
+                    <td colSpan={tableHeaders.length + 1} className="py-8 text-center text-zinc-400">
                       <div className="flex flex-col items-center justify-center gap-2">
-                        <AlertCircle className="h-8 w-8 text-slate-300" />
+                        <AlertCircle className="h-8 w-8 text-zinc-300" />
                         <span>No records match your search query.</span>
                       </div>
                     </td>
@@ -279,23 +279,23 @@ export default function PlaceholderPage({
           {selectedRow && (
             <div className="space-y-4 py-2 text-sm">
               <div className="grid grid-cols-3 gap-2 border-b pb-2">
-                <span className="font-semibold text-slate-500">Reference:</span>
+                <span className="font-semibold text-zinc-500">Reference:</span>
                 <span className="col-span-2 font-medium">{selectedRow.ref}</span>
               </div>
               <div className="grid grid-cols-3 gap-2 border-b pb-2">
-                <span className="font-semibold text-slate-500">Date:</span>
+                <span className="font-semibold text-zinc-500">Date:</span>
                 <span className="col-span-2">{selectedRow.date}</span>
               </div>
               <div className="grid grid-cols-3 gap-2 border-b pb-2">
-                <span className="font-semibold text-slate-500">Category:</span>
+                <span className="font-semibold text-zinc-500">Category:</span>
                 <span className="col-span-2">{selectedRow.category}</span>
               </div>
               <div className="grid grid-cols-3 gap-2 border-b pb-2">
-                <span className="font-semibold text-slate-500">Description:</span>
+                <span className="font-semibold text-zinc-500">Description:</span>
                 <span className="col-span-2 whitespace-pre-wrap">{selectedRow.desc}</span>
               </div>
               <div className="grid grid-cols-3 gap-2 pb-2">
-                <span className="font-semibold text-slate-500">Status:</span>
+                <span className="font-semibold text-zinc-500">Status:</span>
                 <span className="col-span-2">{getStatusBadge(selectedRow.status)}</span>
               </div>
             </div>

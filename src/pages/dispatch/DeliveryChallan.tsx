@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+﻿import { useParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Printer, ArrowLeft, Send } from 'lucide-react';
 import { mockOrders, mockCustomers, mockQuotations, mockProducts } from '@/lib/mockData';
@@ -51,42 +51,42 @@ export default function DeliveryChallan() {
         </div>
 
         {/* Details Grid */}
-        <div className="flex border border-gray-400 mb-6 text-sm">
-          <div className="w-1/2 border-r border-gray-400 p-4">
-            <h3 className="font-semibold text-gray-700 mb-2 border-b border-gray-200 pb-1">Consignee (Ship To):</h3>
+        <div className="flex border border-zinc-400 mb-6 text-sm">
+          <div className="w-1/2 border-r border-zinc-400 p-4">
+            <h3 className="font-semibold text-zinc-700 mb-2 border-b border-gray-200 pb-1">Consignee (Ship To):</h3>
             <p className="font-bold text-gray-900">{customer.name}</p>
-            <p className="text-gray-700 whitespace-pre-line">{customer.address}</p>
-            <p className="text-gray-700">{customer.city}, {customer.state}</p>
+            <p className="text-zinc-700 whitespace-pre-line">{customer.address}</p>
+            <p className="text-zinc-700">{customer.city}, {customer.state}</p>
             <p className="mt-2"><strong>GSTIN:</strong> {customer.gstin}</p>
           </div>
           <div className="w-1/2 p-0 flex flex-col">
-            <div className="flex border-b border-gray-400">
-              <div className="w-1/2 border-r border-gray-400 p-2">
-                <span className="text-xs text-gray-500 block">Challan No.</span>
+            <div className="flex border-b border-zinc-400">
+              <div className="w-1/2 border-r border-zinc-400 p-2">
+                <span className="text-xs text-zinc-500 block">Challan No.</span>
                 <span className="font-semibold">DC-26-880</span>
               </div>
               <div className="w-1/2 p-2">
-                <span className="text-xs text-gray-500 block">Date</span>
+                <span className="text-xs text-zinc-500 block">Date</span>
                 <span className="font-semibold">30-Jun-2026</span>
               </div>
             </div>
-            <div className="flex border-b border-gray-400">
-              <div className="w-1/2 border-r border-gray-400 p-2">
-                <span className="text-xs text-gray-500 block">Buyer's Order No.</span>
+            <div className="flex border-b border-zinc-400">
+              <div className="w-1/2 border-r border-zinc-400 p-2">
+                <span className="text-xs text-zinc-500 block">Buyer's Order No.</span>
                 <span className="font-semibold">{order.id}</span>
               </div>
               <div className="w-1/2 p-2">
-                <span className="text-xs text-gray-500 block">Mode/Terms of Payment</span>
+                <span className="text-xs text-zinc-500 block">Mode/Terms of Payment</span>
                 <span className="font-semibold">Against Proforma</span>
               </div>
             </div>
             <div className="flex flex-1">
-              <div className="w-1/2 border-r border-gray-400 p-2">
-                <span className="text-xs text-gray-500 block">Dispatch Document No.</span>
+              <div className="w-1/2 border-r border-zinc-400 p-2">
+                <span className="text-xs text-zinc-500 block">Dispatch Document No.</span>
                 <span className="font-semibold">LR-9021</span>
               </div>
               <div className="w-1/2 p-2">
-                <span className="text-xs text-gray-500 block">Dispatched through</span>
+                <span className="text-xs text-zinc-500 block">Dispatched through</span>
                 <span className="font-semibold">By Road (ODC)</span>
               </div>
             </div>
@@ -94,12 +94,12 @@ export default function DeliveryChallan() {
         </div>
 
         {/* Line Items */}
-        <table className="w-full border-collapse border border-gray-400 text-sm mb-6">
-          <thead className="bg-gray-100">
+        <table className="w-full border-collapse border border-zinc-400 text-sm mb-6">
+          <thead className="bg-zinc-100">
             <tr>
-              <th className="border border-gray-400 p-2 text-left w-12">Sr.</th>
-              <th className="border border-gray-400 p-2 text-left">Description of Goods</th>
-              <th className="border border-gray-400 p-2 text-center w-24">Quantity</th>
+              <th className="border border-zinc-400 p-2 text-left w-12">Sr.</th>
+              <th className="border border-zinc-400 p-2 text-left">Description of Goods</th>
+              <th className="border border-zinc-400 p-2 text-center w-24">Quantity</th>
             </tr>
           </thead>
           <tbody className="h-48 align-top">
@@ -107,36 +107,36 @@ export default function DeliveryChallan() {
               const product = mockProducts.find(p => p.id === item.productId);
               return (
                 <tr key={index}>
-                  <td className="border-x border-gray-400 p-3 text-center">{index + 1}</td>
-                  <td className="border-x border-gray-400 p-3">
+                  <td className="border-x border-zinc-400 p-3 text-center">{index + 1}</td>
+                  <td className="border-x border-zinc-400 p-3">
                     <p className="font-semibold">{product?.name}</p>
                     <p className="text-gray-600 mt-1">Machine S.No: SP/26/1012</p>
                     <p className="text-gray-600">Standard Accessories Box attached.</p>
                   </td>
-                  <td className="border-x border-gray-400 p-3 text-center font-semibold">{item.quantity} Nos</td>
+                  <td className="border-x border-zinc-400 p-3 text-center font-semibold">{item.quantity} Nos</td>
                 </tr>
               );
             })}
           </tbody>
           <tfoot>
-            <tr className="border border-gray-400 bg-gray-50">
+            <tr className="border border-zinc-400 bg-gray-50">
               <td colSpan={2} className="p-2 text-right font-bold">Total Quantity:</td>
               <td className="p-2 text-center font-bold">{quotation?.items.reduce((acc, curr) => acc + curr.quantity, 0)} Nos</td>
             </tr>
           </tfoot>
         </table>
 
-        <div className="text-sm text-gray-700 mb-16">
+        <div className="text-sm text-zinc-700 mb-16">
           <p><strong>Declaration:</strong> We declare that this delivery challan shows the actual quantity of the goods described and that all particulars are true and correct.</p>
         </div>
 
         {/* Signatures */}
         <div className="flex justify-between items-end">
-          <div className="text-center w-64 border border-gray-400 h-24 relative flex items-end justify-center p-2">
-            <span className="absolute top-2 left-2 text-xs text-gray-500">Receiver's Signature / Stamp</span>
+          <div className="text-center w-64 border border-zinc-400 h-24 relative flex items-end justify-center p-2">
+            <span className="absolute top-2 left-2 text-xs text-zinc-500">Receiver's Signature / Stamp</span>
           </div>
-          <div className="text-center w-64 border border-gray-400 h-24 relative flex items-end justify-center p-2">
-            <span className="absolute top-2 left-2 text-xs text-gray-500">For Sumesh Petroleum Pvt. Ltd.</span>
+          <div className="text-center w-64 border border-zinc-400 h-24 relative flex items-end justify-center p-2">
+            <span className="absolute top-2 left-2 text-xs text-zinc-500">For Sumesh Petroleum Pvt. Ltd.</span>
             <span className="font-semibold text-sm">Authorized Signatory</span>
           </div>
         </div>

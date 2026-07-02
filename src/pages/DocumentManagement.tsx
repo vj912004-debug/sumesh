@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { FileText, Download, UploadCloud, FolderOpen, Plus } from 'lucide-react';
@@ -94,7 +94,7 @@ ${docName}`;
         </Card>
         <Card>
           <CardContent className="p-4 flex items-center gap-4">
-            <FolderOpen className="h-8 w-8 text-blue-500" />
+            <FolderOpen className="h-8 w-8 text-teal-500" />
             <div>
               <div className="font-bold text-lg">O&M Manuals</div>
               <div className="text-sm text-muted-foreground">{getDocCountByCategory('Manuals') + 10} Files</div>
@@ -112,7 +112,7 @@ ${docName}`;
         </Card>
         <Card>
           <CardContent className="p-4 flex items-center gap-4">
-            <FolderOpen className="h-8 w-8 text-orange-500" />
+            <FolderOpen className="h-8 w-8 text-cyan-500" />
             <div>
               <div className="font-bold text-lg">Order Docs</div>
               <div className="text-sm text-muted-foreground">{getDocCountByCategory('Customer PO') + 80} Files</div>
@@ -140,7 +140,7 @@ ${docName}`;
               {documents.map((doc) => (
                 <TableRow key={doc.id}>
                   <TableCell className="font-medium flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-blue-600 shrink-0" />
+                    <FileText className="h-4 w-4 text-teal-600 shrink-0" />
                     <span className="truncate max-w-[300px] md:max-w-[450px]" title={doc.name}>
                       {doc.name}
                     </span>

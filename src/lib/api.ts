@@ -1,5 +1,6 @@
 // src/lib/api.ts
 import { mockCustomers, mockEnquiries, mockQuotations, mockOrders } from './mockData';
+import { processErpEvent } from './erpEvents';
 
 // Keys for localStorage
 const CUSTOMERS_KEY = 'sp2_customers';
@@ -152,10 +153,26 @@ export const api = {
       const newEnquiry = {
         id: newId,
         date: new Date().toISOString().split('T')[0],
+        status: 'Open',
         ...data
       };
       enquiries.push(newEnquiry);
       localStorage.setItem(ENQUIRIES_KEY, JSON.stringify(enquiries));
+
+      const customers = JSON.parse(localStorage.getItem(CUSTOMERS_KEY) || '[]');
+      const customer = customers.find((c: any) => c.id === newEnquiry.customerId);
+
+      processErpEvent('enquiry.created', {
+        enquiryId: newEnquiry.id,
+        customerId: newEnquiry.customerId,
+        customerName: customer?.name,
+        customerEmail: customer?.email,
+        customerPhone: customer?.phone,
+        contactPerson: customer?.contactPerson,
+        requirements: newEnquiry.requirements,
+        expectedValue: newEnquiry.expectedValue,
+      });
+
       return { data: newEnquiry };
     }
 

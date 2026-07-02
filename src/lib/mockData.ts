@@ -192,43 +192,11 @@ export const mockPackingLists: PackingList[] = [
   }
 ];
 
-export const triggerDispatchAlerts = (orderId: string) => {
-  if (typeof window === 'undefined') return;
-
-  // WhatsApp Alert
-  const newWa = {
-    id: `WA-${Math.floor(804 + Math.random() * 1000)}`,
-    recipient: 'Suketu Shah (Admin) & Transport Desk',
-    type: 'Dispatch Readiness',
-    message: `Automated Dispatch Alert: Order ${orderId} is certified and Ready for Dispatch. Loading transporter coordinates requested.`,
-    status: 'Delivered',
-    timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16)
-  };
-  
-  const waSaved = localStorage.getItem('whatsappLogs');
-  const waArray = waSaved ? JSON.parse(waSaved) : [
-    { id: 'WA-801', recipient: 'Sukhwinder Singh (Driver)', type: 'Transport Alert', message: 'Gate pass GP-9018 issued. Route: Vadodara to Navi Mumbai. e-Way Link: ewb.gov.in/EWB-26-9921', status: 'Delivered', timestamp: '2026-06-30 11:34 AM' },
-    { id: 'WA-802', recipient: 'Tata Power (QA Inspector)', type: 'QC Notification', message: 'Inspections for Transformer Oil Plant complete. Certificate TC-26-085 is ready for review.', status: 'Delivered', timestamp: '2026-06-28 04:32 PM' },
-    { id: 'WA-803', recipient: 'Ketan Shah (Reliance Customer)', type: 'Order Dispatch', message: 'Dear Ketan, Your order SO-26-004 has been dispatched via truck GJ-06-ZZ-4012.', status: 'Read', timestamp: '2026-06-30 11:40 AM' }
-  ];
-  localStorage.setItem('whatsappLogs', JSON.stringify([newWa, ...waArray]));
-
-  // Email Alert
-  const newEm = {
-    id: `EM-${Math.floor(192 + Math.random() * 1000)}`,
-    recipient: 'admin@sumeshpetroleum.com, logistics@sumeshpetroleum.com',
-    type: 'Dispatch Notification',
-    subject: `Automated Alert: Order ${orderId} is Ready for Dispatch`,
-    attachment: `SO-${orderId}_Ready.pdf`,
-    status: 'Relayed',
-    timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16)
-  };
-
-  const emSaved = localStorage.getItem('emailLogs');
-  const emArray = emSaved ? JSON.parse(emSaved) : [
-    { id: 'EM-190', recipient: 'procurement@tatapower.com', type: 'Tax Invoice & Challan', subject: 'Tax Invoice INV-26-004 & Challan CHL-1084 - Sumesh Petroleum', attachment: 'INV-26-004.pdf, CHL-1084.pdf', status: 'Relayed', timestamp: '2026-06-28 05:00 PM' },
-    { id: 'EM-191', recipient: 'plant.operations@reliance.com', type: 'FAT Drawing Certificate', subject: 'QA Inspection Release Certificate FAT-892 - Sumesh Petroleum', attachment: 'FAT-892_Certified.pdf', status: 'Delayed (SMTP Retry)', timestamp: '2026-06-30 12:00 PM' }
-  ];
-  localStorage.setItem('emailLogs', JSON.stringify([newEm, ...emArray]));
+export const getStoredEnquiries = (): Enquiry[] => {
+  if (typeof window !== 'undefined') {
+    const saved = localStorage.getItem('sp2_enquiries');
+    if (saved) return JSON.parse(saved);
+  }
+  return mockEnquiries;
 };
 

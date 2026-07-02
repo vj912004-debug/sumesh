@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,8 +7,11 @@ import { Input } from '@/components/ui/input';
 import { 
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter 
 } from '@/components/ui/dialog';
-import { mockOrders, mockCustomers, mockQuotations, mockProducts, mockPackingLists, getMockOrders, saveMockOrders, triggerDispatchAlerts } from '@/lib/mockData';
+import { mockOrders, mockCustomers, mockQuotations, mockProducts, mockPackingLists, getMockOrders, saveMockOrders } from '@/lib/mockData';
 import type { Order } from '@/lib/mockData';
+import { processErpEvent } from '@/lib/erpEvents';
+import { sendEmail, sendWhatsApp, openWhatsAppDeepLink } from '@/lib/communicationService';
+import { getIntegrationSettings } from '@/lib/integrationConfig';
 import { ArrowLeft, Truck, Wrench, Mail, Package } from 'lucide-react';
 
 export default function OrderDetail() {
@@ -37,47 +40,58 @@ export default function OrderDetail() {
   });
   const [isSending, setIsSending] = useState(false);
 
-  const handleGenerateDispatch = () => {
-    if (!order) return;
+  const handleGenerateDispatch = async () => {
+    if (!order || !customer) return;
     const updated = orders.map(o => o.id === order.id ? { ...o, status: 'Ready for Dispatch' as const } : o);
     setOrders(updated);
     saveMockOrders(updated);
-    triggerDispatchAlerts(order.id);
-    alert(`Automated alerts triggered!\n- SMS/WhatsApp notification dispatched to Admin & Transport Manager.\n- Transactional SMTP Email released regarding Order ${order.id} dispatch readiness.`);
+    const result = await processErpEvent('order.ready_for_dispatch', {
+      orderId: order.id,
+      customerId: customer.id,
+      customerName: customer.name,
+      customerEmail: customer.email,
+      customerPhone: customer.phone,
+      contactPerson: customer.contactPerson,
+      totalAmount: order.totalAmount,
+    });
+    alert(`Dispatch workflow triggered!\n• ${result.tasksCreated.length} task(s) auto-created\n• ${result.notificationsSent} WhatsApp/email notification(s) sent\n\nCheck Tasks and Communication pages.`);
   };
 
   if (!order || !customer) {
     return <div>Order not found</div>;
   }
 
-  const handleWhatsAppSend = () => {
+  const handleWhatsAppSend = async () => {
     const product = mockProducts.find(p => p.id === quotation?.items[0]?.productId);
-    const message = `Hi *${customer.contactPerson}*,\n\n` +
-      `Your Order *${order.id}* for *${product?.name || 'equipment'}* has been updated on the Sumesh Petroleum ERP.\n\n` +
-      `*Order Details:*\n` +
-      `- Total: *₹${order.totalAmount.toLocaleString('en-IN')}*\n` +
-      `- Status: *${order.status}*\n` +
-      `- Date: *${order.date}*\n\n` +
-      `Thank you,\n` +
-      `Sumesh Petroleum`;
-    
-    let phoneDigits = customer.phone.replace(/[^0-9]/g, '');
-    if (phoneDigits.length === 10) {
-      phoneDigits = '91' + phoneDigits; // Default to India country code
+    const message = `Hi *${customer.contactPerson}*,\n\nYour Order *${order.id}* for *${product?.name || 'equipment'}* has been updated.\n\n*Total:* ₹${order.totalAmount.toLocaleString('en-IN')}\n*Status:* ${order.status}\n*Date:* ${order.date}\n\nThank you,\nSumesh Petroleum`;
+
+    const settings = getIntegrationSettings();
+    if (settings.whatsapp.mode === 'deep_link') {
+      openWhatsAppDeepLink(customer.phone, message);
     }
-    
-    const url = `https://api.whatsapp.com/send?phone=${phoneDigits}&text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+    await sendWhatsApp({
+      recipient: `${customer.contactPerson} (${customer.name})`,
+      phone: customer.phone,
+      type: 'Order Update',
+      message,
+      sourceRef: order.id,
+    });
+    alert('WhatsApp message logged and sent.');
   };
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSending(true);
-    setTimeout(() => {
-      setIsSending(false);
-      setIsEmailOpen(false);
-      alert(`Email sent successfully to ${emailTo}!`);
-    }, 1500);
+    await sendEmail({
+      to: emailTo,
+      type: 'Order Status Update',
+      subject: emailSubject,
+      body: emailBody,
+      sourceRef: order.id,
+    });
+    setIsSending(false);
+    setIsEmailOpen(false);
+    alert(`Email sent to ${emailTo} and logged in Communication Hub.`);
   };
 
   return (
@@ -100,7 +114,7 @@ export default function OrderDetail() {
         <div className="flex gap-2">
           {packingList ? (
             <Link to={`/dispatch/packing-list/${packingList.id}`}>
-              <Button variant="outline" className="text-blue-600 border-blue-200">
+              <Button variant="outline" className="text-teal-600 border-teal-200">
                 <Package className="mr-2 h-4 w-4" /> Packing List
               </Button>
             </Link>
@@ -129,22 +143,22 @@ export default function OrderDetail() {
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
             <div>
-              <div className="font-semibold text-slate-800 text-base">{customer.name}</div>
-              <div className="text-slate-500 mt-0.5">{customer.city}, {customer.state}</div>
-              <div className="text-slate-500 text-xs mt-1 font-medium">GSTIN: {customer.gstin}</div>
+              <div className="font-semibold text-zinc-800 text-base">{customer.name}</div>
+              <div className="text-zinc-500 mt-0.5">{customer.city}, {customer.state}</div>
+              <div className="text-zinc-500 text-xs mt-1 font-medium">GSTIN: {customer.gstin}</div>
             </div>
 
-            <div className="border-t border-slate-100 pt-3 space-y-2">
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Contact Person</div>
-              <div className="font-medium text-slate-800">{customer.contactPerson}</div>
+            <div className="border-t border-zinc-100 pt-3 space-y-2">
+              <div className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Contact Person</div>
+              <div className="font-medium text-zinc-800">{customer.contactPerson}</div>
               
-              <div className="flex flex-col gap-1 text-slate-600 mt-1">
+              <div className="flex flex-col gap-1 text-zinc-600 mt-1">
                 <span>Phone: {customer.phone}</span>
                 <span className="truncate">Email: {customer.email}</span>
               </div>
             </div>
 
-            <div className="border-t border-slate-100 pt-3 flex flex-col gap-2">
+            <div className="border-t border-zinc-100 pt-3 flex flex-col gap-2">
               <Button 
                 variant="outline" 
                 size="sm" 
@@ -159,7 +173,7 @@ export default function OrderDetail() {
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="w-full justify-start text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 border-indigo-200"
+                className="w-full justify-start text-cyan-600 hover:text-orange-700 hover:bg-orange-50 border-orange-200"
                 onClick={() => setIsEmailOpen(true)}
               >
                 <Mail className="w-4 h-4 mr-2 shrink-0" />
@@ -236,7 +250,7 @@ export default function OrderDetail() {
           <form onSubmit={handleEmailSubmit}>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
-                <Mail className="w-5 h-5 text-indigo-500" />
+                <Mail className="w-5 h-5 text-cyan-500" />
                 Email Order Summary
               </DialogTitle>
               <DialogDescription>

@@ -1,4 +1,4 @@
-
+﻿
 import { Button } from '@/components/ui/button';
 import { Printer, CheckCircle2, ShieldCheck, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -37,7 +37,7 @@ export default function QualityControl() {
         <div className="text-center border-b-2 border-gray-800 pb-4 mb-6">
           <h1 className="text-3xl font-bold text-primary mb-1">SUMESH PETROLEUM PVT. LTD.</h1>
           <p className="text-sm text-gray-600 mb-2">Makarpura GIDC, Vadodara, Gujarat - 390010 (AN ISO 9001:2015 CERTIFIED COMPANY)</p>
-          <div className="bg-gray-100 py-2 border border-gray-300 mt-4">
+          <div className="bg-zinc-100 py-2 border border-gray-300 mt-4">
             <h2 className="text-xl font-bold tracking-widest uppercase">Factory Test Certificate</h2>
           </div>
         </div>
@@ -78,7 +78,7 @@ export default function QualityControl() {
         <div className="mb-8">
           <h3 className="font-bold text-lg mb-2">1. Visual & Dimensional Checks</h3>
           <table className="w-full text-sm border-collapse border border-gray-300 mb-6">
-            <thead className="bg-gray-100">
+            <thead className="bg-zinc-100">
               <tr>
                 <th className="border border-gray-300 px-3 py-2 text-left w-12">Sr.</th>
                 <th className="border border-gray-300 px-3 py-2 text-left">Parameter Checked</th>
@@ -107,7 +107,7 @@ export default function QualityControl() {
 
           <h3 className="font-bold text-lg mb-2">2. Functional & Performance Tests</h3>
           <table className="w-full text-sm border-collapse border border-gray-300">
-            <thead className="bg-gray-100">
+            <thead className="bg-zinc-100">
               <tr>
                 <th className="border border-gray-300 px-3 py-2 text-left w-12">Sr.</th>
                 <th className="border border-gray-300 px-3 py-2 text-left">Test Description</th>
@@ -161,13 +161,13 @@ export default function QualityControl() {
         <div className="flex justify-between items-end pt-8">
           <div className="text-center w-48 relative">
             <div className="absolute -top-8 left-0 right-0 flex justify-center opacity-80 pointer-events-none">
-              <div className="border-2 border-blue-600 text-blue-600 px-2 py-1 rounded text-xs font-bold -rotate-12 transform">
+              <div className="border-2 border-teal-600 text-teal-600 px-2 py-1 rounded text-xs font-bold -rotate-12 transform">
                 DIGITALLY SIGNED<br/>R. DESAI
               </div>
             </div>
-            <div className="border-b border-gray-400 mb-2 h-16"></div>
+            <div className="border-b border-zinc-400 mb-2 h-16"></div>
             <p className="text-gray-800 font-semibold text-sm">Tested By</p>
-            <p className="text-gray-500 text-xs">QC Engineer</p>
+            <p className="text-zinc-500 text-xs">QC Engineer</p>
           </div>
           <div className="text-center w-48 relative">
             <div className="absolute -top-10 left-0 right-0 flex justify-center opacity-80 pointer-events-none">
@@ -175,9 +175,9 @@ export default function QualityControl() {
                 APPROVED<br/>M. PATEL (PROD. MGR)
               </div>
             </div>
-            <div className="border-b border-gray-400 mb-2 h-16"></div>
+            <div className="border-b border-zinc-400 mb-2 h-16"></div>
             <p className="text-gray-800 font-semibold text-sm">Approved By</p>
-            <p className="text-gray-500 text-xs">Production Manager</p>
+            <p className="text-zinc-500 text-xs">Production Manager</p>
           </div>
         </div>
 

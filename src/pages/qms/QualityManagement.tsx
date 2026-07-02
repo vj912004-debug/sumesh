@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -263,7 +263,7 @@ export default function QualityManagement() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                    <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                       <th className="pb-3 text-left">Inspection ID</th>
                       <th className="pb-3 text-left">Drawing No</th>
                       <th className="pb-3 text-left">"As Per Drawing" Spec</th>
@@ -274,16 +274,16 @@ export default function QualityManagement() {
                       <th className="pb-3 text-right">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                  <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                     {fatLogs.map((log) => (
-                      <tr key={log.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                      <tr key={log.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                         <td className="py-3 font-semibold text-xs text-primary">{log.id}</td>
                         <td className="py-3 font-mono text-xs">{log.drawingNo}</td>
                         <td className="py-3 font-medium">{log.asPerDrawing}</td>
-                        <td className="py-3 text-slate-500 font-mono text-xs">{log.tolerance}</td>
-                        <td className="py-3 font-bold text-indigo-600 dark:text-indigo-400">{log.obtainedValue}</td>
+                        <td className="py-3 text-zinc-500 font-mono text-xs">{log.tolerance}</td>
+                        <td className="py-3 font-bold text-cyan-600 dark:text-cyan-400">{log.obtainedValue}</td>
                         <td className="py-3 text-xs">{log.inspector}</td>
-                        <td className="py-3 text-slate-400 text-xs">{log.date}</td>
+                        <td className="py-3 text-zinc-400 text-xs">{log.date}</td>
                         <td className="py-3 text-right">
                           <Badge variant={log.status === 'Passed' ? 'default' : 'destructive'} className={log.status === 'Passed' ? 'bg-green-100 text-green-800 border-green-200' : ''}>
                             {log.status === 'Passed' ? 'OK (Passed)' : 'Defect (Failed)'}
@@ -340,19 +340,19 @@ export default function QualityManagement() {
                       </div>
 
                       {elecPhase === 'Three-Phase' ? (
-                        <div className="space-y-2 border p-3 rounded-lg bg-slate-50/50">
-                          <label className="text-sm font-semibold text-slate-600 block mb-1">Amperage Array Readings [I_R, I_Y, I_B] (Amps)</label>
+                        <div className="space-y-2 border p-3 rounded-lg bg-zinc-50/50">
+                          <label className="text-sm font-semibold text-zinc-600 block mb-1">Amperage Array Readings [I_R, I_Y, I_B] (Amps)</label>
                           <div className="grid grid-cols-3 gap-2">
                             <div>
                               <span className="text-[10px] text-red-500 font-bold">Phase R</span>
                               <Input type="number" value={elecAmpsR} onChange={e => setElecAmpsR(e.target.value)} required />
                             </div>
                             <div>
-                              <span className="text-[10px] text-amber-500 font-bold">Phase Y</span>
+                              <span className="text-[10px] text-teal-500 font-bold">Phase Y</span>
                               <Input type="number" value={elecAmpsY} onChange={e => setElecAmpsY(e.target.value)} required />
                             </div>
                             <div>
-                              <span className="text-[10px] text-blue-500 font-bold">Phase B</span>
+                              <span className="text-[10px] text-teal-500 font-bold">Phase B</span>
                               <Input type="number" value={elecAmpsB} onChange={e => setElecAmpsB(e.target.value)} required />
                             </div>
                           </div>
@@ -387,7 +387,7 @@ export default function QualityManagement() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                    <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                       <th className="pb-3 text-left">Log ID</th>
                       <th className="pb-3 text-left">Equipment / Motor Description</th>
                       <th className="pb-3 text-left">Phase</th>
@@ -399,23 +399,23 @@ export default function QualityManagement() {
                       <th className="pb-3 text-right">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                  <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                     {powerLogs.map((log) => {
                       const avgAmps = (log.ampsArray.reduce((a, b) => a + b, 0) / log.ampsArray.length).toFixed(1);
                       return (
-                        <tr key={log.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                        <tr key={log.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                           <td className="py-3.5 font-semibold text-xs text-primary">{log.id}</td>
                           <td className="py-3.5 font-bold">{log.equipment}</td>
                           <td className="py-3.5 text-xs">{log.phase}</td>
                           <td className="py-3.5 text-right font-mono text-xs">{log.voltage} V</td>
                           <td className="py-3.5 text-center font-mono text-xs">
                             <span className="text-red-500 font-semibold">{log.ampsArray[0]}A</span>
-                            {log.ampsArray[1] && <span className="text-slate-400 mx-1">/</span>}
-                            {log.ampsArray[1] && <span className="text-amber-500 font-semibold">{log.ampsArray[1]}A</span>}
-                            {log.ampsArray[2] && <span className="text-slate-400 mx-1">/</span>}
-                            {log.ampsArray[2] && <span className="text-blue-500 font-semibold">{log.ampsArray[2]}A</span>}
+                            {log.ampsArray[1] && <span className="text-zinc-400 mx-1">/</span>}
+                            {log.ampsArray[1] && <span className="text-teal-500 font-semibold">{log.ampsArray[1]}A</span>}
+                            {log.ampsArray[2] && <span className="text-zinc-400 mx-1">/</span>}
+                            {log.ampsArray[2] && <span className="text-teal-500 font-semibold">{log.ampsArray[2]}A</span>}
                           </td>
-                          <td className="py-3.5 text-right font-mono text-xs text-indigo-600 dark:text-indigo-400 font-bold">{avgAmps} A</td>
+                          <td className="py-3.5 text-right font-mono text-xs text-cyan-600 dark:text-cyan-400 font-bold">{avgAmps} A</td>
                           <td className="py-3.5 text-right font-mono text-xs">{log.powerFactor}</td>
                           <td className="py-3.5 text-right font-mono text-xs">{log.rpm}</td>
                           <td className="py-3.5 text-right">
@@ -424,7 +424,7 @@ export default function QualityManagement() {
                                 ? 'text-green-600 border-green-200 bg-green-50/50' 
                                 : log.status === 'Imbalance' 
                                   ? 'text-red-600 border-red-200 bg-red-50/50 animate-pulse' 
-                                  : 'text-amber-600 border-amber-200 bg-amber-50/50'
+                                  : 'text-teal-600 border-teal-200 bg-teal-50/50'
                             }>
                               {log.status}
                             </Badge>
@@ -463,43 +463,43 @@ export default function QualityManagement() {
                         <Input value={chemSample} onChange={e => setChemSample(e.target.value)} placeholder="e.g. SMP-26-445" required />
                       </div>
                       
-                      <div className="border p-3 rounded-lg space-y-3 bg-slate-50/50">
-                        <h4 className="font-bold text-slate-700">1. Breakdown Voltage (BDV) Parameters</h4>
+                      <div className="border p-3 rounded-lg space-y-3 bg-zinc-50/50">
+                        <h4 className="font-bold text-zinc-700">1. Breakdown Voltage (BDV) Parameters</h4>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <span className="text-[10px] text-slate-500 font-bold block mb-1">Pre-Treatment BDV (kV)</span>
+                            <span className="text-[10px] text-zinc-500 font-bold block mb-1">Pre-Treatment BDV (kV)</span>
                             <Input type="number" value={preBdvVal} onChange={e => setPreBdvVal(e.target.value)} required />
                           </div>
                           <div>
-                            <span className="text-[10px] text-slate-500 font-bold block mb-1">Post-Treatment BDV (kV) *</span>
+                            <span className="text-[10px] text-zinc-500 font-bold block mb-1">Post-Treatment BDV (kV) *</span>
                             <Input type="number" value={postBdvVal} onChange={e => setPostBdvVal(e.target.value)} required />
                           </div>
                         </div>
                       </div>
 
-                      <div className="border p-3 rounded-lg space-y-3 bg-slate-50/50">
-                        <h4 className="font-bold text-slate-700">2. Moisture Content (Karl Fischer)</h4>
+                      <div className="border p-3 rounded-lg space-y-3 bg-zinc-50/50">
+                        <h4 className="font-bold text-zinc-700">2. Moisture Content (Karl Fischer)</h4>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <span className="text-[10px] text-slate-500 font-bold block mb-1">Pre-Treatment Moisture (PPM)</span>
+                            <span className="text-[10px] text-zinc-500 font-bold block mb-1">Pre-Treatment Moisture (PPM)</span>
                             <Input type="number" step="0.1" value={preMoistVal} onChange={e => setPreMoistVal(e.target.value)} required />
                           </div>
                           <div>
-                            <span className="text-[10px] text-slate-500 font-bold block mb-1">Post-Treatment Moisture (PPM) *</span>
+                            <span className="text-[10px] text-zinc-500 font-bold block mb-1">Post-Treatment Moisture (PPM) *</span>
                             <Input type="number" step="0.1" value={postMoistVal} onChange={e => setPostMoistVal(e.target.value)} required />
                           </div>
                         </div>
                       </div>
 
-                      <div className="border p-3 rounded-lg space-y-3 bg-slate-50/50">
-                        <h4 className="font-bold text-slate-700">3. Dissolved Gas Content (DGA)</h4>
+                      <div className="border p-3 rounded-lg space-y-3 bg-zinc-50/50">
+                        <h4 className="font-bold text-zinc-700">3. Dissolved Gas Content (DGA)</h4>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <span className="text-[10px] text-slate-500 font-bold block mb-1">Pre-Treatment Gas (%)</span>
+                            <span className="text-[10px] text-zinc-500 font-bold block mb-1">Pre-Treatment Gas (%)</span>
                             <Input type="number" step="0.1" value={preGasVal} onChange={e => setPreGasVal(e.target.value)} required />
                           </div>
                           <div>
-                            <span className="text-[10px] text-slate-500 font-bold block mb-1">Post-Treatment Gas (%)</span>
+                            <span className="text-[10px] text-zinc-500 font-bold block mb-1">Post-Treatment Gas (%)</span>
                             <Input type="number" step="0.1" value={postGasVal} onChange={e => setPostGasVal(e.target.value)} required />
                           </div>
                         </div>
@@ -517,7 +517,7 @@ export default function QualityManagement() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                    <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                       <th className="pb-3 text-left">Sample ID</th>
                       <th className="pb-3 text-left">Ref Label</th>
                       <th className="pb-3 text-center bg-red-50/30 dark:bg-red-950/10">Pre-BDV</th>
@@ -529,12 +529,12 @@ export default function QualityManagement() {
                       <th className="pb-3 text-right">Lab Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                  <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                     {chemicalLogs.map((log) => {
                       const bdvScale = (((log.postBdv - log.preBdv) / log.preBdv) * 100).toFixed(0);
                       const moistDrop = (((log.preMoisture - log.postMoisture) / log.preMoisture) * 100).toFixed(1);
                       return (
-                        <tr key={log.id} className="hover:bg-slate-50/30 dark:hover:bg-slate-900/30 transition-colors">
+                        <tr key={log.id} className="hover:bg-zinc-50/30 dark:hover:bg-zinc-900/30 transition-colors">
                           <td className="py-3.5 font-semibold text-xs text-primary">{log.id}</td>
                           <td className="py-3.5 font-mono text-xs">{log.sampleNo}</td>
                           <td className="py-3.5 text-center font-mono text-xs text-red-500 font-medium bg-red-50/20 dark:bg-red-950/5">{log.preBdv} kV</td>
@@ -577,7 +577,7 @@ export default function QualityManagement() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                    <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                       <th className="pb-3 text-left">Record ID</th>
                       <th className="pb-3 text-left">Structural Component</th>
                       <th className="pb-3 text-left">Sandblasting Grade</th>
@@ -587,14 +587,14 @@ export default function QualityManagement() {
                       <th className="pb-3 text-right">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                  <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                     {coatingLogs.map((log) => (
-                      <tr key={log.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                      <tr key={log.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                         <td className="py-3.5 font-semibold text-xs text-primary">{log.id}</td>
                         <td className="py-3.5 font-bold">{log.component}</td>
                         <td className="py-3.5 font-mono text-xs">{log.sandblast}</td>
-                        <td className="py-3.5 text-xs text-slate-600 dark:text-slate-400">{log.primer}</td>
-                        <td className="py-3.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400">{log.topcoat}</td>
+                        <td className="py-3.5 text-xs text-zinc-600 dark:text-zinc-400">{log.primer}</td>
+                        <td className="py-3.5 text-xs font-semibold text-cyan-600 dark:text-cyan-400">{log.topcoat}</td>
                         <td className="py-3.5 text-xs">{log.inspector}</td>
                         <td className="py-3.5 text-right">
                           <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50/20">
@@ -620,17 +620,17 @@ export default function QualityManagement() {
             <CardContent>
               <div className="space-y-4">
                 {approvals.map((app) => (
-                  <div key={app.id} className="p-6 border rounded-xl space-y-4 bg-slate-50/50 dark:bg-slate-900/20">
+                  <div key={app.id} className="p-6 border rounded-xl space-y-4 bg-zinc-50/50 dark:bg-zinc-900/20">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                       <div>
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="font-extrabold text-sm text-primary">{app.id}</span>
-                          <span className="text-slate-300">|</span>
-                          <span className="font-bold text-slate-800 dark:text-slate-200">{app.client}</span>
-                          <span className="text-slate-300">|</span>
-                          <span className="text-xs text-slate-500 font-medium">{app.item}</span>
+                          <span className="text-zinc-300">|</span>
+                          <span className="font-bold text-zinc-800 dark:text-zinc-200">{app.client}</span>
+                          <span className="text-zinc-300">|</span>
+                          <span className="text-xs text-zinc-500 font-medium">{app.item}</span>
                         </div>
-                        <p className="text-xs text-slate-400 mt-1">QC Authority Sign-off: <span className="font-semibold text-foreground">{app.signoff}</span></p>
+                        <p className="text-xs text-zinc-400 mt-1">QC Authority Sign-off: <span className="font-semibold text-foreground">{app.signoff}</span></p>
                       </div>
 
                       <div>
@@ -647,30 +647,30 @@ export default function QualityManagement() {
                     </div>
 
                     <div className="grid grid-cols-2 sm:grid-cols-6 gap-3 pt-2">
-                      <div className="p-3 border rounded-lg bg-white dark:bg-slate-900 text-center">
-                        <span className="text-[10px] font-bold text-slate-400 block mb-1">1. Final Inspection</span>
+                      <div className="p-3 border rounded-lg bg-white dark:bg-zinc-900 text-center">
+                        <span className="text-[10px] font-bold text-zinc-400 block mb-1">1. Final Inspection</span>
                         <Badge className="bg-emerald-500 text-white text-[10px] h-5">OK (Passed)</Badge>
                       </div>
-                      <div className="p-3 border rounded-lg bg-white dark:bg-slate-900 text-center">
-                        <span className="text-[10px] font-bold text-slate-400 block mb-1">2. Trial Running</span>
+                      <div className="p-3 border rounded-lg bg-white dark:bg-zinc-900 text-center">
+                        <span className="text-[10px] font-bold text-zinc-400 block mb-1">2. Trial Running</span>
                         <Badge className="bg-emerald-500 text-white text-[10px] h-5">OK (8 Hours)</Badge>
                       </div>
-                      <div className="p-3 border rounded-lg bg-white dark:bg-slate-900 text-center">
-                        <span className="text-[10px] font-bold text-slate-400 block mb-1">3. Power Consumption</span>
+                      <div className="p-3 border rounded-lg bg-white dark:bg-zinc-900 text-center">
+                        <span className="text-[10px] font-bold text-zinc-400 block mb-1">3. Power Consumption</span>
                         <Badge className="bg-emerald-500 text-white text-[10px] h-5">OK (Verified)</Badge>
                       </div>
-                      <div className="p-3 border rounded-lg bg-white dark:bg-slate-900 text-center">
-                        <span className="text-[10px] font-bold text-slate-400 block mb-1">4. Performance Tests</span>
-                        <Badge variant={app.tests.performance === 'OK' ? 'default' : 'secondary'} className={app.tests.performance === 'OK' ? 'bg-emerald-500 text-white text-[10px] h-5' : 'text-amber-600 bg-amber-50 h-5'}>
+                      <div className="p-3 border rounded-lg bg-white dark:bg-zinc-900 text-center">
+                        <span className="text-[10px] font-bold text-zinc-400 block mb-1">4. Performance Tests</span>
+                        <Badge variant={app.tests.performance === 'OK' ? 'default' : 'secondary'} className={app.tests.performance === 'OK' ? 'bg-emerald-500 text-white text-[10px] h-5' : 'text-teal-600 bg-teal-50 h-5'}>
                           {app.tests.performance}
                         </Badge>
                       </div>
-                      <div className="p-3 border rounded-lg bg-white dark:bg-slate-900 text-center">
-                        <span className="text-[10px] font-bold text-slate-400 block mb-1">5. Control Panel QC</span>
+                      <div className="p-3 border rounded-lg bg-white dark:bg-zinc-900 text-center">
+                        <span className="text-[10px] font-bold text-zinc-400 block mb-1">5. Control Panel QC</span>
                         <Badge className="bg-emerald-500 text-white text-[10px] h-5">OK (Interlock OK)</Badge>
                       </div>
-                      <div className="p-3 border rounded-lg bg-white dark:bg-slate-900 text-center">
-                        <span className="text-[10px] font-bold text-slate-400 block mb-1">6. Paint Thickness</span>
+                      <div className="p-3 border rounded-lg bg-white dark:bg-zinc-900 text-center">
+                        <span className="text-[10px] font-bold text-zinc-400 block mb-1">6. Paint Thickness</span>
                         <Badge className="bg-emerald-500 text-white text-[10px] h-5">OK (RAL 5012)</Badge>
                       </div>
                     </div>

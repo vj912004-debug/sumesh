@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -207,7 +207,7 @@ export default function FinanceTaxCompliance() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                    <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                       <th className="pb-3 text-left">Invoice No</th>
                       <th className="pb-3 text-left">Customer</th>
                       <th className="pb-3 text-right">Basic Amount</th>
@@ -219,23 +219,23 @@ export default function FinanceTaxCompliance() {
                       <th className="pb-3 text-right">Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                  <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                     {invoices.map((inv) => (
-                      <tr key={inv.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                      <tr key={inv.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                         <td className="py-3.5 font-semibold text-xs text-primary">{inv.id}</td>
                         <td className="py-3.5 font-bold">{inv.customer}</td>
                         <td className="py-3.5 text-right font-mono text-xs">₹{inv.basic.toLocaleString('en-IN')}</td>
-                        <td className="py-3.5 pl-6 text-xs text-slate-500">{inv.taxType}</td>
-                        <td className="py-3.5 font-mono text-xs text-slate-500">{inv.hsn}</td>
+                        <td className="py-3.5 pl-6 text-xs text-zinc-500">{inv.taxType}</td>
+                        <td className="py-3.5 font-mono text-xs text-zinc-500">{inv.hsn}</td>
                         <td className="py-3.5 font-mono text-[10px] max-w-[150px] truncate" title={inv.irn}>{inv.irn}</td>
                         <td className="py-3.5 text-xs font-mono">{inv.ackNo}</td>
-                        <td className="py-3.5 text-xs text-slate-400 font-mono">{inv.ackDate}</td>
+                        <td className="py-3.5 text-xs text-zinc-400 font-mono">{inv.ackDate}</td>
                         <td className="py-3.5 text-right space-x-1">
                           {inv.status.includes('Generated') ? (
                             <Button 
                               size="sm" 
                               variant="outline" 
-                              className="h-7 text-xs border-indigo-200 text-indigo-600 hover:bg-indigo-50"
+                              className="h-7 text-xs border-orange-200 text-cyan-600 hover:bg-orange-50"
                               onClick={() => setSelectedInvoice(inv)}
                             >
                               <Printer className="w-3 h-3 mr-1" /> View/Print
@@ -272,7 +272,7 @@ export default function FinanceTaxCompliance() {
                   <div className="space-y-2">
                     <label className="text-sm font-semibold">HSN/SAC Code Designation</label>
                     <Input value={calcHsn} onChange={e => handleHsnChange(e.target.value)} placeholder="8421.29.00" required />
-                    <p className="text-[10px] text-slate-400">
+                    <p className="text-[10px] text-zinc-400">
                       * Enter HSN 8421 (Filtration machinery) or SAC 9973 (Rentals) to auto-fill GST rate.
                     </p>
                   </div>
@@ -309,7 +309,7 @@ export default function FinanceTaxCompliance() {
                   <div className="space-y-6 w-full">
                     <div className="border rounded-lg overflow-hidden">
                       <table className="w-full text-sm">
-                        <thead className="bg-slate-50 dark:bg-slate-900 text-slate-500 font-medium">
+                        <thead className="bg-zinc-50 dark:bg-zinc-900 text-zinc-500 font-medium">
                           <tr>
                             <th className="py-2.5 px-4 text-left">GST Component</th>
                             <th className="py-2.5 px-4 text-left">HSN/SAC Code</th>
@@ -317,7 +317,7 @@ export default function FinanceTaxCompliance() {
                             <th className="py-2.5 px-4 text-right">Amount (₹)</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                        <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                           <tr>
                             <td className="py-3 px-4">Basic Taxable Amount</td>
                             <td className="py-3 px-4 font-mono">{calcResults.hsn}</td>
@@ -357,8 +357,8 @@ export default function FinanceTaxCompliance() {
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center text-slate-400 py-10">
-                    <Percent className="w-12 h-12 text-slate-200 mx-auto mb-2 animate-bounce" />
+                  <div className="text-center text-zinc-400 py-10">
+                    <Percent className="w-12 h-12 text-zinc-200 mx-auto mb-2 animate-bounce" />
                     <p className="text-sm">Enter basic value and click calculate to review CGST/SGST/IGST tax splits.</p>
                   </div>
                 )}
@@ -395,7 +395,7 @@ export default function FinanceTaxCompliance() {
                   <div className="space-y-2">
                     <label className="text-sm font-semibold">RBI Repo Rate (%)</label>
                     <Input type="number" step="0.01" value={rbiRate} onChange={e => setRbiRate(e.target.value)} required />
-                    <p className="text-[10px] text-slate-400">* Delayed Interest Rate will be calculated at 3x this rate: {(Number(rbiRate) * 3).toFixed(2)}% p.a.</p>
+                    <p className="text-[10px] text-zinc-400">* Delayed Interest Rate will be calculated at 3x this rate: {(Number(rbiRate) * 3).toFixed(2)}% p.a.</p>
                   </div>
                   <Button type="submit" className="w-full mt-4">
                     <Calculator className="w-4 h-4 mr-2" /> Audit MSMED Interest
@@ -412,23 +412,23 @@ export default function FinanceTaxCompliance() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                      <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                         <th className="pb-3 text-left">Invoice No</th>
                         <th className="pb-3 text-left">Customer Name</th>
                         <th className="pb-3 text-right">Invoice Amount</th>
                         <th className="pb-3 text-right">Delay (Days)</th>
-                        <th className="pb-3 text-right bg-amber-50/50">MSMED Penalty (3x RBI rate)</th>
+                        <th className="pb-3 text-right bg-teal-50/50">MSMED Penalty (3x RBI rate)</th>
                         <th className="pb-3 text-right">Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                    <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                       {receivables.map((rec) => (
-                        <tr key={rec.invoiceNo} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                        <tr key={rec.invoiceNo} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                           <td className="py-3.5 font-semibold text-xs text-primary">{rec.invoiceNo}</td>
                           <td className="py-3.5 font-bold">{rec.customer}</td>
                           <td className="py-3.5 text-right font-mono text-xs">₹{rec.amount.toLocaleString('en-IN')}</td>
                           <td className="py-3.5 text-right font-mono text-xs text-red-500 font-semibold">{rec.delayDays} days</td>
-                          <td className="py-3.5 text-right font-mono text-xs text-amber-600 dark:text-amber-400 font-extrabold bg-amber-50/20 dark:bg-amber-950/5">
+                          <td className="py-3.5 text-right font-mono text-xs text-teal-600 dark:text-teal-400 font-extrabold bg-teal-50/20 dark:bg-teal-950/5">
                             ₹{rec.penalty.toLocaleString('en-IN')}
                           </td>
                           <td className="py-3.5 text-right">
@@ -443,19 +443,19 @@ export default function FinanceTaxCompliance() {
                 </div>
 
                 {calculatedMsmedInterest !== null && (
-                  <div className="mt-4 p-4 border border-dashed rounded-lg bg-amber-50 text-amber-900 space-y-2 text-xs">
+                  <div className="mt-4 p-4 border border-dashed rounded-lg bg-teal-50 text-teal-900 space-y-2 text-xs">
                     <p className="font-extrabold flex items-center gap-1.5">
-                      <AlertCircle className="w-4 h-4 text-amber-600" /> MSMED Statutory Late Fee calculated
+                      <AlertCircle className="w-4 h-4 text-teal-600" /> MSMED Statutory Late Fee calculated
                     </p>
                     <p>
-                      Invoice Reference: <span className="font-bold text-slate-900">{msmedInvoice}</span> is delayed by{' '}
-                      <span className="font-bold text-slate-900">{receivables.find(r => r.invoiceNo === msmedInvoice)?.delayDays} days</span>.
+                      Invoice Reference: <span className="font-bold text-zinc-900">{msmedInvoice}</span> is delayed by{' '}
+                      <span className="font-bold text-zinc-900">{receivables.find(r => r.invoiceNo === msmedInvoice)?.delayDays} days</span>.
                     </p>
                     <p>
                       Interest Penalty (at {(Number(rbiRate) * 3).toFixed(2)}% p.a. compounded monthly):{' '}
                       <span className="font-extrabold text-red-600 text-sm">₹{calculatedMsmedInterest.toLocaleString('en-IN')}</span>
                     </p>
-                    <p className="text-[10px] text-amber-600">
+                    <p className="text-[10px] text-teal-600">
                       Note: Under section 16 of the MSMED Act, this interest is mandatory and cannot be claimed as tax deductible expenditure.
                     </p>
                   </div>
@@ -476,7 +476,7 @@ export default function FinanceTaxCompliance() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-slate-400 font-semibold text-xs uppercase tracking-wider pb-3">
+                    <tr className="border-b text-zinc-400 font-semibold text-xs uppercase tracking-wider pb-3">
                       <th className="pb-3 text-left">Bank Name</th>
                       <th className="pb-3 text-left">Branch Address</th>
                       <th className="pb-3 text-left font-mono">Account Number</th>
@@ -485,13 +485,13 @@ export default function FinanceTaxCompliance() {
                       <th className="pb-3 text-right">Accounting Designation</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y text-slate-700 dark:text-slate-300">
+                  <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
                     {banks.map((b) => (
-                      <tr key={b.accountNo} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                      <tr key={b.accountNo} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                         <td className="py-3.5 font-bold">{b.name}</td>
-                        <td className="py-3.5 text-xs text-slate-500">{b.branch}</td>
+                        <td className="py-3.5 text-xs text-zinc-500">{b.branch}</td>
                         <td className="py-3.5 font-mono text-xs font-semibold">{b.accountNo}</td>
-                        <td className="py-3.5 font-mono text-xs text-indigo-600 dark:text-indigo-400 font-bold">{b.ifsc}</td>
+                        <td className="py-3.5 font-mono text-xs text-cyan-600 dark:text-cyan-400 font-bold">{b.ifsc}</td>
                         <td className="py-3.5 font-mono text-xs">{b.swift}</td>
                         <td className="py-3.5 text-right">
                           <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50/20">
@@ -514,7 +514,7 @@ export default function FinanceTaxCompliance() {
           <form onSubmit={handleSaveContractCharges}>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
-                <FileSpreadsheet className="w-5 h-5 text-indigo-500" /> Contractual Billing Engine
+                <FileSpreadsheet className="w-5 h-5 text-cyan-500" /> Contractual Billing Engine
               </DialogTitle>
               <DialogDescription>
                 Parse out recurring machinery hiring charges linked to long-term delivery challans.
@@ -523,7 +523,7 @@ export default function FinanceTaxCompliance() {
 
             <div className="space-y-4 py-4 text-xs border-t border-b my-3">
               <div className="space-y-2">
-                <label className="font-semibold text-slate-500">Customer Leaseholder</label>
+                <label className="font-semibold text-zinc-500">Customer Leaseholder</label>
                 <select 
                   className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus:outline-none"
                   value={rentCust}
@@ -537,7 +537,7 @@ export default function FinanceTaxCompliance() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="font-semibold text-slate-500">Reference Delivery Challan</label>
+                  <label className="font-semibold text-zinc-500">Reference Delivery Challan</label>
                   <select 
                     className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus:outline-none"
                     value={rentChallan}
@@ -548,13 +548,13 @@ export default function FinanceTaxCompliance() {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label className="font-semibold text-slate-500">Billing Period (Months)</label>
+                  <label className="font-semibold text-zinc-500">Billing Period (Months)</label>
                   <Input type="number" min="1" value={monthsCount} onChange={e => setMonthsCount(e.target.value)} required />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="font-semibold text-slate-500">Hiring Charge Rate (₹ / Month)</label>
+                <label className="font-semibold text-zinc-500">Hiring Charge Rate (₹ / Month)</label>
                 <Input type="number" value={monthlyCharge} onChange={e => setMonthlyCharge(e.target.value)} required />
               </div>
             </div>
@@ -578,15 +578,15 @@ export default function FinanceTaxCompliance() {
               </DialogHeader>
 
               {/* Printable Invoice Card */}
-              <div className="border border-slate-900 bg-white text-black p-6 rounded-lg space-y-4 font-sans text-xs shadow-sm">
+              <div className="border border-zinc-900 bg-white text-black p-6 rounded-lg space-y-4 font-sans text-xs shadow-sm">
                 <div className="flex justify-between border-b-2 pb-2">
                   <div>
                     <h3 className="font-bold text-sm uppercase leading-tight">Sumesh Petroleum Pvt. Ltd.</h3>
-                    <p className="text-[9px] text-slate-500">226-227, G.I.D.C Makarpura, Vadodara</p>
-                    <p className="text-[9px] text-slate-500">GSTIN: 24U29309GJ2018PTC102237</p>
+                    <p className="text-[9px] text-zinc-500">226-227, G.I.D.C Makarpura, Vadodara</p>
+                    <p className="text-[9px] text-zinc-500">GSTIN: 24U29309GJ2018PTC102237</p>
                   </div>
                   <div className="text-right">
-                    <h4 className="font-bold text-xs uppercase text-indigo-600">TAX INVOICE</h4>
+                    <h4 className="font-bold text-xs uppercase text-cyan-600">TAX INVOICE</h4>
                     <p className="font-bold">No: {selectedInvoice.id}</p>
                     <p>Date: {selectedInvoice.ackDate}</p>
                   </div>
@@ -594,19 +594,19 @@ export default function FinanceTaxCompliance() {
 
                 <div className="grid grid-cols-2 gap-4 border-b pb-2">
                   <div>
-                    <span className="text-[9px] text-slate-400 font-bold block">BILL TO:</span>
+                    <span className="text-[9px] text-zinc-400 font-bold block">BILL TO:</span>
                     <span className="font-bold">{selectedInvoice.customer}</span>
-                    <p className="text-[10px] text-slate-600">GSTIN Reference Accounted</p>
+                    <p className="text-[10px] text-zinc-600">GSTIN Reference Accounted</p>
                   </div>
                   <div>
-                    <span className="text-[9px] text-slate-400 font-bold block">HSN/SAC CODE:</span>
+                    <span className="text-[9px] text-zinc-400 font-bold block">HSN/SAC CODE:</span>
                     <span className="font-mono font-semibold">{selectedInvoice.hsn}</span>
                   </div>
                 </div>
 
                 <table className="w-full text-left my-2 border-b pb-2">
                   <thead>
-                    <tr className="border-b font-bold text-[9px] text-slate-500">
+                    <tr className="border-b font-bold text-[9px] text-zinc-500">
                       <th>Description of Supply</th>
                       <th className="text-right">Taxable Value</th>
                       <th className="text-right">GST Rate</th>
@@ -630,24 +630,24 @@ export default function FinanceTaxCompliance() {
                 </table>
 
                 {/* E-Invoicing Verification Details Section */}
-                <div className="bg-slate-50 p-3 rounded border flex gap-3 items-center">
+                <div className="bg-zinc-50 p-3 rounded border flex gap-3 items-center">
                   <div className="p-1 border bg-white rounded shadow-sm">
                     {/* Simulated QR Code */}
-                    <div className="w-16 h-16 bg-slate-900 flex items-center justify-center text-white relative">
+                    <div className="w-16 h-16 bg-zinc-900 flex items-center justify-center text-white relative">
                       <QrCode className="w-12 h-12" />
                       <div className="absolute inset-0 bg-transparent border-2 border-white m-1"></div>
                     </div>
                   </div>
-                  <div className="space-y-1 flex-1 text-[8px] text-slate-500 leading-normal">
+                  <div className="space-y-1 flex-1 text-[8px] text-zinc-500 leading-normal">
                     <p className="text-green-700 font-bold flex items-center gap-0.5"><CheckCircle2 className="w-3 h-3 text-green-600" /> NIC e-Invoice Registered</p>
                     <p className="truncate w-64" title={selectedInvoice.irn}>
-                      <span className="font-bold text-slate-700">IRN:</span> {selectedInvoice.irn}
+                      <span className="font-bold text-zinc-700">IRN:</span> {selectedInvoice.irn}
                     </p>
-                    <p><span className="font-bold text-slate-700">Ack No:</span> {selectedInvoice.ackNo} | <span className="font-bold text-slate-700">Ack Date:</span> {selectedInvoice.ackDate}</p>
+                    <p><span className="font-bold text-zinc-700">Ack No:</span> {selectedInvoice.ackNo} | <span className="font-bold text-zinc-700">Ack Date:</span> {selectedInvoice.ackDate}</p>
                   </div>
                 </div>
 
-                <div className="text-[8px] text-slate-400 text-center pt-1 border-t">
+                <div className="text-[8px] text-zinc-400 text-center pt-1 border-t">
                   Thank you for choosing Sumesh Petroleum. Generated via Government GST Portal API connection.
                 </div>
               </div>

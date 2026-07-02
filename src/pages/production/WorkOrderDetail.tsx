@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,7 +8,8 @@ import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter 
 } from '@/components/ui/dialog';
 import { mockWorkOrders, type WorkOrder } from '@/lib/mockData2';
-import { mockProducts, getMockOrders, saveMockOrders, triggerDispatchAlerts } from '@/lib/mockData';
+import { mockProducts, getMockOrders, saveMockOrders } from '@/lib/mockData';
+import { processErpEvent } from '@/lib/erpEvents';
 import { ArrowLeft, CheckCircle2, Factory, FileCheck } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -49,7 +50,7 @@ export default function WorkOrderDetail() {
 
   const currentStageIdx = stages.findIndex(s => s.name === wo.status);
 
-  const handleAdvanceStage = () => {
+  const handleAdvanceStage = async () => {
     if (wo.status === 'Completed') return;
     const nextIdx = currentStageIdx + 1;
     const nextStage = stages[nextIdx].name as any;
@@ -64,12 +65,18 @@ export default function WorkOrderDetail() {
     setWos(updated);
     localStorage.setItem('mockWorkOrders', JSON.stringify(updated));
 
+    await processErpEvent('workorder.stage_changed', {
+      workOrderId: wo.id,
+      orderId: wo.orderId,
+      stage: nextStage,
+    });
+
     if (nextStage === 'Completed') {
       const salesOrders = getMockOrders();
       const updatedSales = salesOrders.map(o => o.id === wo.orderId ? { ...o, status: 'Ready for Dispatch' as const } : o);
       saveMockOrders(updatedSales);
-      triggerDispatchAlerts(wo.orderId);
-      alert(`Job card completed!\n- Linked Sales Order ${wo.orderId} status automatically updated to "Ready for Dispatch".\n- WhatsApp notifications and SMTP emails triggered to Admin and Transport Manager.`);
+      const result = await processErpEvent('workorder.completed', { orderId: wo.orderId, workOrderId: wo.id });
+      alert(`Job card completed!\n• Order ${wo.orderId} → Ready for Dispatch\n• ${result.tasksCreated.length} task(s) created\n• ${result.notificationsSent} notification(s) sent`);
     }
   };
 
@@ -231,7 +238,7 @@ export default function WorkOrderDetail() {
                       <tr>
                         <td className="py-3">SS 304 Sheet 2mm</td>
                         <td className="py-3 text-center">450 Kg</td>
-                        <td className="py-3 text-center font-medium text-orange-600">200 Kg</td>
+                        <td className="py-3 text-center font-medium text-cyan-600">200 Kg</td>
                         <td className="py-3 text-right"><Badge variant="secondary">Material Issued</Badge></td>
                       </tr>
                       <tr>

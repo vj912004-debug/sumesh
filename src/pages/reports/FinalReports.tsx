@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { 
   Card, CardContent, CardHeader, CardTitle 
 } from '@/components/ui/card';
@@ -211,8 +211,8 @@ export default function FinalReports() {
       {/* Title Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-slate-800">Final Inspection & Dossier Reports</h2>
-          <p className="text-slate-500">Compile visual checkpoints, 6-hr factory vacuum holding logs, and chemical Mill Test Certificates (MTC) to authorize dispatch clearance.</p>
+          <h2 className="text-3xl font-bold tracking-tight text-zinc-800">Final Inspection & Dossier Reports</h2>
+          <p className="text-zinc-500">Compile visual checkpoints, 6-hr factory vacuum holding logs, and chemical Mill Test Certificates (MTC) to authorize dispatch clearance.</p>
         </div>
       </div>
 
@@ -220,47 +220,47 @@ export default function FinalReports() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-500">Total Project Dossiers</CardTitle>
-            <FileCheck className="h-4 w-4 text-blue-500" />
+            <CardTitle className="text-sm font-semibold text-zinc-500">Total Project Dossiers</CardTitle>
+            <FileCheck className="h-4 w-4 text-teal-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-slate-800">{totalCompiled}</div>
-            <p className="text-xs text-slate-400">Manufactured machine dossiers</p>
+            <div className="text-3xl font-bold text-zinc-800">{totalCompiled}</div>
+            <p className="text-xs text-zinc-400">Manufactured machine dossiers</p>
           </CardContent>
         </Card>
 
         <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-500">Pending QC Certification</CardTitle>
-            <ClipboardCheck className="h-4 w-4 text-amber-500" />
+            <CardTitle className="text-sm font-semibold text-zinc-500">Pending QC Certification</CardTitle>
+            <ClipboardCheck className="h-4 w-4 text-teal-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-amber-600">{pendingQC}</div>
-            <p className="text-xs text-slate-400">Failed visual or testing checkpoints</p>
+            <div className="text-3xl font-bold text-teal-600">{pendingQC}</div>
+            <p className="text-xs text-zinc-400">Failed visual or testing checkpoints</p>
           </CardContent>
         </Card>
 
         <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-500">Dispatch Clearances Issued</CardTitle>
+            <CardTitle className="text-sm font-semibold text-zinc-500">Dispatch Clearances Issued</CardTitle>
             <Shield className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-emerald-600">{dispatchCleared}</div>
-            <p className="text-xs text-slate-400">Dossiers signed off & released</p>
+            <p className="text-xs text-zinc-400">Dossiers signed off & released</p>
           </CardContent>
         </Card>
 
         <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-semibold text-slate-500">Dossier Clearance Rate</CardTitle>
+            <CardTitle className="text-sm font-semibold text-zinc-500">Dossier Clearance Rate</CardTitle>
             <Award className="h-4 w-4 text-purple-500" />
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-purple-600">
               {((dispatchCleared / totalCompiled) * 100).toFixed(0)}%
             </div>
-            <p className="text-xs text-slate-400">Quality-reconciled deliveries</p>
+            <p className="text-xs text-zinc-400">Quality-reconciled deliveries</p>
           </CardContent>
         </Card>
       </div>
@@ -269,13 +269,13 @@ export default function FinalReports() {
       <Card>
         <CardHeader className="border-b pb-4">
           <div className="flex items-center justify-between gap-4">
-            <CardTitle className="text-lg font-semibold text-slate-800">Dispatch Clearance Dossier Registry</CardTitle>
+            <CardTitle className="text-lg font-semibold text-zinc-800">Dispatch Clearance Dossier Registry</CardTitle>
             <div className="relative w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-400" />
               <input
                 type="text"
                 placeholder="Search by S.No, model, client..."
-                className="w-full bg-slate-50 border border-slate-200 rounded-md pl-9 pr-4 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="w-full bg-zinc-50 border border-zinc-200 rounded-md pl-9 pr-4 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
               />
@@ -302,20 +302,20 @@ export default function FinalReports() {
                 const totalChecks = d.checklist.length;
                 
                 return (
-                  <TableRow key={d.id} className="hover:bg-slate-50/50">
-                    <TableCell className="font-semibold text-blue-600 text-xs">
+                  <TableRow key={d.id} className="hover:bg-zinc-50/50">
+                    <TableCell className="font-semibold text-teal-600 text-xs">
                       {d.id}
-                      <span className="block text-[10px] text-slate-400 font-normal mt-0.5">{d.poRef}</span>
+                      <span className="block text-[10px] text-zinc-400 font-normal mt-0.5">{d.poRef}</span>
                     </TableCell>
-                    <TableCell className="font-medium text-slate-700 text-xs max-w-[200px] truncate">{d.modelName}</TableCell>
-                    <TableCell className="text-slate-800 font-medium">{d.customerName}</TableCell>
-                    <TableCell className="text-slate-500 text-xs">{format(new Date(d.testDate), 'dd MMM yyyy')}</TableCell>
+                    <TableCell className="font-medium text-zinc-700 text-xs max-w-[200px] truncate">{d.modelName}</TableCell>
+                    <TableCell className="text-zinc-800 font-medium">{d.customerName}</TableCell>
+                    <TableCell className="text-zinc-500 text-xs">{format(new Date(d.testDate), 'dd MMM yyyy')}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1.5">
                         <Badge variant={d.isQcApproved ? 'default' : 'destructive'} className="text-[10px]">
                           {d.isQcApproved ? 'PASSED' : 'HOLD'}
                         </Badge>
-                        <span className="text-[10px] text-slate-400">({totalPassedChecks}/{totalChecks})</span>
+                        <span className="text-[10px] text-zinc-400">({totalPassedChecks}/{totalChecks})</span>
                       </div>
                     </TableCell>
                     <TableCell>
@@ -332,7 +332,7 @@ export default function FinalReports() {
                       <Button 
                         size="sm" 
                         variant={d.isDispatchCleared ? 'ghost' : 'default'} 
-                        className={!d.isDispatchCleared ? 'bg-slate-800 hover:bg-slate-900 text-white' : ''}
+                        className={!d.isDispatchCleared ? 'bg-zinc-800 hover:bg-zinc-900 text-white' : ''}
                         onClick={() => handleOpenCompiler(d)}
                       >
                         {d.isDispatchCleared ? 'View Dossier' : 'Compile & Clear'}
@@ -343,7 +343,7 @@ export default function FinalReports() {
               })}
               {filteredDossiers.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center py-8 text-slate-400">
+                  <TableCell colSpan={8} className="text-center py-8 text-zinc-400">
                     No dossiers matching the filter.
                   </TableCell>
                 </TableRow>
@@ -360,16 +360,16 @@ export default function FinalReports() {
             <div>
               <DialogHeader>
                 <DialogTitle className="text-xl flex items-center gap-2">
-                  <Award className="h-5 w-5 text-blue-500" />
+                  <Award className="h-5 w-5 text-teal-500" />
                   Quality & Dispatch Dossier Compiler
                 </DialogTitle>
                 <DialogDescription>
-                  Equipment: <span className="font-semibold text-slate-800">{selectedDossier.modelName}</span> (S.No: {selectedDossier.id})
+                  Equipment: <span className="font-semibold text-zinc-800">{selectedDossier.modelName}</span> (S.No: {selectedDossier.id})
                 </DialogDescription>
               </DialogHeader>
 
               <Tabs defaultValue="checklist" className="mt-4 py-2">
-                <TabsList className="grid grid-cols-4 bg-slate-100 p-1 rounded-md mb-4 text-xs">
+                <TabsList className="grid grid-cols-4 bg-zinc-100 p-1 rounded-md mb-4 text-xs">
                   <TabsTrigger value="checklist" className="text-xs">1. visual & QAP Checklist</TabsTrigger>
                   <TabsTrigger value="vacuum" className="text-xs">2. Vacuum Leak Test Log</TabsTrigger>
                   <TabsTrigger value="mtc" className="text-xs">3. MTC Traceability</TabsTrigger>
@@ -378,12 +378,12 @@ export default function FinalReports() {
 
                 {/* Tab 1: Checklist */}
                 <TabsContent value="checklist" className="space-y-4">
-                  <div className="flex justify-between items-center bg-slate-50 p-3 rounded-md border text-xs">
+                  <div className="flex justify-between items-center bg-zinc-50 p-3 rounded-md border text-xs">
                     <div>
-                      <span className="font-medium text-slate-500">QC Inspector:</span> {selectedDossier.qcEngineer}
+                      <span className="font-medium text-zinc-500">QC Inspector:</span> {selectedDossier.qcEngineer}
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-slate-700">Audit Result:</span>
+                      <span className="font-semibold text-zinc-700">Audit Result:</span>
                       <Badge variant={selectedDossier.isQcApproved ? 'default' : 'destructive'}>
                         {selectedDossier.isQcApproved ? 'ALL CRITERIA MET' : 'CRITERIA PENDING'}
                       </Badge>
@@ -391,13 +391,13 @@ export default function FinalReports() {
                   </div>
 
                   <div className="space-y-2 border rounded-lg p-4 bg-white shadow-sm">
-                    <h4 className="text-xs font-bold text-slate-600 uppercase border-b pb-1">Quality Assurance visual & Dimensional Audits</h4>
+                    <h4 className="text-xs font-bold text-zinc-600 uppercase border-b pb-1">Quality Assurance visual & Dimensional Audits</h4>
                     <div className="divide-y text-xs">
                       {selectedDossier.checklist.map(item => (
                         <div key={item.id} className="flex justify-between items-center py-2.5">
                           <div className="flex-1 pr-6">
-                            <span className="font-bold text-[10px] text-slate-400 mr-2 uppercase">{item.category}</span>
-                            <span className="text-slate-800">{item.name}</span>
+                            <span className="font-bold text-[10px] text-zinc-400 mr-2 uppercase">{item.category}</span>
+                            <span className="text-zinc-800">{item.name}</span>
                           </div>
                           <button
                             type="button"
@@ -420,8 +420,8 @@ export default function FinalReports() {
                 {/* Tab 2: Vacuum Decay */}
                 <TabsContent value="vacuum" className="space-y-4">
                   <div className="grid grid-cols-3 gap-6">
-                    <div className="col-span-2 border p-4 rounded-lg bg-slate-50/50 shadow-inner h-[250px]">
-                      <h4 className="text-xs font-bold text-slate-600 mb-2 uppercase text-center tracking-wide">
+                    <div className="col-span-2 border p-4 rounded-lg bg-zinc-50/50 shadow-inner h-[250px]">
+                      <h4 className="text-xs font-bold text-zinc-600 mb-2 uppercase text-center tracking-wide">
                         6-Hour Chamber Vacuum Holding Leak Test Curve
                       </h4>
                       <ResponsiveContainer width="100%" height="90%">
@@ -445,20 +445,20 @@ export default function FinalReports() {
                     </div>
 
                     <div className="col-span-1 border rounded-lg p-4 bg-white shadow-sm text-xs space-y-3">
-                      <h4 className="font-bold text-slate-700 uppercase border-b pb-1">Chamber Hold Metrics</h4>
+                      <h4 className="font-bold text-zinc-700 uppercase border-b pb-1">Chamber Hold Metrics</h4>
                       <div className="space-y-2">
                         <div>
-                          <p className="text-[10px] text-slate-400 uppercase font-semibold">Start Vacuum</p>
-                          <p className="font-bold text-slate-800">0.1 Torr</p>
+                          <p className="text-[10px] text-zinc-400 uppercase font-semibold">Start Vacuum</p>
+                          <p className="font-bold text-zinc-800">0.1 Torr</p>
                         </div>
                         <div>
-                          <p className="text-[10px] text-slate-400 uppercase font-semibold">6-Hour End Vacuum</p>
-                          <p className="font-bold text-slate-800">
+                          <p className="text-[10px] text-zinc-400 uppercase font-semibold">6-Hour End Vacuum</p>
+                          <p className="font-bold text-zinc-800">
                             {selectedDossier.vacuumData[selectedDossier.vacuumData.length - 1]?.vacuumVal} Torr
                           </p>
                         </div>
                         <div>
-                          <p className="text-[10px] text-slate-400 uppercase font-semibold">Status</p>
+                          <p className="text-[10px] text-zinc-400 uppercase font-semibold">Status</p>
                           {selectedDossier.vacuumData[selectedDossier.vacuumData.length - 1]?.vacuumVal < 1.0 ? (
                             <Badge className="bg-emerald-100 text-emerald-800 border-emerald-200">
                               PASS (Leak Rate OK)
@@ -477,36 +477,36 @@ export default function FinalReports() {
                 {/* Tab 3: MTC Traceability */}
                 <TabsContent value="mtc" className="space-y-4">
                   <div className="border rounded-lg p-4 bg-white shadow-sm space-y-4 text-xs">
-                    <h4 className="font-bold text-slate-700 uppercase border-b pb-1">Steel Plate Heat Traceability Links</h4>
-                    <p className="text-slate-500">Every pressure/vacuum degassing chamber must be traceably linked to its raw Mill Test Certificate (MTC) chemical grades.</p>
+                    <h4 className="font-bold text-zinc-700 uppercase border-b pb-1">Steel Plate Heat Traceability Links</h4>
+                    <p className="text-zinc-500">Every pressure/vacuum degassing chamber must be traceably linked to its raw Mill Test Certificate (MTC) chemical grades.</p>
                     
-                    <div className="bg-slate-50 p-4 rounded border grid grid-cols-2 gap-y-3 gap-x-6">
+                    <div className="bg-zinc-50 p-4 rounded border grid grid-cols-2 gap-y-3 gap-x-6">
                       <div>
-                        <span className="font-semibold text-slate-500">Vacuum Chamber Shell Material:</span>
-                        <p className="font-bold text-slate-800">16mm Thick MS Plate (IS 2062 Gr B)</p>
+                        <span className="font-semibold text-zinc-500">Vacuum Chamber Shell Material:</span>
+                        <p className="font-bold text-zinc-800">16mm Thick MS Plate (IS 2062 Gr B)</p>
                       </div>
                       <div>
-                        <span className="font-semibold text-slate-500">Supplier Heat Number:</span>
-                        <p className="font-bold text-slate-800">HT-9018-TATA</p>
+                        <span className="font-semibold text-zinc-500">Supplier Heat Number:</span>
+                        <p className="font-bold text-zinc-800">HT-9018-TATA</p>
                       </div>
                       <div>
-                        <span className="font-semibold text-slate-500">MTC Certificate Reference:</span>
-                        <p className="font-bold text-slate-800">MTC-881903-TATACLOSE</p>
+                        <span className="font-semibold text-zinc-500">MTC Certificate Reference:</span>
+                        <p className="font-bold text-zinc-800">MTC-881903-TATACLOSE</p>
                       </div>
                       <div>
-                        <span className="font-semibold text-slate-500">Laboratory Radiography Report:</span>
-                        <p className="font-bold text-slate-800 text-emerald-600">PASSED (100% Weld Joint Radiography)</p>
+                        <span className="font-semibold text-zinc-500">Laboratory Radiography Report:</span>
+                        <p className="font-bold text-zinc-800 text-emerald-600">PASSED (100% Weld Joint Radiography)</p>
                       </div>
                     </div>
 
                     <div className="flex justify-between items-center pt-2">
-                      <span className="font-semibold text-slate-700">Approve Material Traceability Link?</span>
+                      <span className="font-semibold text-zinc-700">Approve Material Traceability Link?</span>
                       <button
                         type="button"
                         className={`flex items-center gap-1.5 px-4 py-2 rounded-md font-bold text-xs border transition-colors ${
                           selectedDossier.isMtcLinked 
                             ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-700' 
-                            : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300'
+                            : 'bg-white hover:bg-zinc-50 text-zinc-700 border-zinc-300'
                         }`}
                         onClick={handleToggleMtc}
                       >
@@ -519,12 +519,12 @@ export default function FinalReports() {
 
                 {/* Tab 4: Preview Print Dossier */}
                 <TabsContent value="dossier" className="space-y-4">
-                  <div className="border border-slate-300 p-8 rounded-lg bg-white mt-2 text-slate-800 text-xs font-sans max-w-2xl mx-auto space-y-4 shadow-sm leading-relaxed">
+                  <div className="border border-zinc-300 p-8 rounded-lg bg-white mt-2 text-zinc-800 text-xs font-sans max-w-2xl mx-auto space-y-4 shadow-sm leading-relaxed">
                     {/* Header */}
-                    <div className="text-center border-b-2 border-slate-800 pb-3">
-                      <h2 className="text-lg font-bold tracking-wider text-slate-900">SUMESH PETROLEUM PVT. LTD.</h2>
-                      <p className="text-[10px] text-slate-500">Regd. Office & Works: 247/A, GIDC Makarpura, Vadodara - 390010</p>
-                      <p className="text-xs font-bold tracking-widest text-slate-700 mt-2 uppercase">FINAL QUALITY INSPECTION & DISPATCH CLEARANCE CERTIFICATE</p>
+                    <div className="text-center border-b-2 border-zinc-800 pb-3">
+                      <h2 className="text-lg font-bold tracking-wider text-zinc-900">SUMESH PETROLEUM PVT. LTD.</h2>
+                      <p className="text-[10px] text-zinc-500">Regd. Office & Works: 247/A, GIDC Makarpura, Vadodara - 390010</p>
+                      <p className="text-xs font-bold tracking-widest text-zinc-700 mt-2 uppercase">FINAL QUALITY INSPECTION & DISPATCH CLEARANCE CERTIFICATE</p>
                     </div>
 
                     {/* Metadata */}
@@ -539,32 +539,32 @@ export default function FinalReports() {
 
                     {/* Quality Summary */}
                     <div className="space-y-2">
-                      <h4 className="font-bold text-[10px] text-slate-700 uppercase">1. Quality Audits Status</h4>
-                      <table className="w-full text-center border-collapse border border-slate-300">
-                        <thead className="bg-slate-50 font-bold">
+                      <h4 className="font-bold text-[10px] text-zinc-700 uppercase">1. Quality Audits Status</h4>
+                      <table className="w-full text-center border-collapse border border-zinc-300">
+                        <thead className="bg-zinc-50 font-bold">
                           <tr>
-                            <th className="border border-slate-300 py-1.5 text-left px-2">QAP Compliance Checkpoints</th>
-                            <th className="border border-slate-300 py-1.5 w-24">Result</th>
+                            <th className="border border-zinc-300 py-1.5 text-left px-2">QAP Compliance Checkpoints</th>
+                            <th className="border border-zinc-300 py-1.5 w-24">Result</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <td className="border border-slate-300 py-1.5 px-2 text-left">Chamber sandblasting and paint coat thickness check</td>
-                            <td className="border border-slate-300 py-1.5 font-semibold text-emerald-600">PASSED</td>
+                            <td className="border border-zinc-300 py-1.5 px-2 text-left">Chamber sandblasting and paint coat thickness check</td>
+                            <td className="border border-zinc-300 py-1.5 font-semibold text-emerald-600">PASSED</td>
                           </tr>
                           <tr>
-                            <td className="border border-slate-300 py-1.5 px-2 text-left">Overall skid framework dimensional matching GA drawing</td>
-                            <td className="border border-slate-300 py-1.5 font-semibold text-emerald-600">PASSED</td>
+                            <td className="border border-zinc-300 py-1.5 px-2 text-left">Overall skid framework dimensional matching GA drawing</td>
+                            <td className="border border-zinc-300 py-1.5 font-semibold text-emerald-600">PASSED</td>
                           </tr>
                           <tr>
-                            <td className="border border-slate-300 py-1.5 px-2 text-left">6-Hour degassing chamber vacuum holding drop leak test</td>
-                            <td className="border border-slate-300 py-1.5 font-semibold text-emerald-600">
+                            <td className="border border-zinc-300 py-1.5 px-2 text-left">6-Hour degassing chamber vacuum holding drop leak test</td>
+                            <td className="border border-zinc-300 py-1.5 font-semibold text-emerald-600">
                               {selectedDossier.vacuumData[selectedDossier.vacuumData.length - 1]?.vacuumVal < 1.0 ? 'PASSED' : 'FAILED'}
                             </td>
                           </tr>
                           <tr>
-                            <td className="border border-slate-300 py-1.5 px-2 text-left">Material traceability certificates & plate heat numbers</td>
-                            <td className="border border-slate-300 py-1.5 font-semibold text-emerald-600">
+                            <td className="border border-zinc-300 py-1.5 px-2 text-left">Material traceability certificates & plate heat numbers</td>
+                            <td className="border border-zinc-300 py-1.5 font-semibold text-emerald-600">
                               {selectedDossier.isMtcLinked ? 'VERIFIED' : 'PENDING'}
                             </td>
                           </tr>
@@ -573,7 +573,7 @@ export default function FinalReports() {
                     </div>
 
                     {/* Final Declaration */}
-                    <div className="border p-3 bg-slate-50 text-[10px] italic text-slate-600">
+                    <div className="border p-3 bg-zinc-50 text-[10px] italic text-zinc-600">
                       We certify that the above equipment has undergone exhaustive inspection and testing at our works in accordance with the Quality Assurance Plan. The plant is found fully compliant with the technical delivery conditions and is cleared for dispatch.
                     </div>
 
@@ -585,19 +585,19 @@ export default function FinalReports() {
                             DIGITALLY APPROVED
                           </div>
                         </div>
-                        <div className="border-b border-slate-400 mb-1.5 h-10"></div>
-                        <p className="font-semibold text-slate-700">QC Inspector</p>
+                        <div className="border-b border-zinc-400 mb-1.5 h-10"></div>
+                        <p className="font-semibold text-zinc-700">QC Inspector</p>
                       </div>
                       <div className="text-center w-40 relative">
                         {selectedDossier.isDispatchCleared && (
                           <div className="absolute -top-8 left-0 right-0 flex justify-center opacity-85 pointer-events-none">
-                            <div className="border-2 border-blue-600 text-blue-600 px-3 py-1 rounded text-[10px] font-bold -rotate-6 transform uppercase tracking-widest">
+                            <div className="border-2 border-teal-600 text-teal-600 px-3 py-1 rounded text-[10px] font-bold -rotate-6 transform uppercase tracking-widest">
                               RELEASE FOR SHIPMENT
                             </div>
                           </div>
                         )}
-                        <div className="border-b border-slate-400 mb-1.5 h-10"></div>
-                        <p className="font-semibold text-slate-700">Production Manager</p>
+                        <div className="border-b border-zinc-400 mb-1.5 h-10"></div>
+                        <p className="font-semibold text-zinc-700">Production Manager</p>
                       </div>
                     </div>
                   </div>
@@ -612,7 +612,7 @@ export default function FinalReports() {
                   </Button>
                 )}
                 {selectedDossier.isDispatchCleared && (
-                  <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold" onClick={() => window.print()}>
+                  <Button className="bg-teal-600 hover:bg-teal-700 text-white font-semibold" onClick={() => window.print()}>
                     <Printer className="h-4 w-4 mr-2" /> Print Final Dossier Pack
                   </Button>
                 )}
