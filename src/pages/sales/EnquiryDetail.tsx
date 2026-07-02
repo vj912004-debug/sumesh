@@ -1,8 +1,12 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import {
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
+} from '@/components/ui/dialog';
 import { mockEnquiries, mockCustomers } from '@/lib/mockData';
 import {
   createEstimateFromEnquiry,
@@ -21,6 +25,12 @@ export default function EnquiryDetail() {
     () => (id ? getCostEstimateByEnquiryId(id) : undefined),
     [id]
   );
+
+  const [requirements, setRequirements] = useState(enquiry?.requirements ?? '');
+  const [expectedValue, setExpectedValue] = useState(enquiry?.expectedValue ?? 0);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [editReq, setEditReq] = useState('');
+  const [editValue, setEditValue] = useState('');
 
   if (!enquiry) {
     return <div>Enquiry not found</div>;
@@ -48,6 +58,19 @@ export default function EnquiryDetail() {
     navigate(`/quotations/${quote.id}`);
   };
 
+  const openEdit = () => {
+    setEditReq(requirements);
+    setEditValue(String(expectedValue));
+    setIsEditOpen(true);
+  };
+
+  const handleEditSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    setRequirements(editReq);
+    setExpectedValue(Number(editValue));
+    setIsEditOpen(false);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -66,7 +89,7 @@ export default function EnquiryDetail() {
           <p className="text-muted-foreground">Received on {enquiry.date} via {enquiry.source}</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline">
+          <Button variant="outline" onClick={openEdit}>
             <Edit className="mr-2 h-4 w-4" /> Edit
           </Button>
           <Button variant="outline" onClick={handleCreateEstimate}>
@@ -118,12 +141,12 @@ export default function EnquiryDetail() {
           <CardContent className="space-y-4">
             <div>
               <div className="text-sm font-semibold mb-1">Expected Value</div>
-              <div className="text-2xl font-bold text-accent">₹{enquiry.expectedValue.toLocaleString('en-IN')}</div>
+              <div className="text-2xl font-bold text-accent">₹{expectedValue.toLocaleString('en-IN')}</div>
             </div>
             <div>
               <div className="text-sm font-semibold mb-1">Requirements</div>
               <p className="text-sm text-muted-foreground bg-muted p-3 rounded-md min-h-[80px]">
-                {enquiry.requirements}
+                {requirements}
               </p>
             </div>
           </CardContent>
@@ -153,6 +176,36 @@ export default function EnquiryDetail() {
           </div>
         </CardContent>
       </Card>
+
+      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+        <DialogContent>
+          <form onSubmit={handleEditSave}>
+            <DialogHeader>
+              <DialogTitle>Edit Enquiry</DialogTitle>
+              <DialogDescription>Update requirements and expected value.</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Requirements</label>
+                <textarea
+                  className="w-full border rounded-md p-2 text-sm min-h-[100px]"
+                  value={editReq}
+                  onChange={e => setEditReq(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Expected Value (₹)</label>
+                <Input type="number" value={editValue} onChange={e => setEditValue(e.target.value)} required />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setIsEditOpen(false)}>Cancel</Button>
+              <Button type="submit">Save Changes</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

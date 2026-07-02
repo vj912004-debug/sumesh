@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
 } from '@/components/ui/table';
@@ -7,6 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { ShoppingCart, Plus } from 'lucide-react';
 
 export default function PurchaseOrders() {
+  const navigate = useNavigate();
+  const [toast, setToast] = useState<string | null>(null);
   const mockPOs = [
     { id: 'PO-26-050', vendor: 'Laxmi Steels', date: '2026-06-25', amount: 450000, status: 'Received' },
     { id: 'PO-26-051', vendor: 'ABB India Ltd', date: '2026-06-28', amount: 1200000, status: 'Pending' },
@@ -15,12 +19,17 @@ export default function PurchaseOrders() {
 
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg">
+          {toast}
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Purchase Orders</h2>
           <p className="text-muted-foreground">Manage vendor POs and track incoming materials.</p>
         </div>
-        <Button>
+        <Button onClick={() => setToast('New PO draft created — PO-26-053')}>
           <Plus className="mr-2 h-4 w-4" /> Create PO
         </Button>
       </div>
@@ -54,7 +63,11 @@ export default function PurchaseOrders() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="sm">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => po.status === 'Pending' ? navigate('/purchase/grn') : navigate(`/purchase-orders/${po.id}`)}
+                    >
                       <ShoppingCart className="mr-2 h-4 w-4" /> {po.status === 'Pending' ? 'Receive (GRN)' : 'View'}
                     </Button>
                   </TableCell>

@@ -19,6 +19,12 @@ export default function WeighBridge() {
   const [slips, setSlips] = useState(mockSlips);
   const [searchTerm, setSearchTerm] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+
+  const notify = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2500);
+  };
 
   // Form states
   const [vehicleNo, setVehicleNo] = useState('');
@@ -64,6 +70,11 @@ export default function WeighBridge() {
 
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg">
+          {toast}
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight font-sans">Weigh Bridge Logs</h2>
@@ -120,33 +131,24 @@ export default function WeighBridge() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Active Slips Today</CardTitle>
-            <Scale className="h-4 w-4 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold tracking-tight">14 Slips</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Net Weight Dispatched</CardTitle>
-            <Scale className="h-4 w-4 text-emerald-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold tracking-tight">57.2 Tons</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Average Tare Time</CardTitle>
-            <Scale className="h-4 w-4 text-teal-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold tracking-tight">18 mins</div>
-          </CardContent>
-        </Card>
+        {[
+          { label: 'Active Slips Today', value: '14 Slips', onClick: () => notify('Showing today\'s weighment slips') },
+          { label: 'Net Weight Dispatched', value: '57.2 Tons', onClick: () => notify('Dispatch weight summary exported') },
+          { label: 'Average Tare Time', value: '18 mins', onClick: () => notify('Tare time analytics opened') },
+        ].map(card => (
+          <button
+            key={card.label}
+            type="button"
+            onClick={card.onClick}
+            className="rounded-xl border bg-card text-card-foreground shadow-sm text-left p-6 cursor-pointer transition-all hover:shadow-md hover:border-primary/40"
+          >
+            <div className="flex flex-row items-center justify-between pb-2">
+              <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">{card.label}</span>
+              <Scale className="h-4 w-4 text-primary" />
+            </div>
+            <div className="text-2xl font-bold tracking-tight pt-1">{card.value}</div>
+          </button>
+        ))}
       </div>
 
       <Card>
@@ -162,7 +164,17 @@ export default function WeighBridge() {
                 className="pl-9 h-9"
               />
             </div>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={() => {
+              const csv = 'Slip No,Vehicle,Driver,Material,Gross,Tare,Net,Date\n' +
+                filteredSlips.map(s => `${s.slipNo},${s.vehicleNo},${s.driver},${s.material},${s.gross},${s.tare},${s.net},${s.date}`).join('\n');
+              const blob = new Blob([csv], { type: 'text/csv' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = 'weighbridge_slips.csv';
+              a.click();
+              notify(`Exported ${filteredSlips.length} slips.`);
+            }}>
               <Download className="h-4 w-4 mr-2" /> Export
             </Button>
           </div>
@@ -195,7 +207,7 @@ export default function WeighBridge() {
                     <td className="py-3.5 text-right font-semibold text-primary">{s.net.toLocaleString()}</td>
                     <td className="py-3.5 pl-6 text-xs">{s.date}</td>
                     <td className="py-3.5 text-right">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-zinc-900">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-zinc-900" onClick={() => { notify(`Printing slip ${s.slipNo}`); window.print(); }}>
                         <Printer className="h-4 w-4" />
                       </Button>
                     </td>

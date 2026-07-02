@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { 
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
 } from '@/components/ui/table';
@@ -7,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { PackageCheck, ArrowDownToLine, CheckCircle2 } from 'lucide-react';
 
 export default function GoodsReceipt() {
+  const [toast, setToast] = useState<string | null>(null);
   const grnList = [
     { grnNo: 'GRN-26-401', date: '30-Jun-2026', poNo: 'PO-26-050', vendor: 'Laxmi Steels & Alloys', status: 'QC Pending', billStatus: 'Pending' },
     { grnNo: 'GRN-26-400', date: '28-Jun-2026', poNo: 'PO-26-048', vendor: 'Siemens India Ltd', status: 'Accepted', billStatus: 'Bill Booked' },
@@ -14,12 +16,17 @@ export default function GoodsReceipt() {
 
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg">
+          {toast}
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Goods Receipt (GRN) & Purchase Bills</h2>
           <p className="text-muted-foreground">Receive vendor materials, perform inward QC, and book purchase bills.</p>
         </div>
-        <Button>
+        <Button onClick={() => setToast('GRN-26-402 created — awaiting inward QC.')}>
           <ArrowDownToLine className="mr-2 h-4 w-4" /> Create GRN
         </Button>
       </div>
@@ -60,11 +67,11 @@ export default function GoodsReceipt() {
                   </TableCell>
                   <TableCell className="text-right">
                     {grn.status === 'QC Pending' ? (
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" size="sm" onClick={() => setToast(`${grn.grnNo} QC cleared — stock updated.`)}>
                         <CheckCircle2 className="mr-2 h-4 w-4" /> Clear QC
                       </Button>
                     ) : (
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" size="sm" onClick={() => setToast(`Purchase bill booked for ${grn.grnNo}.`)}>
                         <PackageCheck className="mr-2 h-4 w-4" /> Book Bill
                       </Button>
                     )}

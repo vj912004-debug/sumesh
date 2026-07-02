@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
 } from '@/components/ui/table';
@@ -9,6 +9,7 @@ import { mockOrders } from '@/lib/mockData';
 import { Truck, Plus, Package } from 'lucide-react';
 
 export default function Dispatch() {
+  const navigate = useNavigate();
   const dispatchableOrders = mockOrders.filter(o => o.status === 'Ready for Dispatch' || o.status === 'Dispatched');
 
   return (
@@ -24,7 +25,7 @@ export default function Dispatch() {
               <Package className="mr-2 h-4 w-4" /> Packing Lists
             </Button>
           </Link>
-          <Button>
+          <Button onClick={() => navigate('/dispatch/DC-26-879')}>
             <Plus className="mr-2 h-4 w-4" /> Non-Sale Challan
           </Button>
         </div>

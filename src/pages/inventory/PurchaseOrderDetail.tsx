@@ -1,10 +1,12 @@
 ﻿import { useParams, Link } from 'react-router-dom';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Printer, ArrowLeft, Download, Send } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 export default function PurchaseOrderDetail() {
   const { id } = useParams();
+  const [toast, setToast] = useState<string | null>(null);
   
   // Hardcoded mock for PO detail since we just need the visual representation
   const poId = id || 'PO-26-050';
@@ -19,6 +21,11 @@ export default function PurchaseOrderDetail() {
 
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg print:hidden">
+          {toast}
+        </div>
+      )}
       <div className="flex items-center gap-4 print:hidden">
         <Link to="/purchase-orders">
           <Button variant="outline" size="icon">
@@ -35,10 +42,10 @@ export default function PurchaseOrderDetail() {
           <Button variant="outline" onClick={handlePrint}>
             <Printer className="mr-2 h-4 w-4" /> Print PO
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => { handlePrint(); setToast('PO PDF downloaded.'); }}>
             <Download className="mr-2 h-4 w-4" /> PDF
           </Button>
-          <Button>
+          <Button onClick={() => setToast(`PO ${poId} emailed to ${vendor.contact}.`)}>
             <Send className="mr-2 h-4 w-4" /> Email to Vendor
           </Button>
         </div>

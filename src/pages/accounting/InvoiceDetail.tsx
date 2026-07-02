@@ -1,4 +1,5 @@
 ﻿import { useParams, Link } from 'react-router-dom';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Printer, ArrowLeft, Send } from 'lucide-react';
 import { mockOrders, mockCustomers, mockQuotations, mockProducts } from '@/lib/mockData';
@@ -6,6 +7,7 @@ import { getTaxInvoiceByOrder, createTaxInvoice } from '@/lib/billingData';
 
 export default function InvoiceDetail() {
   const { id } = useParams();
+  const [toast, setToast] = useState<string | null>(null);
   const order = mockOrders.find(o => o.id === id);
   const quotation = mockQuotations.find(q => q.id === order?.quotationId);
   const customer = mockCustomers.find(c => c.id === order?.customerId);
@@ -27,6 +29,11 @@ export default function InvoiceDetail() {
 
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg print:hidden">
+          {toast}
+        </div>
+      )}
       <div className="flex items-center gap-4 print:hidden">
         <Link to="/accounting">
           <Button variant="outline" size="icon">
@@ -41,7 +48,7 @@ export default function InvoiceDetail() {
           <Button variant="outline" onClick={handlePrint}>
             <Printer className="mr-2 h-4 w-4" /> Print
           </Button>
-          <Button>
+          <Button onClick={() => setToast(`IRN generated for ${ti.id} — e-invoice submitted to GST portal.`)}>
             <Send className="mr-2 h-4 w-4" /> Send to IRN Portal
           </Button>
         </div>

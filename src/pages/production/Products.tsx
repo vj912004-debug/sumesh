@@ -5,18 +5,27 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { mockProducts } from '@/lib/mockData';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { PackageSearch, Network } from 'lucide-react';
 
 export default function Products() {
+  const navigate = useNavigate();
+  const [toast, setToast] = useState<string | null>(null);
+
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg">
+          {toast}
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Products & BOM</h2>
           <p className="text-muted-foreground">Manage machine catalog and Engineering Bill of Materials.</p>
         </div>
-        <Button>
+        <Button onClick={() => { setToast('New product wizard opened — add details in Master Items.'); navigate('/master/items'); }}>
           <PackageSearch className="mr-2 h-4 w-4" /> New Product
         </Button>
       </div>

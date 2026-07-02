@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calculator, CheckCircle2 } from 'lucide-react';
@@ -6,6 +7,7 @@ import {
 } from '@/components/ui/table';
 
 export default function Payroll() {
+  const [toast, setToast] = useState<string | null>(null);
   const payrollData = [
     { empId: 'EMP-01', name: 'Ramesh Bhai', trade: 'Welder', daysPresent: 26, otHours: 12, basicSalary: 18000, totalPay: 20400 },
     { empId: 'EMP-02', name: 'Suresh Kumar', trade: 'Fitter', daysPresent: 24, otHours: 0, basicSalary: 16000, totalPay: 14769 },
@@ -14,46 +16,42 @@ export default function Payroll() {
 
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg">
+          {toast}
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">HR & Payroll</h2>
           <p className="text-muted-foreground">Process monthly salaries, track attendance, and overtime.</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => setToast('June 2026 salaries recalculated for 14 employees.')}>
             <Calculator className="mr-2 h-4 w-4" /> Calculate Salary (Jun 2026)
           </Button>
-          <Button>
+          <Button onClick={() => setToast('Payroll payout processed — bank transfer initiated.')}>
             <CheckCircle2 className="mr-2 h-4 w-4" /> Process Payout
           </Button>
         </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3 mb-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Employees</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">14</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Est. Payroll Cost</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">₹ 2,45,000</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total OT Hours</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">42 Hrs</div>
-          </CardContent>
-        </Card>
+        {[
+          { label: 'Total Employees', value: '14', action: () => setToast('Employee directory — 14 active staff') },
+          { label: 'Est. Payroll Cost', value: '₹ 2,45,000', action: () => setToast('June 2026 payroll cost calculated') },
+          { label: 'Total OT Hours', value: '42 Hrs', action: () => setToast('Overtime register opened') },
+        ].map(card => (
+          <button
+            key={card.label}
+            type="button"
+            onClick={card.action}
+            className="rounded-xl border bg-card text-card-foreground shadow-sm text-left p-6 cursor-pointer transition-all hover:shadow-md hover:border-primary/40"
+          >
+            <p className="text-sm font-medium text-muted-foreground">{card.label}</p>
+            <div className="text-2xl font-bold mt-2">{card.value}</div>
+          </button>
+        ))}
       </div>
 
       <Card>

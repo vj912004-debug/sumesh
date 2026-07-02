@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
 } from '@/components/ui/table';
@@ -7,6 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { Truck, Plus } from 'lucide-react';
 
 export default function JobWorkOutward() {
+  const navigate = useNavigate();
+  const [toast, setToast] = useState<string | null>(null);
   const outwardChallans = [
     { challanNo: 'DC-JW-26-010', date: '28-Jun-2026', subcontractor: 'Shreeji Laser Cutting', item: 'MS Plate 10mm (Raw)', qty: '500 Kg', process: 'Laser Cutting', status: 'Pending Receipt' },
     { challanNo: 'DC-JW-26-011', date: '29-Jun-2026', subcontractor: 'Om Fabricators', item: 'Tank Shell Assembly', qty: '1 Set', process: 'Welding', status: 'Pending Receipt' },
@@ -14,12 +18,17 @@ export default function JobWorkOutward() {
 
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg">
+          {toast}
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Job Work (Outward)</h2>
           <p className="text-muted-foreground">Issue raw materials and semi-finished goods to subcontractors.</p>
         </div>
-        <Button>
+        <Button onClick={() => setToast('Outward challan DC-JW-26-012 created (Form 57F4).')}>
           <Plus className="mr-2 h-4 w-4" /> Issue Material (57F4)
         </Button>
       </div>
@@ -55,7 +64,7 @@ export default function JobWorkOutward() {
                     <Badge variant="secondary">{challan.status}</Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="sm">
+                    <Button variant="ghost" size="sm" onClick={() => navigate('/inventory/job-work-in')}>
                       <Truck className="mr-2 h-4 w-4" /> Receive Inward
                     </Button>
                   </TableCell>

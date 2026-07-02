@@ -1,5 +1,5 @@
 ﻿import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -16,6 +16,7 @@ import { ArrowLeft, Truck, Wrench, Mail, Package, FileText, Receipt } from 'luci
 
 export default function OrderDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>(() => getMockOrders());
   const order = orders.find(o => o.id === id);
   const quotation = mockQuotations.find(q => q.id === order?.quotationId);
@@ -139,7 +140,7 @@ export default function OrderDetail() {
               </Button>
             </Link>
           )}
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => navigate('/production/list')}>
             <Wrench className="mr-2 h-4 w-4" /> Issue to Production
           </Button>
           <Button onClick={handleGenerateDispatch}>

@@ -1,176 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
-import { 
-  LayoutDashboard, Users, FileText, ShoppingCart,
-  Package, Wrench, Truck, 
-  Receipt, Bell, Search, Settings as SettingsIcon, Factory, Headset,
-  Database, ShoppingBag, Layers, ChevronDown, ChevronUp, Wallet, BarChart3, Sliders,
-  Sun, Moon, Menu, X, ShieldCheck, Mail, Star, ChevronsUpDown, ChevronsDownUp
-} from 'lucide-react';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
+import { appNavGroups } from '@/lib/erpModules';
+import {
+  Search, Settings as SettingsIcon, Sliders,
+  Sun, Moon, Menu, X, ShieldCheck, Mail, Star, ChevronsUpDown, ChevronsDownUp,
+  ChevronDown, ChevronUp, Bell,
+} from 'lucide-react';
 
-const navGroups = [
-  {
-    title: 'Overview',
-    isCollapsible: false,
-    items: [
-      { name: 'Dashboard', path: '/', icon: LayoutDashboard },
-      { name: 'Tasks', path: '/tasks', icon: Bell },
-      { name: 'Visitor Pass & Gate Registry', path: '/visitor-registry', icon: Users },
-      { name: 'Communication Alerts', path: '/communication', icon: Mail }
-    ]
-  },
-  {
-    title: 'Master Data',
-    isCollapsible: true,
-    icon: Database,
-    items: [
-      { name: 'Master Configurations', path: '/master/saved-data' },
-      { name: 'Client & Party Master', path: '/master/parties' },
-      { name: 'Plant Catalog (Item Master)', path: '/master/items' },
-      { name: 'Grade & Alloy Master', path: '/master/grades' },
-      { name: 'Worker Directory', path: '/master/workers' },
-      { name: 'Transporter Master', path: '/master/transports' }
-    ]
-  },
-  {
-    title: 'Plant Sales & Service Rentals',
-    isCollapsible: true,
-    icon: ShoppingCart,
-    items: [
-      { name: 'New Plant Order Entry', path: '/sales/order-entry' },
-      { name: 'Pending Quotation Follow-up', path: '/sales/pending-quotations' },
-      { name: 'Pre-Build Material Pricing', path: '/production/cost-estimates' },
-      { name: 'Plant Order Book', path: '/sales/orders' },
-      { name: 'Pending Advance Orders', path: '/sales/pending-orders' },
-      { name: 'Dispatch Entry', path: '/sales/dispatch-entry' },
-      { name: 'Despatch Report', path: '/sales/dispatch-reports' },
-      { name: 'Packing Lists', path: '/dispatch/packing-lists' },
-      { name: 'Proforma Invoice (PI)', path: '/sales/invoice-entry' },
-      { name: 'Tax Invoice (TI)', path: '/sales/ti-entry' },
-      { name: 'Sales Reports', path: '/sales/reports' },
-      { name: 'Rental Contracts & Billing', path: '/sales-billing' }
-    ]
-  },
-  {
-    title: 'Plant Fabrication & FAT Testing',
-    isCollapsible: true,
-    icon: Factory,
-    items: [
-      { name: 'CNC Fabrication List', path: '/production/worker-cutting' },
-      { name: 'Ready For Dispatch List', path: '/production/ready-dispatch' },
-      { name: 'Pre-Build Cost Estimate', path: '/production/cost-estimates' },
-      { name: 'Plant Assembly Orders', path: '/production/list' },
-      { name: 'Products & BOM', path: '/master/items' },
-      { name: 'Production & Bed Status', path: '/production/status' },
-      { name: 'TC Management', path: '/production/tc-management' },
-      { name: 'MTC & Vacuum Vessel Certs', path: '/production/mtc' },
-      { name: 'Build Profit & Loss', path: '/reports/build-profit' },
-      { name: 'FAT & QA Inspection Logs', path: '/qms' }
-    ]
-  },
-  {
-    title: 'Procurement & Sourcing',
-    isCollapsible: true,
-    icon: ShoppingBag,
-    items: [
-      { name: 'PO (Pumps, Heaters, Spares)', path: '/purchase/orders' },
-      { name: 'Purchase Rejections & Returns', path: '/purchase/returns' },
-      { name: 'Supplier Ledger', path: '/purchase/ledgers' },
-      { name: 'Gate GRN & Inward Check', path: '/purchase/grn' }
-    ]
-  },
-  {
-    title: 'Inventory & Spares Control',
-    isCollapsible: true,
-    icon: Layers,
-    items: [
-      { name: 'Stock Summary', path: '/inventory/summary' },
-      { name: 'Stock Register', path: '/inventory/register' },
-      { name: 'Outsourced Machining (Job Work)', path: '/inventory/job-work-out' },
-      { name: 'Job Work Inward Receipt', path: '/inventory/job-work-in' },
-      { name: 'Job Work Pending Report', path: '/inventory/job-work-pending' },
-      { name: 'Returnable Challan', path: '/inventory/returnable-challan' },
-      { name: 'Inventory Control', path: '/inventory-control' }
-    ]
-  },
-  {
-    title: 'Finance, Billing & GST',
-    isCollapsible: true,
-    icon: Wallet,
-    items: [
-      { name: 'Ledger Registry', path: '/accounts/ledger' },
-      { name: 'Outstanding Receivables', path: '/accounts/outstanding' },
-      { name: 'Payments Journal', path: '/accounts/payments' },
-      { name: 'Challan Reconciliation', path: '/accounts/challans' },
-      { name: 'Proforma Invoices (PI)', path: '/sales/invoice-entry' },
-      { name: 'Tax Invoices (TI)', path: '/sales/ti-entry' },
-      { name: 'Finance & Compliance', path: '/finance' },
-      { name: 'Build Profit & Loss', path: '/reports/build-profit' }
-    ]
-  },
-  {
-    title: 'Heavy Logistics & ODC Cargo',
-    isCollapsible: true,
-    icon: Truck,
-    items: [
-      { name: 'Weighbridge Logs', path: '/transport/weigh-bridge' },
-      { name: 'Packing Lists', path: '/dispatch/packing-lists' },
-      { name: 'Transport Bill Entry', path: '/transport/bill-entry' },
-      { name: 'Transport Bill Register', path: '/transport/bills' },
-      { name: 'Pending Heavy Freight Dispatch', path: '/transport/pending' },
-      { name: 'Transport Wise Summary', path: '/transport/summary' },
-      { name: 'Supply Chain & Heavy Fleet', path: '/logistics' }
-    ]
-  },
-  {
-    title: 'AMC & On-site Filtration',
-    isCollapsible: true,
-    icon: Headset,
-    items: [
-      { name: 'AMC Service Tickets', path: '/after-sales' },
-      { name: 'On-site Oil Filtration Log', path: '/after-sales/filtration-service' }
-    ]
-  },
-  {
-    title: 'Operational Analytics',
-    isCollapsible: true,
-    icon: BarChart3,
-    items: [
-      { name: 'Purchase Reports', path: '/reports/purchase' },
-      { name: 'Production Reports', path: '/reports/production' },
-      { name: 'Stock Reports', path: '/reports/stock' },
-      { name: 'Material Receipt Reports', path: '/reports/receipts' },
-      { name: 'Material Pending Reports', path: '/reports/pending' },
-      { name: 'Sales Dashboard', path: '/reports/sales-dashboard' },
-      { name: 'Final Inspection Reports', path: '/reports/final' },
-      { name: 'Build Profit & Loss', path: '/reports/build-profit' }
-    ]
-  },
-  {
-    title: 'System Preferences',
-    isCollapsible: true,
-    icon: SettingsIcon,
-    items: [
-      { name: 'Company Profile', path: '/settings/company-profile' },
-      { name: 'Users & Roles', path: '/settings/users-roles' },
-      { name: 'Preferences', path: '/settings/preferences' },
-      { name: 'Alert Center', path: '/settings/alert-center' }
-    ]
-  },
-  {
-    title: 'System',
-    isCollapsible: false,
-    items: [
-      { name: 'Document Management', path: '/documents', icon: FileText }
-    ]
-  }
-];
+const navGroups = appNavGroups;
 
 export function AppLayout() {
   const { logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
   
@@ -449,7 +293,7 @@ export function AppLayout() {
                   </div>
                 )}
 
-                {!isCollapsed && (
+                {(group.items.length === 0 ? false : !isCollapsed) && (
                   <div className="space-y-0.5 pl-2 border-l border-zinc-700/50 ml-3">
                     {group.items.map((item) => {
                       const isActive = location.pathname === item.path || 
@@ -574,24 +418,32 @@ export function AppLayout() {
               <span className="sr-only">Toggle theme</span>
             </Button>
 
-            {/* Mail Icon */}
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
-              <Mail className="h-5 w-5" />
-              <span className="sr-only">Messages</span>
-              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary"></span>
-            </Button>
+            <Link to="/communication">
+              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
+                <Mail className="h-5 w-5" />
+                <span className="sr-only">Messages</span>
+                <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary"></span>
+              </Button>
+            </Link>
 
-            {/* Notification Bell with red unread badge */}
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
-              <Bell className="h-5 w-5" />
-              <span className="sr-only">Notifications</span>
-              <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center border border-white dark:border-zinc-950">
-                3
-              </span>
-            </Button>
+            <Link to="/tasks">
+              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
+                <Bell className="h-5 w-5" />
+                <span className="sr-only">Notifications</span>
+                <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center border border-white dark:border-zinc-950">
+                  3
+                </span>
+              </Button>
+            </Link>
 
             {/* User Profile Avatar with dropdown */}
-            <div className="flex items-center gap-2 border-l border-border pl-4 cursor-pointer hover:opacity-85">
+            <div
+              className="flex items-center gap-2 border-l border-border pl-4 cursor-pointer hover:opacity-85"
+              onClick={() => navigate('/settings')}
+              onKeyDown={e => { if (e.key === 'Enter') navigate('/settings'); }}
+              role="button"
+              tabIndex={0}
+            >
               <div className="h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs shadow-sm">
                 SS
               </div>

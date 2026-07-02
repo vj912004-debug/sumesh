@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { 
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
 } from '@/components/ui/table';
@@ -7,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle2, ArrowDownToLine } from 'lucide-react';
 
 export default function JobWorkInward() {
+  const [toast, setToast] = useState<string | null>(null);
   const inwardReceipts = [
     { receiptNo: 'JWR-26-105', date: '30-Jun-2026', subcontractor: 'Shreeji Laser Cutting', refChallan: 'DC-JW-26-005', item: 'MS Profiles (Cut)', qty: '250 Kg', scrap: '10 Kg', status: 'QC Pending' },
     { receiptNo: 'JWR-26-104', date: '28-Jun-2026', subcontractor: 'Perfect Powder Coating', refChallan: 'DC-JW-26-008', item: 'Panel Covers (Blue)', qty: '5 Sets', scrap: '0', status: 'Accepted' },
@@ -14,12 +16,17 @@ export default function JobWorkInward() {
 
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg">
+          {toast}
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Job Work (Inward)</h2>
           <p className="text-muted-foreground">Receive processed goods and scrap material back from subcontractors.</p>
         </div>
-        <Button>
+        <Button onClick={() => setToast('Inward receipt JWR-26-106 recorded — QC pending.')}>
           <ArrowDownToLine className="mr-2 h-4 w-4" /> Receive Material
         </Button>
       </div>
@@ -60,11 +67,11 @@ export default function JobWorkInward() {
                   </TableCell>
                   <TableCell className="text-right">
                     {receipt.status === 'QC Pending' ? (
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" size="sm" onClick={() => setToast(`${receipt.receiptNo} cleared — material accepted into stock.`)}>
                         <CheckCircle2 className="mr-2 h-4 w-4" /> Clear QC
                       </Button>
                     ) : (
-                      <Button variant="ghost" size="sm">View</Button>
+                      <Button variant="ghost" size="sm" onClick={() => setToast(`Viewing receipt ${receipt.receiptNo}`)}>View</Button>
                     )}
                   </TableCell>
                 </TableRow>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
 } from '@/components/ui/table';
@@ -11,6 +11,7 @@ import { Plus } from 'lucide-react';
 import { format } from 'date-fns';
 
 export default function Quotations() {
+  const navigate = useNavigate();
   const [quotations, setQuotations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +36,7 @@ export default function Quotations() {
           <h2 className="text-3xl font-bold tracking-tight">Quotations</h2>
           <p className="text-muted-foreground">Manage techno-commercial quotes and revisions.</p>
         </div>
-        <Button>
+        <Button onClick={() => navigate('/enquiries')}>
           <Plus className="mr-2 h-4 w-4" /> New Quotation
         </Button>
       </div>

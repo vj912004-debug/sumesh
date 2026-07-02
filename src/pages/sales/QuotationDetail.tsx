@@ -1,4 +1,5 @@
-﻿import { useParams, Link } from 'react-router-dom';
+﻿import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -9,6 +10,8 @@ import { ArrowLeft, Printer, Send, Edit, FileCheck } from 'lucide-react';
 
 export default function QuotationDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [toast, setToast] = useState<string | null>(null);
   const quote = id ? getQuotationById(id) : undefined;
   const customer = mockCustomers.find(c => c.id === quote?.customerId);
 
@@ -20,8 +23,18 @@ export default function QuotationDetail() {
     window.print();
   };
 
+  const notify = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  };
+
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg print:hidden">
+          {toast}
+        </div>
+      )}
       {/* Action Bar - Hidden during print */}
       <div className="flex items-center gap-4 print:hidden">
         <Link to="/quotations">
@@ -47,13 +60,13 @@ export default function QuotationDetail() {
           <Button variant="outline" onClick={handlePrint}>
             <Printer className="mr-2 h-4 w-4" /> Print
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => notify('Revision v4 saved as draft.')}>
             <Edit className="mr-2 h-4 w-4" /> Revise
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => notify(`Quotation ${quote.id} sent to ${customer.email}.`)}>
             <Send className="mr-2 h-4 w-4" /> Send to Client
           </Button>
-          <Button>
+          <Button onClick={() => navigate('/orders')}>
             <FileCheck className="mr-2 h-4 w-4" /> Convert to Order
           </Button>
         </div>

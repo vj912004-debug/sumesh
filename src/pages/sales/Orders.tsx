@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
 } from '@/components/ui/table';
@@ -9,6 +9,8 @@ import { mockOrders, mockCustomers } from '@/lib/mockData';
 import { Plus } from 'lucide-react';
 
 export default function Orders() {
+  const navigate = useNavigate();
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -16,7 +18,7 @@ export default function Orders() {
           <h2 className="text-3xl font-bold tracking-tight">Sales Orders</h2>
           <p className="text-muted-foreground">Track order processing, production, and dispatch status.</p>
         </div>
-        <Button>
+        <Button onClick={() => navigate('/quotations')}>
           <Plus className="mr-2 h-4 w-4" /> New Order
         </Button>
       </div>

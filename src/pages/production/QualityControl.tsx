@@ -1,15 +1,22 @@
-﻿
+﻿import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Printer, CheckCircle2, ShieldCheck, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function QualityControl() {
+  const [toast, setToast] = useState<string | null>(null);
   const handlePrint = () => {
     window.print();
   };
 
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg print:hidden">
+          {toast}
+        </div>
+      )}
       <div className="flex items-center gap-4 print:hidden">
         <Link to="/work-orders">
           <Button variant="outline" size="icon">
@@ -24,7 +31,7 @@ export default function QualityControl() {
           <Button variant="outline" onClick={handlePrint}>
             <Printer className="mr-2 h-4 w-4" /> Print Certificate
           </Button>
-          <Button>
+          <Button onClick={() => setToast('QC certificate approved — work order cleared for dispatch.')}>
             <ShieldCheck className="mr-2 h-4 w-4" /> Final Approval
           </Button>
         </div>

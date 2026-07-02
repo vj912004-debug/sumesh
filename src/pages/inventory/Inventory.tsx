@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { 
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
 } from '@/components/ui/table';
@@ -8,6 +9,8 @@ import { mockInventory } from '@/lib/mockData2';
 import { ArrowUpDown, Search } from 'lucide-react';
 
 export default function Inventory() {
+  const navigate = useNavigate();
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -16,10 +19,10 @@ export default function Inventory() {
           <p className="text-muted-foreground">Manage raw materials, components, and finished goods stock.</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => navigate('/inventory-control')}>
             <ArrowUpDown className="mr-2 h-4 w-4" /> Stock Transfer
           </Button>
-          <Button>Material Receipt (GRN)</Button>
+          <Button onClick={() => navigate('/purchase/grn')}>Material Receipt (GRN)</Button>
         </div>
       </div>
 

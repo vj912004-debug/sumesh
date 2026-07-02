@@ -1,4 +1,5 @@
 ﻿import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -28,7 +29,14 @@ const projSparkData = [{ v: 8 }, { v: 10 }, { v: 9 }, { v: 12 }, { v: 11 }, { v:
 const COLORS = ['#134e4a', '#14b8a6', '#0ea5e9', '#34d399']; // teal, cyan, emerald
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [marketFilter, setMarketFilter] = useState('All markets');
+  const [toast, setToast] = useState<string | null>(null);
+
+  const notify = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2500);
+  };
 
   // Dynamic calculations from company databases
   const totalRevenueVal = mockOrders
@@ -142,8 +150,56 @@ export default function Dashboard() {
     addLog('[Finance] Simulator reset.');
   };
 
+  const kpiCards = [
+    {
+      key: 'revenue',
+      label: 'Total Revenue',
+      value: `₹${(totalRevenueVal / 100000).toFixed(1)} Lakhs`,
+      badge: { text: '+14.2%', className: 'text-green-600 bg-green-50 dark:bg-green-950/20', icon: ArrowUpRight },
+      sparkData: revSparkData,
+      stroke: '#10b981',
+      path: '/reports/sales-dashboard',
+      hint: 'Sales dashboard & revenue reports',
+    },
+    {
+      key: 'invoices',
+      label: 'Pending Invoices',
+      value: `₹${(pendingInvoicesVal / 100000).toFixed(1)} Lakhs`,
+      badge: { text: 'In Queue', className: 'text-teal-600 bg-teal-50 dark:bg-teal-950/20' },
+      sparkData: invSparkData,
+      stroke: '#2563eb',
+      path: '/sales/invoice-entry',
+      hint: 'Proforma & tax invoices',
+    },
+    {
+      key: 'orders',
+      label: 'Open Orders',
+      value: `${openOrdersCount} Units`,
+      badge: { text: 'Awaiting Delivery', className: 'text-teal-600 bg-teal-50 dark:bg-teal-950/20' },
+      sparkData: orderSparkData,
+      stroke: '#2563eb',
+      path: '/sales/orders',
+      hint: 'Plant order book',
+    },
+    {
+      key: 'projects',
+      label: 'Active Projects',
+      value: `${activeProjectsCount} Machines`,
+      badge: { text: 'Live Operations', className: 'text-teal-600 bg-teal-50 dark:bg-teal-950/20' },
+      sparkData: projSparkData,
+      stroke: '#0d9488',
+      path: '/production/list',
+      hint: 'Work orders & assembly',
+    },
+  ];
+
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg">
+          {toast}
+        </div>
+      )}
       {/* Top Greeting */}
       <div>
         <h2 className="text-3xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-100">
@@ -156,109 +212,40 @@ export default function Dashboard() {
 
       {/* KPI Cards Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {/* Card 1: Total Revenue */}
-        <Card className="bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl">
-          <CardContent className="p-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-                  Total Revenue
-                </p>
-                <h3 className="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mt-1">
-                  ₹{(totalRevenueVal / 100000).toFixed(1)} Lakhs
-                </h3>
-                <span className="inline-flex items-center text-xs font-bold text-green-600 mt-2 bg-green-50 dark:bg-green-950/20 px-2 py-0.5 rounded">
-                  <ArrowUpRight className="w-3.5 h-3.5 mr-0.5" /> +14.2%
-                </span>
+        {kpiCards.map(card => {
+          const BadgeIcon = card.badge.icon;
+          return (
+            <button
+              key={card.key}
+              type="button"
+              onClick={() => { notify(`Opening ${card.label}`); navigate(card.path); }}
+              title={card.hint}
+              className="rounded-xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm text-left p-6 cursor-pointer transition-all hover:shadow-md hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+            >
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                    {card.label}
+                  </p>
+                  <h3 className="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mt-1">
+                    {card.value}
+                  </h3>
+                  <span className={`inline-flex items-center text-xs font-bold mt-2 px-2 py-0.5 rounded ${card.badge.className}`}>
+                    {BadgeIcon && <BadgeIcon className="w-3.5 h-3.5 mr-0.5" />}
+                    {card.badge.text}
+                  </span>
+                </div>
+                <div className="w-24 h-10 mt-2 pointer-events-none">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={card.sparkData}>
+                      <Line type="monotone" dataKey="v" stroke={card.stroke} strokeWidth={2} dot={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
-              <div className="w-24 h-10 mt-2">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={revSparkData}>
-                    <Line type="monotone" dataKey="v" stroke="#10b981" strokeWidth={2} dot={false} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Card 2: Pending Invoices */}
-        <Card className="bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl">
-          <CardContent className="p-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-                  Pending Invoices
-                </p>
-                <h3 className="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mt-1">
-                  ₹{(pendingInvoicesVal / 100000).toFixed(1)} Lakhs
-                </h3>
-                <span className="inline-flex items-center text-xs font-bold text-teal-600 mt-2 bg-teal-50 dark:bg-teal-950/20 px-2 py-0.5 rounded">
-                  In Queue
-                </span>
-              </div>
-              <div className="w-24 h-10 mt-2">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={invSparkData}>
-                    <Line type="monotone" dataKey="v" stroke="#2563eb" strokeWidth={2} dot={false} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Card 3: Open Orders */}
-        <Card className="bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl">
-          <CardContent className="p-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-                  Open Orders
-                </p>
-                <h3 className="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mt-1">
-                  {openOrdersCount} Units
-                </h3>
-                <span className="inline-flex items-center text-xs font-bold text-teal-600 mt-2 bg-teal-50 dark:bg-teal-950/20 px-2 py-0.5 rounded">
-                  Awaiting Delivery
-                </span>
-              </div>
-              <div className="w-24 h-10 mt-2">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={orderSparkData}>
-                    <Line type="monotone" dataKey="v" stroke="#2563eb" strokeWidth={2} dot={false} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Card 4: Active Projects */}
-        <Card className="bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 shadow-sm rounded-xl">
-          <CardContent className="p-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-                  Active Projects
-                </p>
-                <h3 className="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mt-1">
-                  {activeProjectsCount} Machines
-                </h3>
-                <span className="inline-flex items-center text-xs font-bold text-teal-600 mt-2 bg-teal-50 dark:bg-teal-950/20 px-2 py-0.5 rounded">
-                  Live Operations
-                </span>
-              </div>
-              <div className="w-24 h-10 mt-2">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={projSparkData}>
-                    <Line type="monotone" dataKey="v" stroke="#0d9488" strokeWidth={2} dot={false} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </button>
+          );
+        })}
       </div>
 
       {/* Main Charts & Activity Section */}
@@ -340,13 +327,18 @@ export default function Dashboard() {
             </div>
             <div className="w-full space-y-1.5 text-[11px] font-medium text-zinc-600 dark:text-zinc-400">
               {categoryShare.map((d, i) => (
-                <div key={d.name} className="flex items-center justify-between">
+                <button
+                  key={d.name}
+                  type="button"
+                  onClick={() => { notify(`Filter: ${d.name}`); navigate('/master/items'); }}
+                  className="flex items-center justify-between w-full rounded px-1 py-0.5 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors text-left"
+                >
                   <span className="flex items-center">
                     <span className="w-2.5 h-2.5 rounded-full mr-2" style={{ backgroundColor: COLORS[i] }} />
                     {d.name}
                   </span>
                   <span className="font-bold">{d.value}%</span>
-                </div>
+                </button>
               ))}
             </div>
           </CardContent>
@@ -362,10 +354,15 @@ export default function Dashboard() {
           <CardContent className="h-[300px] overflow-y-auto pr-1">
             <div className="space-y-4">
               {/* Dynamic activity feed from real company data files */}
-              {mockOrders.map((order, i) => {
+              {mockOrders.map((order) => {
                 const customer = mockCustomers.find(c => c.id === order.customerId);
                 return (
-                  <div key={order.id} className="pb-3 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
+                  <button
+                    key={order.id}
+                    type="button"
+                    onClick={() => navigate(`/orders/${order.id}`)}
+                    className="w-full text-left pb-3 border-b border-zinc-100 dark:border-zinc-800 last:border-0 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 rounded px-1 -mx-1 transition-colors"
+                  >
                     <div className="flex justify-between items-start gap-1">
                       <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 leading-tight">
                         Order {order.id}
@@ -377,13 +374,18 @@ export default function Dashboard() {
                     <p className="text-[11px] text-zinc-500 mt-1 leading-snug">
                       Client: {customer?.name}. Status is <strong>{order.status}</strong>. Amount: ₹{(order.totalAmount / 100000).toFixed(1)} Lakhs.
                     </p>
-                  </div>
+                  </button>
                 );
               })}
               {mockEnquiries.slice(0, 2).map((enq) => {
                 const customer = mockCustomers.find(c => c.id === enq.customerId);
                 return (
-                  <div key={enq.id} className="pb-3 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
+                  <button
+                    key={enq.id}
+                    type="button"
+                    onClick={() => navigate(`/enquiries/${enq.id}`)}
+                    className="w-full text-left pb-3 border-b border-zinc-100 dark:border-zinc-800 last:border-0 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 rounded px-1 -mx-1 transition-colors"
+                  >
                     <div className="flex justify-between items-start gap-1">
                       <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 leading-tight">
                         Enquiry {enq.id}
@@ -395,7 +397,7 @@ export default function Dashboard() {
                     <p className="text-[11px] text-zinc-500 mt-1 leading-snug">
                       {customer?.name} requested: "{enq.requirements}"
                     </p>
-                  </div>
+                  </button>
                 );
               })}
             </div>

@@ -1,10 +1,13 @@
-﻿import { useParams, Link } from 'react-router-dom';
+﻿import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Printer, ArrowLeft, Send } from 'lucide-react';
 import { mockOrders, mockCustomers, mockQuotations, mockProducts } from '@/lib/mockData';
 
 export default function DeliveryChallan() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [toast, setToast] = useState<string | null>(null);
   const order = mockOrders.find(o => o.id === id);
   const quotation = mockQuotations.find(q => q.id === order?.quotationId);
   const customer = mockCustomers.find(c => c.id === order?.customerId);
@@ -17,6 +20,11 @@ export default function DeliveryChallan() {
 
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg print:hidden">
+          {toast}
+        </div>
+      )}
       {/* Action Bar */}
       <div className="flex items-center gap-4 print:hidden">
         <Link to="/dispatch">
@@ -31,7 +39,7 @@ export default function DeliveryChallan() {
           <Button variant="outline" onClick={handlePrint}>
             <Printer className="mr-2 h-4 w-4" /> Print
           </Button>
-          <Button>
+          <Button onClick={() => { setToast('E-Way bill generated — opening register.'); navigate('/dispatch/eway-bills'); }}>
             <Send className="mr-2 h-4 w-4" /> Generate E-Way Bill
           </Button>
         </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table';
@@ -16,7 +16,9 @@ import { mockProducts, mockCustomers } from '@/lib/mockData';
 import { Calculator, Plus, ArrowRight } from 'lucide-react';
 
 export default function CostEstimates() {
+  const navigate = useNavigate();
   const [estimates, setEstimates] = useState(() => getCostEstimates());
+  const [filter, setFilter] = useState<'all' | 'draft' | 'reviewed'>('all');
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [productId, setProductId] = useState('PROD-001');
@@ -60,27 +62,37 @@ export default function CostEstimates() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
-        <Card>
-          <CardContent className="p-5">
-            <p className="text-xs font-semibold text-muted-foreground uppercase">Open Estimates</p>
-            <p className="text-2xl font-bold mt-1">{estimates.filter(e => e.status === 'Draft').length}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-5">
-            <p className="text-xs font-semibold text-muted-foreground uppercase">Under Review</p>
-            <p className="text-2xl font-bold mt-1">{estimates.filter(e => e.status === 'Reviewed').length}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-5">
-            <p className="text-xs font-semibold text-muted-foreground uppercase">Total Pipeline Value</p>
-            <p className="text-2xl font-bold mt-1 text-primary">
-              ₹{estimates.reduce((s, e) => s + e.suggestedPrice, 0).toLocaleString('en-IN')}
-            </p>
-          </CardContent>
-        </Card>
+        <button
+          type="button"
+          onClick={() => setFilter('draft')}
+          className={`rounded-xl border bg-card shadow-sm text-left p-5 cursor-pointer transition-all hover:shadow-md hover:border-primary/40 ${filter === 'draft' ? 'border-primary ring-2 ring-primary/20' : ''}`}
+        >
+          <p className="text-xs font-semibold text-muted-foreground uppercase">Open Estimates</p>
+          <p className="text-2xl font-bold mt-1">{estimates.filter(e => e.status === 'Draft').length}</p>
+        </button>
+        <button
+          type="button"
+          onClick={() => setFilter('reviewed')}
+          className={`rounded-xl border bg-card shadow-sm text-left p-5 cursor-pointer transition-all hover:shadow-md hover:border-primary/40 ${filter === 'reviewed' ? 'border-primary ring-2 ring-primary/20' : ''}`}
+        >
+          <p className="text-xs font-semibold text-muted-foreground uppercase">Under Review</p>
+          <p className="text-2xl font-bold mt-1">{estimates.filter(e => e.status === 'Reviewed').length}</p>
+        </button>
+        <button
+          type="button"
+          onClick={() => { setFilter('all'); navigate('/production/cost-estimates'); }}
+          className={`rounded-xl border bg-card shadow-sm text-left p-5 cursor-pointer transition-all hover:shadow-md hover:border-primary/40 ${filter === 'all' ? 'border-primary ring-2 ring-primary/20' : ''}`}
+        >
+          <p className="text-xs font-semibold text-muted-foreground uppercase">Total Pipeline Value</p>
+          <p className="text-2xl font-bold mt-1 text-primary">
+            ₹{estimates.reduce((s, e) => s + e.suggestedPrice, 0).toLocaleString('en-IN')}
+          </p>
+        </button>
       </div>
+
+      {filter !== 'all' && (
+        <Button variant="ghost" size="sm" onClick={() => setFilter('all')}>Clear filter</Button>
+      )}
 
       <Card>
         <CardHeader>
@@ -104,7 +116,9 @@ export default function CostEstimates() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {estimates.map(est => {
+              {(filter === 'all' ? estimates : estimates.filter(e =>
+                filter === 'draft' ? e.status === 'Draft' : e.status === 'Reviewed'
+              )).map(est => {
                 const product = mockProducts.find(p => p.id === est.productId);
                 const customer = est.customerId
                   ? mockCustomers.find(c => c.id === est.customerId)

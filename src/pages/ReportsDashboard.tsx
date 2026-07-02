@@ -1,9 +1,20 @@
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts';
 
 export default function ReportsDashboard() {
+  const navigate = useNavigate();
+  const [toast, setToast] = useState<string | null>(null);
+
+  const notify = (msg: string, path: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2000);
+    navigate(path);
+  };
+
   const salesData = [
     { month: 'Jan', sales: 40, target: 50 },
     { month: 'Feb', sales: 65, target: 50 },
@@ -13,8 +24,21 @@ export default function ReportsDashboard() {
     { month: 'Jun', sales: 110, target: 90 },
   ];
 
+  const metricCards = [
+    { label: 'Total Revenue (YTD)', value: '₹ 4.2 Cr', sub: '+12% from last year', path: '/sales/invoice-entry' },
+    { label: 'Pending Orders', value: '14', sub: 'Worth ₹ 1.1 Cr', path: '/sales/orders' },
+    { label: 'Machines in Prod.', value: '8', sub: '3 behind schedule', path: '/production/list' },
+    { label: 'Inventory Value', value: '₹ 85 L', sub: 'Raw Materials + FG', path: '/inventory' },
+  ];
+
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg">
+          {toast}
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Management Dashboard</h2>
@@ -23,42 +47,18 @@ export default function ReportsDashboard() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue (YTD)</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">₹ 4.2 Cr</div>
-            <p className="text-xs text-muted-foreground">+12% from last year</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Orders</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">14</div>
-            <p className="text-xs text-muted-foreground">Worth ₹ 1.1 Cr</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Machines in Prod.</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">8</div>
-            <p className="text-xs text-muted-foreground">3 behind schedule</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Inventory Value</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">₹ 85 L</div>
-            <p className="text-xs text-muted-foreground">Raw Materials + FG</p>
-          </CardContent>
-        </Card>
+        {metricCards.map(card => (
+          <button
+            key={card.label}
+            type="button"
+            onClick={() => notify(`Opening ${card.label}`, card.path)}
+            className="rounded-xl border bg-card text-card-foreground shadow-sm text-left p-6 cursor-pointer transition-all hover:shadow-md hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+          >
+            <p className="text-sm font-medium text-muted-foreground">{card.label}</p>
+            <div className="text-2xl font-bold mt-2">{card.value}</div>
+            <p className="text-xs text-muted-foreground mt-1">{card.sub}</p>
+          </button>
+        ))}
       </div>
 
       <Card>
