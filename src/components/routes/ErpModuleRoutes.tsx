@@ -96,6 +96,7 @@ function resolveElement(item: ErpNavItem) {
   return (
     <PlaceholderPage
       title={item.name}
+      modulePath={item.path}
       description={item.description ?? `Manage ${item.name} records and operations.`}
       actionLabel={`New ${item.name}`}
     />
