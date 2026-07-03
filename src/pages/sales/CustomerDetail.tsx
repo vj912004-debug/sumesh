@@ -8,7 +8,11 @@ import {
 } from '@/components/ui/dialog';
 import { CustomerForm, type CustomerFormData } from '@/components/forms/CustomerForm';
 import { api } from '@/lib/api';
-import { ArrowLeft, Edit, Mail, Phone, MapPin, Trash2 } from 'lucide-react';
+import { ArrowLeft, Edit, Mail, MapPin, Trash2 } from 'lucide-react';
+import { getSubmittedOffersForParty } from '@/lib/quotationService';
+import { PreviousOffersTable } from '@/components/sales/PreviousOffersTable';
+import { CustomerContactsList } from '@/components/sales/CustomerContactsList';
+import { getCustomerContacts } from '@/lib/customerContacts';
 
 export default function CustomerDetail() {
   const { id } = useParams();
@@ -60,6 +64,11 @@ export default function CustomerDetail() {
   if (!customer) return <div className="p-8 text-center text-red-500">Customer not found</div>;
 
   const customerOrders = customer.orders || [];
+  const previousOffers = getSubmittedOffersForParty(id || '').map(o => ({
+    ...o,
+    customerName: customer.name,
+  }));
+  const contacts = getCustomerContacts(customer);
 
   return (
     <div className="space-y-6">
@@ -80,7 +89,7 @@ export default function CustomerDetail() {
                 <Edit className="mr-2 h-4 w-4" /> Edit Profile
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px]">
+            <DialogContent className="sm:max-w-[720px] max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Edit Customer</DialogTitle>
                 <DialogDescription>
@@ -108,26 +117,20 @@ export default function CustomerDetail() {
             <CardTitle>Contact Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-start gap-3">
-              <Mail className="h-4 w-4 mt-1 text-muted-foreground" />
+            <CustomerContactsList contacts={contacts} />
+            <div className="flex items-start gap-3 pt-2 border-t">
+              <Mail className="h-4 w-4 mt-1 text-muted-foreground shrink-0" />
               <div>
-                <div className="text-sm font-medium">Email</div>
-                <div className="text-sm text-muted-foreground">{customer.email}</div>
+                <div className="text-sm font-medium">Company Email</div>
+                <div className="text-sm text-muted-foreground">{customer.email || '—'}</div>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <Phone className="h-4 w-4 mt-1 text-muted-foreground" />
-              <div>
-                <div className="text-sm font-medium">Phone</div>
-                <div className="text-sm text-muted-foreground">{customer.phone}</div>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <MapPin className="h-4 w-4 mt-1 text-muted-foreground" />
+              <MapPin className="h-4 w-4 mt-1 text-muted-foreground shrink-0" />
               <div>
                 <div className="text-sm font-medium">Address</div>
-                <div className="text-sm text-muted-foreground whitespace-pre-line">{customer.address}</div>
-                <div className="text-sm text-muted-foreground">{customer.city}, {customer.state}</div>
+                <div className="text-sm text-muted-foreground whitespace-pre-line">{customer.address || '—'}</div>
+                <div className="text-sm text-muted-foreground">{customer.city}{customer.city && customer.state ? ', ' : ''}{customer.state}</div>
               </div>
             </div>
           </CardContent>
@@ -142,6 +145,7 @@ export default function CustomerDetail() {
               <TabsList className="mb-4">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="orders">Order History</TabsTrigger>
+                <TabsTrigger value="quotations">Previous Offers</TabsTrigger>
                 <TabsTrigger value="ledger">Ledger</TabsTrigger>
               </TabsList>
               
@@ -152,8 +156,15 @@ export default function CustomerDetail() {
                     <p className="text-sm text-muted-foreground">{customer.gstin}</p>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-sm font-medium">Contact Person</p>
-                    <p className="text-sm text-muted-foreground">{customer.contactPerson}</p>
+                    <p className="text-sm font-medium">Primary Contact</p>
+                    <p className="text-sm text-muted-foreground">
+                      {contacts[0]?.name ?? customer.contactPerson}
+                      {contacts[0]?.designation ? ` · ${contacts[0].designation}` : ''}
+                    </p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium">Contact Persons</p>
+                    <p className="text-sm text-muted-foreground">{contacts.length} on file</p>
                   </div>
                   <div className="space-y-1">
                     <p className="text-sm font-medium">Total Orders</p>
@@ -197,6 +208,14 @@ export default function CustomerDetail() {
                     </tbody>
                   </table>
                 </div>
+              </TabsContent>
+
+              <TabsContent value="quotations">
+                <PreviousOffersTable
+                  offers={previousOffers}
+                  showParty={false}
+                  emptyMessage="No previous offers submitted for this party."
+                />
               </TabsContent>
               
               <TabsContent value="ledger">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
@@ -6,7 +6,11 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PreviousOffersTable } from '@/components/sales/PreviousOffersTable';
 import { api } from '@/lib/api';
+import { getSubmittedOffers } from '@/lib/quotationService';
+import { mockCustomers } from '@/lib/mockData';
 import { Plus } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -29,6 +33,16 @@ export default function Quotations() {
     fetchQuotations();
   }, []);
 
+  const previousOffers = useMemo(
+    () => getSubmittedOffers().map(offer => ({
+      ...offer,
+      customerName: mockCustomers.find(c => c.id === offer.customerId)?.name,
+    })),
+    [quotations]
+  );
+
+  const draftQuotations = quotations.filter((q: { status: string }) => q.status === 'Draft');
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -41,6 +55,20 @@ export default function Quotations() {
         </Button>
       </div>
 
+      <Tabs defaultValue="all" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="all">All Quotations</TabsTrigger>
+          <TabsTrigger value="previous-offers">
+            Previous Offers Submitted
+            {previousOffers.length > 0 && (
+              <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-[10px]">
+                {previousOffers.length}
+              </Badge>
+            )}
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="all">
       <Card>
         <CardHeader>
           <CardTitle>Recent Quotations</CardTitle>
@@ -92,6 +120,27 @@ export default function Quotations() {
           )}
         </CardContent>
       </Card>
+        </TabsContent>
+
+        <TabsContent value="previous-offers">
+          <Card>
+            <CardHeader>
+              <CardTitle>Previous Offers Submitted</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Sent, accepted, and rejected quotations — grouped by party for commercial reference.
+                {draftQuotations.length > 0 && (
+                  <span className="block mt-1 text-xs">
+                    {draftQuotations.length} draft quote{draftQuotations.length > 1 ? 's' : ''} excluded until sent.
+                  </span>
+                )}
+              </p>
+            </CardHeader>
+            <CardContent>
+              <PreviousOffersTable offers={previousOffers} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

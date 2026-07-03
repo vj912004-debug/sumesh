@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
+import { getPastQuotedRatesForParty, formatQuotedAmount } from '@/lib/quotationService';
 
 const enquirySchema = z.object({
   customerId: z.string().min(1, 'Customer is required'),
@@ -31,7 +33,7 @@ export function EnquiryForm({ initialData, onSubmit, onCancel, isLoading }: Enqu
     api.get('/crm/customers').then(res => setCustomers(res.data)).catch(console.error);
   }, []);
 
-  const { register, handleSubmit, formState: { errors } } = useForm<EnquiryFormData>({
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<EnquiryFormData>({
     resolver: zodResolver(enquirySchema) as any,
     defaultValues: initialData || {
       customerId: '',
@@ -42,6 +44,12 @@ export function EnquiryForm({ initialData, onSubmit, onCancel, isLoading }: Enqu
       nextFollowUp: '',
     }
   });
+
+  const selectedCustomerId = watch('customerId');
+  const pastQuotedRates = useMemo(
+    () => (selectedCustomerId ? getPastQuotedRatesForParty(selectedCustomerId) : []),
+    [selectedCustomerId]
+  );
 
   const inputClass = "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
 
@@ -56,6 +64,22 @@ export function EnquiryForm({ initialData, onSubmit, onCancel, isLoading }: Enqu
           ))}
         </select>
         {errors.customerId && <p className="text-xs text-red-500">{errors.customerId.message}</p>}
+        {pastQuotedRates.length > 0 && (
+          <div className="rounded-md border bg-muted/40 p-3 text-xs space-y-1.5">
+            <p className="font-semibold text-muted-foreground uppercase tracking-wide">Past quoted rates for this party</p>
+            {pastQuotedRates.slice(0, 3).map(q => (
+              <div key={q.quotationId} className="flex flex-wrap items-center justify-between gap-2">
+                <span>
+                  <Link to={`/quotations/${q.quotationId}`} className="text-primary hover:underline font-medium">
+                    {q.quotationId}
+                  </Link>
+                  <span className="text-muted-foreground"> · {q.date}</span>
+                </span>
+                <span className="font-semibold">{formatQuotedAmount(q.totalAmount)}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 
 import { mockCustomers, mockProducts } from '@/lib/mockData';
 import { getQuotationById } from '@/lib/quotationService';
+import { getCustomerContacts } from '@/lib/customerContacts';
 import { ArrowLeft, Printer, Send, Edit, FileCheck } from 'lucide-react';
 
 export default function QuotationDetail() {
@@ -115,6 +116,13 @@ export default function QuotationDetail() {
             <p className="text-sm text-gray-600 whitespace-pre-line">{customer.address}</p>
             <p className="text-sm text-gray-600">{customer.city}, {customer.state}</p>
             <p className="text-sm text-gray-600 mt-2"><strong>Attn:</strong> {customer.contactPerson}</p>
+            {getCustomerContacts(customer).length > 1 && (
+              <div className="text-xs text-gray-600 mt-2 space-y-0.5">
+                {getCustomerContacts(customer).slice(1).map((c, i) => (
+                  <p key={i}>{c.designation}: {c.name} ({c.phone})</p>
+                ))}
+              </div>
+            )}
             <p className="text-sm text-gray-600"><strong>GSTIN:</strong> {customer.gstin}</p>
           </div>
         </div>

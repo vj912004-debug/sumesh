@@ -1,5 +1,7 @@
 // src/lib/api.ts
 import { mockCustomers, mockEnquiries, mockQuotations, mockOrders } from './mockData';
+import { getPastQuotedRatesForParty } from './quotationService';
+import { syncLegacyContactFields } from './customerContacts';
 import { processErpEvent } from './erpEvents';
 
 // Keys for localStorage
@@ -69,10 +71,12 @@ export const api = {
       // Fetch orders history for this customer
       const orders = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]');
       const customerOrders = orders.filter((o: any) => o.customerId === id);
+      const pastQuotedRates = getPastQuotedRatesForParty(id);
       return {
         data: {
           ...customer,
-          orders: customerOrders
+          orders: customerOrders,
+          pastQuotedRates,
         }
       };
     }
@@ -83,9 +87,12 @@ export const api = {
       const customers = JSON.parse(localStorage.getItem(CUSTOMERS_KEY) || '[]');
       const populated = enquiries.map((enq: any) => {
         const customer = customers.find((c: any) => c.id === enq.customerId);
+        const pastQuotedRates = getPastQuotedRatesForParty(enq.customerId);
         return {
           ...enq,
-          customer
+          customer,
+          pastQuotedRates,
+          latestQuotedRate: pastQuotedRates[0] ?? null,
         };
       });
       return { data: populated };
@@ -136,10 +143,10 @@ export const api = {
     if (url === '/crm/customers') {
       const customers = JSON.parse(localStorage.getItem(CUSTOMERS_KEY) || '[]');
       const newId = `CUST-${String(customers.length + 1).padStart(3, '0')}`;
-      const newCustomer = {
+      const newCustomer = syncLegacyContactFields({
         id: newId,
-        ...data
-      };
+        ...data,
+      });
       customers.push(newCustomer);
       localStorage.setItem(CUSTOMERS_KEY, JSON.stringify(customers));
       return { data: newCustomer };
@@ -207,7 +214,7 @@ export const api = {
       if (index === -1) {
         throw { response: { status: 404, data: { error: 'Customer not found' } } };
       }
-      customers[index] = { ...customers[index], ...data };
+      customers[index] = syncLegacyContactFields({ ...customers[index], ...data });
       localStorage.setItem(CUSTOMERS_KEY, JSON.stringify(customers));
       return { data: customers[index] };
     }

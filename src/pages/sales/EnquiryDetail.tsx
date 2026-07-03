@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PreviousOffersTable } from '@/components/sales/PreviousOffersTable';
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog';
@@ -12,8 +14,14 @@ import {
   createEstimateFromEnquiry,
   getCostEstimateByEnquiryId,
 } from '@/lib/estimateFromEnquiry';
-import { createQuotationFromEstimate } from '@/lib/quotationService';
+import {
+  createQuotationFromEstimate,
+  getSubmittedOffersForParty,
+  getSubmittedOffersForEnquiry,
+} from '@/lib/quotationService';
 import { ArrowLeft, Edit, FileText, Calculator, ExternalLink } from 'lucide-react';
+import { CustomerContactsList } from '@/components/sales/CustomerContactsList';
+import { getCustomerContacts } from '@/lib/customerContacts';
 
 export default function EnquiryDetail() {
   const { id } = useParams();
@@ -24,6 +32,21 @@ export default function EnquiryDetail() {
   const linkedEstimate = useMemo(
     () => (id ? getCostEstimateByEnquiryId(id) : undefined),
     [id]
+  );
+
+  const enquiryOffers = useMemo(
+    () => (id ? getSubmittedOffersForEnquiry(id) : []),
+    [id]
+  );
+
+  const partyOffers = useMemo(
+    () => (enquiry?.customerId
+      ? getSubmittedOffersForParty(enquiry.customerId).map(o => ({
+          ...o,
+          customerName: customer?.name,
+        }))
+      : []),
+    [enquiry?.customerId, customer?.name]
   );
 
   const [requirements, setRequirements] = useState(enquiry?.requirements ?? '');
@@ -120,62 +143,118 @@ export default function EnquiryDetail() {
         </Card>
       )}
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Customer Details</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2 text-sm">
-            <div className="font-medium text-base">{customer?.name}</div>
-            <div><strong>Contact:</strong> {customer?.contactPerson}</div>
-            <div><strong>Email:</strong> {customer?.email}</div>
-            <div><strong>Phone:</strong> {customer?.phone}</div>
-            <div><strong>Location:</strong> {customer?.city}, {customer?.state}</div>
-          </CardContent>
-        </Card>
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="previous-offers">
+            Previous Offers
+            {(enquiryOffers.length + partyOffers.length) > 0 && (
+              <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-[10px]">
+                {partyOffers.length}
+              </Badge>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="communication">Communication</TabsTrigger>
+        </TabsList>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Enquiry Details</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <div className="text-sm font-semibold mb-1">Expected Value</div>
-              <div className="text-2xl font-bold text-accent">₹{expectedValue.toLocaleString('en-IN')}</div>
-            </div>
-            <div>
-              <div className="text-sm font-semibold mb-1">Requirements</div>
-              <p className="text-sm text-muted-foreground bg-muted p-3 rounded-md min-h-[80px]">
-                {requirements}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+        <TabsContent value="overview" className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Customer Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm">
+                <div className="font-medium text-base">{customer?.name}</div>
+                <div>
+                  <div className="text-xs font-semibold text-muted-foreground uppercase mb-2">Contact Persons</div>
+                  <CustomerContactsList contacts={getCustomerContacts(customer)} compact />
+                </div>
+                <div><strong>Email:</strong> {customer?.email}</div>
+                <div><strong>Location:</strong> {customer?.city}, {customer?.state}</div>
+              </CardContent>
+            </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Communication History</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex gap-4 border-b pb-4">
-              <div className="w-24 text-sm text-muted-foreground font-medium shrink-0">Today, 10:00 AM</div>
-              <div className="flex-1">
-                <div className="font-semibold text-sm">Called client to confirm technical specs</div>
-                <p className="text-sm text-muted-foreground mt-1">Spoke to Mr. Sharma. He requested we include a 300m3/hr vacuum pump instead of the standard 150m3/hr. I said I will send a revised quote.</p>
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <div className="w-24 text-sm text-muted-foreground font-medium shrink-0">28-Jun, 04:30 PM</div>
-              <div className="flex-1">
-                <div className="font-semibold text-sm">Initial Inquiry Received</div>
-                <p className="text-sm text-muted-foreground mt-1">Received via IndiaMart. Standard 6000 LPH machine required for their new substation project.</p>
-              </div>
-            </div>
+            <Card>
+              <CardHeader>
+                <CardTitle>Enquiry Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <div className="text-sm font-semibold mb-1">Expected Value</div>
+                  <div className="text-2xl font-bold text-accent">₹{expectedValue.toLocaleString('en-IN')}</div>
+                </div>
+                <div>
+                  <div className="text-sm font-semibold mb-1">Requirements</div>
+                  <p className="text-sm text-muted-foreground bg-muted p-3 rounded-md min-h-[80px]">
+                    {requirements}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
-        </CardContent>
-      </Card>
+        </TabsContent>
+
+        <TabsContent value="previous-offers" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Offers for This Enquiry</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Quotations submitted against {enquiry.id}.
+              </p>
+            </CardHeader>
+            <CardContent>
+              <PreviousOffersTable
+                offers={enquiryOffers}
+                showParty={false}
+                showEnquiry={false}
+                emptyMessage="No offers submitted for this enquiry yet."
+              />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>All Previous Offers — {customer?.name}</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Full party history to compare past commercial rates before submitting a new quote.
+              </p>
+            </CardHeader>
+            <CardContent>
+              <PreviousOffersTable
+                offers={partyOffers}
+                showParty={false}
+                emptyMessage="No previous offers submitted for this party."
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="communication">
+          <Card>
+            <CardHeader>
+              <CardTitle>Communication History</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex gap-4 border-b pb-4">
+                  <div className="w-24 text-sm text-muted-foreground font-medium shrink-0">Today, 10:00 AM</div>
+                  <div className="flex-1">
+                    <div className="font-semibold text-sm">Called client to confirm technical specs</div>
+                    <p className="text-sm text-muted-foreground mt-1">Spoke to Mr. Sharma. He requested we include a 300m3/hr vacuum pump instead of the standard 150m3/hr. I said I will send a revised quote.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-24 text-sm text-muted-foreground font-medium shrink-0">28-Jun, 04:30 PM</div>
+                  <div className="flex-1">
+                    <div className="font-semibold text-sm">Initial Inquiry Received</div>
+                    <p className="text-sm text-muted-foreground mt-1">Received via IndiaMart. Standard 6000 LPH machine required for their new substation project.</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
 
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
         <DialogContent>

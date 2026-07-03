@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { CustomerForm, type CustomerFormData } from '@/components/forms/CustomerForm';
 import { api } from '@/lib/api';
+import { getPrimaryContact, getCustomerContacts } from '@/lib/customerContacts';
 import { Plus } from 'lucide-react';
 
 export default function Customers() {
@@ -60,7 +61,7 @@ export default function Customers() {
               <Plus className="mr-2 h-4 w-4" /> Add Customer
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px]">
+          <DialogContent className="sm:max-w-[720px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Add New Customer</DialogTitle>
               <DialogDescription>
@@ -91,25 +92,43 @@ export default function Customers() {
                   <TableHead>Name</TableHead>
                   <TableHead>Location</TableHead>
                   <TableHead>GSTIN</TableHead>
-                  <TableHead>Contact Person</TableHead>
+                  <TableHead>Primary Contact</TableHead>
                   <TableHead className="text-right">Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {customers.map((customer) => (
+                {customers.map((customer) => {
+                  const primary = getPrimaryContact(customer);
+                  const contactCount = getCustomerContacts(customer).length;
+                  return (
                   <TableRow key={customer.id}>
                     <TableCell className="font-medium text-xs">{customer.id}</TableCell>
                     <TableCell>{customer.name}</TableCell>
                     <TableCell>{customer.city || customer.address || 'N/A'}</TableCell>
                     <TableCell>{customer.gstin || 'Unregistered'}</TableCell>
-                    <TableCell>{customer.phone || 'N/A'}</TableCell>
+                    <TableCell>
+                      {primary ? (
+                        <div className="text-sm">
+                          <div className="font-medium">{primary.name}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {primary.designation} · {primary.phone}
+                            {contactCount > 1 && (
+                              <span> · +{contactCount - 1} more</span>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        'N/A'
+                      )}
+                    </TableCell>
                     <TableCell className="text-right">
                       <Link to={`/customers/${customer.id}`}>
                         <Button variant="ghost" size="sm">View Profile</Button>
                       </Link>
                     </TableCell>
                   </TableRow>
-                ))}
+                  );
+                })}
               </TableBody>
             </Table>
           )}

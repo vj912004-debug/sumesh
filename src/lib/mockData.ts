@@ -1,5 +1,12 @@
 // src/lib/mockData.ts
 
+export type CustomerContact = {
+  designation: string;
+  name: string;
+  phone: string;
+  email?: string;
+};
+
 export type Customer = {
   id: string;
   name: string;
@@ -10,6 +17,7 @@ export type Customer = {
   contactPerson: string;
   email: string;
   phone: string;
+  contacts?: CustomerContact[];
 };
 
 export type Product = {
@@ -52,11 +60,50 @@ export type Order = {
 
 // Mock Customers
 export const mockCustomers: Customer[] = [
-  { id: 'CUST-001', name: 'Reliance Industries Ltd', gstin: '24AAACR4063A1Z5', address: 'Reliance Corporate Park, Ghansoli', city: 'Navi Mumbai', state: 'Maharashtra', contactPerson: 'Rajeev Sharma', email: 'rajeev.sharma@ril.com', phone: '+91 9876543210' },
-  { id: 'CUST-002', name: 'Tata Power', gstin: '27AAACT2727Q1Z8', address: 'Bombay House, Homi Mody Street', city: 'Mumbai', state: 'Maharashtra', contactPerson: 'Sneha Patel', email: 'sneha.patel@tatapower.com', phone: '+91 8765432109' },
-  { id: 'CUST-003', name: 'Larsen & Toubro', gstin: '24AAACL0140P1Z1', address: 'L&T Knowledge City, NH 8', city: 'Vadodara', state: 'Gujarat', contactPerson: 'Amit Desai', email: 'amit.desai@larsentoubro.com', phone: '+91 7654321098' },
-  { id: 'CUST-004', name: 'Adani Green Energy', gstin: '24AAACA5376Q1Z9', address: 'Adani Corporate House, Shantigram', city: 'Ahmedabad', state: 'Gujarat', contactPerson: 'Vikram Singh', email: 'vikram.singh@adani.com', phone: '+91 6543210987' },
-  { id: 'CUST-005', name: 'Torrent Power', gstin: '24AAACT8765R1Z3', address: 'Samanvay, Tapovan', city: 'Ahmedabad', state: 'Gujarat', contactPerson: 'Meera Joshi', email: 'meera.joshi@torrentpower.com', phone: '+91 9988776655' },
+  {
+    id: 'CUST-001', name: 'Reliance Industries Ltd', gstin: '24AAACR4063A1Z5',
+    address: 'Reliance Corporate Park, Ghansoli', city: 'Navi Mumbai', state: 'Maharashtra',
+    contactPerson: 'Rajeev Sharma', email: 'rajeev.sharma@ril.com', phone: '+91 9876543210',
+    contacts: [
+      { designation: 'Purchase Manager', name: 'Rajeev Sharma', phone: '+91 9876543210', email: 'rajeev.sharma@ril.com' },
+      { designation: 'Plant Engineer', name: 'Priya Nair', phone: '+91 9876543211' },
+      { designation: 'Accounts', name: 'Suresh Iyer', phone: '+91 9876543212' },
+    ],
+  },
+  {
+    id: 'CUST-002', name: 'Tata Power', gstin: '27AAACT2727Q1Z8',
+    address: 'Bombay House, Homi Mody Street', city: 'Mumbai', state: 'Maharashtra',
+    contactPerson: 'Sneha Patel', email: 'sneha.patel@tatapower.com', phone: '+91 8765432109',
+    contacts: [
+      { designation: 'Project Head', name: 'Sneha Patel', phone: '+91 8765432109', email: 'sneha.patel@tatapower.com' },
+      { designation: 'Maintenance In-Charge', name: 'Karan Mehta', phone: '+91 8765432110' },
+    ],
+  },
+  {
+    id: 'CUST-003', name: 'Larsen & Toubro', gstin: '24AAACL0140P1Z1',
+    address: 'L&T Knowledge City, NH 8', city: 'Vadodara', state: 'Gujarat',
+    contactPerson: 'Amit Desai', email: 'amit.desai@larsentoubro.com', phone: '+91 7654321098',
+    contacts: [
+      { designation: 'Procurement Officer', name: 'Amit Desai', phone: '+91 7654321098', email: 'amit.desai@larsentoubro.com' },
+    ],
+  },
+  {
+    id: 'CUST-004', name: 'Adani Green Energy', gstin: '24AAACA5376Q1Z9',
+    address: 'Adani Corporate House, Shantigram', city: 'Ahmedabad', state: 'Gujarat',
+    contactPerson: 'Vikram Singh', email: 'vikram.singh@adani.com', phone: '+91 6543210987',
+    contacts: [
+      { designation: 'Technical Manager', name: 'Vikram Singh', phone: '+91 6543210987', email: 'vikram.singh@adani.com' },
+      { designation: 'Site Supervisor', name: 'Deepak Rao', phone: '+91 6543210988' },
+    ],
+  },
+  {
+    id: 'CUST-005', name: 'Torrent Power', gstin: '24AAACT8765R1Z3',
+    address: 'Samanvay, Tapovan', city: 'Ahmedabad', state: 'Gujarat',
+    contactPerson: 'Meera Joshi', email: 'meera.joshi@torrentpower.com', phone: '+91 9988776655',
+    contacts: [
+      { designation: 'Operations Manager', name: 'Meera Joshi', phone: '+91 9988776655', email: 'meera.joshi@torrentpower.com' },
+    ],
+  },
 ];
 
 // Mock Products
@@ -77,10 +124,14 @@ export const mockEnquiries: Enquiry[] = [
   { id: 'ENQ-2026-005', date: '2026-06-28', customerId: 'CUST-004', source: 'Website', status: 'Open', requirements: '10000 LPH Filtration plant', expectedValue: 2200000 },
 ];
 
-// Mock Quotations
+// Mock Quotations (party-wise history for past quoted rate lookup)
 export const mockQuotations: Quotation[] = [
   { id: 'QT-26-001', date: '2026-06-16', enquiryId: 'ENQ-2026-001', customerId: 'CUST-001', totalAmount: 1500000, status: 'Sent', items: [{ productId: 'PROD-001', quantity: 1, unitPrice: 1500000 }] },
   { id: 'QT-26-002', date: '2026-06-21', enquiryId: 'ENQ-2026-003', customerId: 'CUST-005', totalAmount: 1200000, status: 'Accepted', items: [{ productId: 'PROD-005', quantity: 1, unitPrice: 1200000 }] },
+  { id: 'QT-26-003', date: '2026-05-08', enquiryId: '', customerId: 'CUST-003', totalAmount: 2200000, status: 'Sent', items: [{ productId: 'PROD-002', quantity: 1, unitPrice: 2200000 }] },
+  { id: 'QT-26-004', date: '2026-04-10', enquiryId: '', customerId: 'CUST-002', totalAmount: 880000, status: 'Rejected', items: [{ productId: 'PROD-004', quantity: 2, unitPrice: 440000 }] },
+  { id: 'QT-26-005', date: '2026-03-15', enquiryId: '', customerId: 'CUST-001', totalAmount: 1450000, status: 'Rejected', items: [{ productId: 'PROD-001', quantity: 1, unitPrice: 1450000 }] },
+  { id: 'QT-26-006', date: '2026-02-20', enquiryId: '', customerId: 'CUST-004', totalAmount: 2100000, status: 'Sent', items: [{ productId: 'PROD-002', quantity: 1, unitPrice: 2100000 }] },
 ];
 
 // Mock Orders

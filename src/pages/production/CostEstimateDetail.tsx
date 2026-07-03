@@ -12,7 +12,7 @@ import {
   FileText, ExternalLink,
 } from 'lucide-react';
 import { getCostEstimateById, updateCostEstimate } from '@/lib/costEstimateData';
-import { createQuotationFromEstimate } from '@/lib/quotationService';
+import { createQuotationFromEstimate, getPastQuotedRatesForParty, formatQuotedAmount } from '@/lib/quotationService';
 import {
   calculateMaterialEstimate, getBomForProduct, type RequirementSpec,
 } from '@/lib/costingService';
@@ -289,9 +289,20 @@ export default function CostEstimateDetail() {
                 </p>
               )}
               {customer && (
-                <div className="pt-3 border-t">
+                <div className="pt-3 border-t space-y-2">
                   <span className="text-muted-foreground text-xs">Customer</span>
                   <p className="font-medium">{customer.name}</p>
+                  {getPastQuotedRatesForParty(customer.id).length > 0 && (
+                    <div className="rounded-md bg-muted/50 p-2 text-xs space-y-1">
+                      <p className="font-semibold text-muted-foreground">Past quoted rates (party)</p>
+                      {getPastQuotedRatesForParty(customer.id).slice(0, 2).map(q => (
+                        <div key={q.quotationId} className="flex justify-between gap-2">
+                          <span>{q.quotationId}</span>
+                          <span className="font-medium">{formatQuotedAmount(q.totalAmount)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </CardContent>

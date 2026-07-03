@@ -10,9 +10,14 @@ import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger 
 } from '@/components/ui/dialog';
 import { EnquiryForm, type EnquiryFormData } from '@/components/forms/EnquiryForm';
+import { PreviousOffersTable } from '@/components/sales/PreviousOffersTable';
 import { api } from '@/lib/api';
+import { formatQuotedAmount, getSubmittedOffers } from '@/lib/quotationService';
+import { mockCustomers } from '@/lib/mockData';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Plus } from 'lucide-react';
 import { format } from 'date-fns';
+import { useMemo } from 'react';
 
 export default function Enquiries() {
   const [enquiries, setEnquiries] = useState<any[]>([]);
@@ -34,6 +39,14 @@ export default function Enquiries() {
   useEffect(() => {
     fetchEnquiries();
   }, []);
+
+  const previousOffers = useMemo(
+    () => getSubmittedOffers().map(offer => ({
+      ...offer,
+      customerName: mockCustomers.find(c => c.id === offer.customerId)?.name,
+    })),
+    [enquiries]
+  );
 
   const handleCreateEnquiry = async (data: EnquiryFormData) => {
     setIsSubmitting(true);
@@ -83,6 +96,20 @@ export default function Enquiries() {
         </Dialog>
       </div>
 
+      <Tabs defaultValue="enquiries" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="enquiries">Enquiries</TabsTrigger>
+          <TabsTrigger value="previous-offers">
+            Previous Offers Submitted
+            {previousOffers.length > 0 && (
+              <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-[10px]">
+                {previousOffers.length}
+              </Badge>
+            )}
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="enquiries">
       <Card>
         <CardHeader>
           <CardTitle>Recent Enquiries</CardTitle>
@@ -97,6 +124,7 @@ export default function Enquiries() {
                   <TableHead>Enquiry ID</TableHead>
                   <TableHead>Date</TableHead>
                   <TableHead>Customer</TableHead>
+                  <TableHead>Quotation (Past Rates)</TableHead>
                   <TableHead>Source</TableHead>
                   <TableHead>Expected Value</TableHead>
                   <TableHead>Next Follow-up</TableHead>
@@ -111,6 +139,38 @@ export default function Enquiries() {
                       <TableCell className="font-medium text-xs">{enq.id}</TableCell>
                       <TableCell>{format(new Date(enq.date), 'dd MMM yyyy')}</TableCell>
                       <TableCell>{enq.customer?.name}</TableCell>
+                      <TableCell>
+                        {enq.pastQuotedRates?.length > 0 ? (
+                          <div className="space-y-1">
+                            {enq.pastQuotedRates.slice(0, 2).map((q: {
+                              quotationId: string;
+                              date: string;
+                              totalAmount: number;
+                              status: string;
+                            }) => (
+                              <div key={q.quotationId} className="text-sm leading-tight">
+                                <Link
+                                  to={`/quotations/${q.quotationId}`}
+                                  className="font-medium text-primary hover:underline"
+                                  onClick={e => e.stopPropagation()}
+                                >
+                                  {formatQuotedAmount(q.totalAmount)}
+                                </Link>
+                                <div className="text-[11px] text-muted-foreground">
+                                  {q.quotationId} · {format(new Date(q.date), 'dd MMM yyyy')} · {q.status}
+                                </div>
+                              </div>
+                            ))}
+                            {enq.pastQuotedRates.length > 2 && (
+                              <p className="text-[11px] text-muted-foreground">
+                                +{enq.pastQuotedRates.length - 2} earlier quote{enq.pastQuotedRates.length - 2 > 1 ? 's' : ''} for this party
+                              </p>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-sm text-muted-foreground">No prior quote for party</span>
+                        )}
+                      </TableCell>
                       <TableCell>
                         <Badge variant="outline">{enq.source}</Badge>
                       </TableCell>
@@ -140,6 +200,22 @@ export default function Enquiries() {
           )}
         </CardContent>
       </Card>
+        </TabsContent>
+
+        <TabsContent value="previous-offers">
+          <Card>
+            <CardHeader>
+              <CardTitle>Previous Offers Submitted</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                All quotations sent to parties — use this tab to review past commercial offers by customer.
+              </p>
+            </CardHeader>
+            <CardContent>
+              <PreviousOffersTable offers={previousOffers} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
