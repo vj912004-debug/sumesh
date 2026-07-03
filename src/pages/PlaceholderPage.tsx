@@ -10,6 +10,11 @@ import {
   Plus, Search, Download, Eye, Edit2, AlertCircle, Trash2, X, CheckCircle,
 } from 'lucide-react';
 import { getModuleProfile, buildSeedRows, generateRef, type MetricFilterKey, type RowFieldKey, type ModuleFormField } from '@/lib/moduleProfiles';
+import {
+  getModuleBlueprint,
+  blueprintDefaultExtras,
+  type BlueprintField,
+} from '@/lib/moduleBlueprints';
 
 type MetricFilter = MetricFilterKey;
 
@@ -30,6 +35,7 @@ type Row = {
   category: string;
   desc: string;
   status: string;
+  extras?: Record<string, string>;
 };
 
 function storageKey(modulePath: string, title: string) {
@@ -48,6 +54,10 @@ export default function PlaceholderPage({
 }: PlaceholderPageProps) {
   const today = new Date().toISOString().split('T')[0];
   const profile = useMemo(() => getModuleProfile(modulePath || `/${title}`, title), [modulePath, title]);
+  const blueprint = useMemo(
+    () => profile.blueprint ?? getModuleBlueprint(modulePath || `/${title}`),
+    [profile.blueprint, modulePath, title]
+  );
   const form = profile.form!;
   const tableHeaders = tableHeadersProp ?? profile.tableHeaders;
 
@@ -71,18 +81,71 @@ export default function PlaceholderPage({
   const [formValues, setFormValues] = useState<Record<RowFieldKey, string>>({
     ref: '', date: '', category: '', desc: '', status: '',
   });
+  const [extraValues, setExtraValues] = useState<Record<string, string>>({});
 
   const setField = (key: RowFieldKey, value: string) => {
     setFormValues(prev => ({ ...prev, [key]: value }));
   };
 
-  const emptyForm = (): Record<RowFieldKey, string> => ({
-    ref: generateRef(form),
-    date: today,
-    category: form.defaultCategory,
-    desc: '',
-    status: form.defaultStatus,
-  });
+  const setExtra = (key: string, value: string) => {
+    setExtraValues(prev => ({ ...prev, [key]: value }));
+  };
+
+  const initExtras = (): Record<string, string> =>
+    blueprint ? blueprintDefaultExtras(blueprint) : {};
+
+  const extrasToRowFields = (extras: Record<string, string>) => {
+    if (!blueprint || blueprint.detailFields.length === 0) return null;
+    const first = blueprint.detailFields[0];
+    const statusField = blueprint.detailFields.find(
+      fld => fld.key === 'status' || fld.label.toLowerCase().includes('status')
+    );
+    const descField = blueprint.detailFields.find(
+      fld => fld.type === 'textarea'
+    );
+    const dateField = blueprint.detailFields.find(fld => fld.type === 'date' || fld.type === 'datetime');
+    const catField = blueprint.detailFields.find(fld => fld.type === 'select' && fld.key !== 'status');
+
+    return {
+      ref: extras[first.key] || generateRef(form),
+      date: dateField ? (extras[dateField.key] || today) : today,
+      category: catField ? (extras[catField.key] || form.defaultCategory) : form.defaultCategory,
+      desc: descField ? (extras[descField.key] || '') : (extras[blueprint.detailFields[1]?.key ?? ''] || ''),
+      status: statusField ? (extras[statusField.key] || form.defaultStatus) : form.defaultStatus,
+    };
+  };
+
+  const rowFieldsToExtras = (row: Row): Record<string, string> => {
+    const base = row.extras ?? initExtras();
+    if (!blueprint) return base;
+    const updated = { ...base };
+    const first = blueprint.detailFields[0];
+    if (first) updated[first.key] = row.ref;
+    const dateField = blueprint.detailFields.find(fld => fld.type === 'date' || fld.type === 'datetime');
+    if (dateField) updated[dateField.key] = row.date;
+    const catField = blueprint.detailFields.find(fld => fld.type === 'select' && fld.key !== 'status');
+    if (catField) updated[catField.key] = row.category;
+    const descField = blueprint.detailFields.find(fld => fld.type === 'textarea');
+    if (descField) updated[descField.key] = row.desc;
+    const statusField = blueprint.detailFields.find(
+      fld => fld.key === 'status' || fld.label.toLowerCase().includes('status')
+    );
+    if (statusField) updated[statusField.key] = row.status;
+    return updated;
+  };
+
+  const emptyForm = (): Record<RowFieldKey, string> => {
+    const extras = initExtras();
+    const mapped = extrasToRowFields(extras);
+    if (mapped) return mapped;
+    return {
+      ref: generateRef(form),
+      date: today,
+      category: form.defaultCategory,
+      desc: '',
+      status: form.defaultStatus,
+    };
+  };
 
   const rowToForm = (row: Row): Record<RowFieldKey, string> => ({
     ref: row.ref,
@@ -92,13 +155,14 @@ export default function PlaceholderPage({
     status: row.status,
   });
 
-  const formToRow = (values: Record<RowFieldKey, string>, id?: string): Row => ({
+  const formToRow = (values: Record<RowFieldKey, string>, id?: string, extras?: Record<string, string>): Row => ({
     id: id ?? String(Date.now()),
     ref: values.ref,
     date: values.date,
     category: values.category,
     desc: values.desc,
     status: values.status,
+    extras: extras ?? extraValues,
   });
 
   useEffect(() => {
@@ -148,33 +212,40 @@ export default function PlaceholderPage({
   const notify = (msg: string) => setToast(msg);
 
   const openAddModal = () => {
+    const extras = initExtras();
+    setExtraValues(extras);
     setFormValues(emptyForm());
     setIsAddOpen(true);
   };
 
   const handleAddSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const newEntry = formToRow(formValues);
+    const mapped = blueprint ? extrasToRowFields({ ...extraValues, ...formValues }) : null;
+    const finalValues = mapped ?? formValues;
+    const newEntry = formToRow(finalValues, undefined, extraValues);
     setData(prev => [newEntry, ...prev]);
     setIsAddOpen(false);
-    notify(`${form.fields[0].label} ${formValues.ref} added successfully.`);
+    notify(`${blueprint?.detailFields[0]?.label ?? form.fields[0].label} saved successfully.`);
     onActionClick?.();
   };
 
   const openEditModal = (row: Row) => {
     setSelectedRow(row);
     setFormValues(rowToForm(row));
+    setExtraValues(row.extras ?? rowFieldsToExtras(row));
     setIsEditOpen(true);
   };
 
   const handleEditSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedRow) return;
-    const updated = formToRow(formValues, selectedRow.id);
+    const mapped = blueprint ? extrasToRowFields({ ...extraValues, ...formValues }) : null;
+    const finalValues = mapped ?? formValues;
+    const updated = formToRow(finalValues, selectedRow.id, extraValues);
     setData(prev => prev.map(item => item.id === selectedRow.id ? updated : item));
     setIsEditOpen(false);
     setSelectedRow(null);
-    notify(`${form.fields[0].label} ${formValues.ref} updated.`);
+    notify(`Record updated successfully.`);
   };
 
   const handleDelete = (row: Row) => {
@@ -233,7 +304,136 @@ export default function PlaceholderPage({
     }
   };
 
-  const addLabel = actionLabel ?? `New ${title.split(' ')[0]}`;
+  const handleBlueprintAction = (label: string) => {
+    notify(`Action "${label}" executed for ${title}.`);
+  };
+
+  const renderBlueprintField = (field: BlueprintField) => {
+    const value = extraValues[field.key] ?? field.defaultValue ?? '';
+    const readOnly = field.readOnly || field.type === 'readonly';
+
+    if (field.type === 'checkbox') {
+      return (
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={value === 'true'}
+            onChange={e => setExtra(field.key, e.target.checked ? 'true' : 'false')}
+            className="h-4 w-4 rounded border-input"
+          />
+          <span className="text-sm text-muted-foreground">Enabled</span>
+        </label>
+      );
+    }
+    if (field.type === 'date' || field.type === 'datetime') {
+      return (
+        <Input
+          type={field.type === 'datetime' ? 'datetime-local' : 'date'}
+          value={value}
+          onChange={e => setExtra(field.key, e.target.value)}
+          readOnly={readOnly}
+          required={!readOnly}
+        />
+      );
+    }
+    if (field.type === 'textarea') {
+      return (
+        <textarea
+          className="w-full min-h-[72px] rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          value={value}
+          onChange={e => setExtra(field.key, e.target.value)}
+          placeholder={field.placeholder}
+          readOnly={readOnly}
+        />
+      );
+    }
+    if (field.type === 'select') {
+      return (
+        <select
+          className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
+          value={value}
+          onChange={e => setExtra(field.key, e.target.value)}
+          disabled={readOnly}
+        >
+          {(field.options ?? []).map(opt => (
+            <option key={opt} value={opt}>{opt}</option>
+          ))}
+        </select>
+      );
+    }
+    if (field.type === 'number' || field.type === 'currency') {
+      return (
+        <Input
+          type="number"
+          value={value}
+          onChange={e => setExtra(field.key, e.target.value)}
+          placeholder={field.placeholder ?? (field.type === 'currency' ? '0.00' : undefined)}
+          readOnly={readOnly}
+          step={field.type === 'currency' ? '0.01' : '1'}
+        />
+      );
+    }
+    return (
+      <Input
+        value={value}
+        onChange={e => setExtra(field.key, e.target.value)}
+        placeholder={field.placeholder}
+        readOnly={readOnly}
+        className={readOnly ? 'bg-muted' : ''}
+      />
+    );
+  };
+
+  const renderBlueprintFields = () => (
+    <div className="space-y-3 py-2 max-h-[55vh] overflow-y-auto pr-1">
+      <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Details</p>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {blueprint!.detailFields.map(field => (
+          <div
+            key={field.key}
+            className={`space-y-1.5 ${field.type === 'textarea' ? 'sm:col-span-2' : ''}`}
+          >
+            <label className="text-sm font-medium">{field.label}</label>
+            {renderBlueprintField(field)}
+          </div>
+        ))}
+      </div>
+      {blueprint!.gridColumns && blueprint!.gridColumns.length > 0 && (
+        <div className="pt-3 border-t">
+          <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
+            {blueprint!.gridTitle ?? 'Line Items'}
+          </p>
+          <div className="overflow-x-auto rounded-md border">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="bg-zinc-50 border-b">
+                  {blueprint!.gridColumns!.map(col => (
+                    <th key={col} className="px-2 py-2 text-left font-semibold text-zinc-500">{col}</th>
+                  ))}
+                  <th className="px-2 py-2 w-8" />
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b">
+                  {blueprint!.gridColumns!.map(col => (
+                    <td key={col} className="px-2 py-1.5">
+                      <Input className="h-7 text-xs" placeholder="—" />
+                    </td>
+                  ))}
+                  <td className="px-1">
+                    <Button type="button" variant="ghost" size="icon" className="h-7 w-7" title="Add row"
+                      onClick={() => notify('Line item row added.')}>
+                      <Plus className="h-3.5 w-3.5" />
+                    </Button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 
   const renderFormField = (field: ModuleFormField) => {
     const value = formValues[field.key];
@@ -276,7 +476,10 @@ export default function PlaceholderPage({
     );
   };
 
-  const renderFormFields = () => (
+  const addLabel = actionLabel ?? (blueprint ? blueprint.buttons[0]?.label ?? `New ${title.split(' ')[0]}` : `New ${title.split(' ')[0]}`);
+  const renderFormFields = () => {
+    if (blueprint) return renderBlueprintFields();
+    return (
     <div className="space-y-4 py-4">
       {form.fields.map(field => (
         <div key={field.key} className="space-y-2">
@@ -285,7 +488,8 @@ export default function PlaceholderPage({
         </div>
       ))}
     </div>
-  );
+    );
+  };
 
   return (
     <div className="space-y-6">
@@ -308,6 +512,21 @@ export default function PlaceholderPage({
           <Plus className="mr-2 h-4 w-4" /> {addLabel}
         </Button>
       </div>
+
+      {blueprint && blueprint.buttons.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {blueprint.buttons.map(btn => (
+            <Button
+              key={btn.label}
+              variant={btn.variant ?? 'default'}
+              size="sm"
+              onClick={() => handleBlueprintAction(btn.label)}
+            >
+              {btn.label}
+            </Button>
+          ))}
+        </div>
+      )}
 
       <div className="grid gap-4 md:grid-cols-4">
         {metricCards.map(m => {
@@ -429,22 +648,37 @@ export default function PlaceholderPage({
       </Card>
 
       <Dialog open={isViewOpen} onOpenChange={setIsViewOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[640px]">
           <DialogHeader>
             <DialogTitle>{title} Details</DialogTitle>
             <DialogDescription>{form.viewDescription}</DialogDescription>
           </DialogHeader>
           {selectedRow && (
-            <div className="space-y-4 py-2 text-sm">
-              {form.fields.map(field => (
-                <div key={field.key} className="grid grid-cols-3 gap-2 border-b pb-2 last:border-0">
-                  <span className="font-semibold text-zinc-500">{field.label}:</span>
-                  <span className="col-span-2 whitespace-pre-wrap">
-                    {field.key === 'status' ? getStatusBadge(selectedRow.status) : selectedRow[field.key]}
-                  </span>
-                </div>
-              ))}
-            </div>
+            blueprint ? (
+              <div className="space-y-2 py-2 text-sm max-h-[60vh] overflow-y-auto">
+                {blueprint.detailFields.map(field => (
+                  <div key={field.key} className="grid grid-cols-3 gap-2 border-b pb-2 last:border-0">
+                    <span className="font-semibold text-zinc-500">{field.label}:</span>
+                    <span className="col-span-2 whitespace-pre-wrap">
+                      {field.type === 'checkbox'
+                        ? (selectedRow.extras?.[field.key] === 'true' ? 'Yes' : 'No')
+                        : (selectedRow.extras?.[field.key] ?? selectedRow[field.key as RowFieldKey] ?? '—')}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-4 py-2 text-sm">
+                {form.fields.map(field => (
+                  <div key={field.key} className="grid grid-cols-3 gap-2 border-b pb-2 last:border-0">
+                    <span className="font-semibold text-zinc-500">{field.label}:</span>
+                    <span className="col-span-2 whitespace-pre-wrap">
+                      {field.key === 'status' ? getStatusBadge(selectedRow.status) : selectedRow[field.key]}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )
           )}
           <DialogFooter className="gap-2">
             {selectedRow && (
@@ -458,7 +692,7 @@ export default function PlaceholderPage({
       </Dialog>
 
       <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[640px]">
           <form onSubmit={handleAddSubmit}>
             <DialogHeader>
               <DialogTitle>{addLabel}</DialogTitle>
@@ -474,7 +708,7 @@ export default function PlaceholderPage({
       </Dialog>
 
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[640px]">
           <form onSubmit={handleEditSubmit}>
             <DialogHeader>
               <DialogTitle>Edit {title}</DialogTitle>

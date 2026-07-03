@@ -4,6 +4,15 @@ import {
   BarChart3, LineChart, Users, Wrench, ShieldCheck, Database, Settings,
   ClipboardList, Building2, Layers,
 } from 'lucide-react';
+import {
+  getModuleBlueprint,
+  blueprintToTableHeaders,
+  type ModuleBlueprint,
+  type BlueprintField,
+} from '@/lib/moduleBlueprints';
+
+export type { ModuleBlueprint, BlueprintField };
+export { getModuleBlueprint };
 
 export type MetricFilterKey = 'all' | 'active' | 'completed' | 'growth';
 
@@ -40,6 +49,7 @@ export type ModuleProfile = {
   seedCategories: string[];
   seedDescriptions: string[];
   form?: ModuleFormConfig;
+  blueprint?: ModuleBlueprint | null;
 };
 
 const DEFAULT_ICONS: ModuleProfile['metricIcons'] = [FileText, Clock, CheckCircle, TrendingUp];
@@ -680,6 +690,7 @@ function fallbackProfile(name: string): ModuleProfile {
 
 export function getModuleProfile(modulePath: string, moduleName: string): ModuleProfile {
   const path = modulePath.startsWith('/') ? modulePath : `/${modulePath}`;
+  const blueprint = getModuleBlueprint(path);
 
   let result: ModuleProfile;
   if (PATH_PROFILES[path]) {
@@ -689,8 +700,16 @@ export function getModuleProfile(modulePath: string, moduleName: string): Module
     result = prefixRule ? prefixRule.build(moduleName) : fallbackProfile(moduleName);
   }
 
+  if (blueprint) {
+    result = {
+      ...result,
+      tableHeaders: blueprintToTableHeaders(blueprint),
+      logTitle: `${moduleName} Register`,
+    };
+  }
+
   const form = buildFormConfig(result, moduleName, path);
-  return { ...result, form };
+  return { ...result, form, blueprint };
 }
 
 export function generateRef(form: ModuleFormConfig): string {
