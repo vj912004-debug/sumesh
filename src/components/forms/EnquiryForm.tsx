@@ -7,9 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
 import { getPastQuotedRatesForParty, formatQuotedAmount } from '@/lib/quotationService';
+import { ENQUIRY_TYPES, DEFAULT_ENQUIRY_TYPE, type EnquiryType } from '@/lib/enquiryTypes';
 
 const enquirySchema = z.object({
   customerId: z.string().min(1, 'Customer is required'),
+  enquiryType: z.enum(['rental', 'supply', 'service', 'spares']),
   source: z.string().min(1, 'Source is required'),
   requirements: z.string().min(5, 'Please provide more detail about requirements'),
   expectedValue: z.coerce.number().min(0, 'Must be a positive value'),
@@ -21,12 +23,13 @@ export type EnquiryFormData = z.infer<typeof enquirySchema>;
 
 interface EnquiryFormProps {
   initialData?: Partial<EnquiryFormData>;
+  defaultType?: EnquiryType;
   onSubmit: (data: EnquiryFormData) => void;
   onCancel: () => void;
   isLoading?: boolean;
 }
 
-export function EnquiryForm({ initialData, onSubmit, onCancel, isLoading }: EnquiryFormProps) {
+export function EnquiryForm({ initialData, defaultType, onSubmit, onCancel, isLoading }: EnquiryFormProps) {
   const [customers, setCustomers] = useState<any[]>([]);
 
   useEffect(() => {
@@ -37,6 +40,7 @@ export function EnquiryForm({ initialData, onSubmit, onCancel, isLoading }: Enqu
     resolver: zodResolver(enquirySchema) as any,
     defaultValues: initialData || {
       customerId: '',
+      enquiryType: defaultType ?? DEFAULT_ENQUIRY_TYPE,
       source: '',
       requirements: '',
       expectedValue: 0,
@@ -55,6 +59,16 @@ export function EnquiryForm({ initialData, onSubmit, onCancel, isLoading }: Enqu
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div className="space-y-2">
+        <label className="text-sm font-medium">Enquiry Type <span className="text-red-500">*</span></label>
+        <select {...register('enquiryType')} className={inputClass}>
+          {ENQUIRY_TYPES.map(type => (
+            <option key={type.value} value={type.value}>{type.label}</option>
+          ))}
+        </select>
+        {errors.enquiryType && <p className="text-xs text-red-500">{errors.enquiryType.message}</p>}
+      </div>
+
       <div className="space-y-2">
         <label className="text-sm font-medium">Customer <span className="text-red-500">*</span></label>
         <select {...register('customerId')} className={inputClass}>

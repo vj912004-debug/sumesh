@@ -3,6 +3,7 @@ import { mockCustomers, mockEnquiries, mockQuotations, mockOrders } from './mock
 import { getPastQuotedRatesForParty } from './quotationService';
 import { syncLegacyContactFields } from './customerContacts';
 import { processErpEvent } from './erpEvents';
+import { DEFAULT_ENQUIRY_TYPE, normalizeEnquiryType } from './enquiryTypes';
 
 // Keys for localStorage
 const CUSTOMERS_KEY = 'sp2_customers';
@@ -11,6 +12,14 @@ const QUOTATIONS_KEY = 'sp2_quotations';
 const ORDERS_KEY = 'sp2_orders';
 
 // Seeding function to initialize localStorage if empty
+function migrateEnquiries(enquiries: any[]) {
+  const demoTypes = ['supply', 'rental', 'service', 'spares', 'supply', 'spares'] as const;
+  return enquiries.map((enq, index) => ({
+    ...enq,
+    enquiryType: normalizeEnquiryType(enq.enquiryType ?? demoTypes[index % demoTypes.length]),
+  }));
+}
+
 function initDatabase() {
   if (typeof window !== 'undefined') {
     if (!localStorage.getItem(CUSTOMERS_KEY)) {
@@ -18,6 +27,9 @@ function initDatabase() {
     }
     if (!localStorage.getItem(ENQUIRIES_KEY)) {
       localStorage.setItem(ENQUIRIES_KEY, JSON.stringify(mockEnquiries));
+    } else {
+      const enquiries = migrateEnquiries(JSON.parse(localStorage.getItem(ENQUIRIES_KEY) || '[]'));
+      localStorage.setItem(ENQUIRIES_KEY, JSON.stringify(enquiries));
     }
     if (!localStorage.getItem(QUOTATIONS_KEY)) {
       localStorage.setItem(QUOTATIONS_KEY, JSON.stringify(mockQuotations));
@@ -90,6 +102,7 @@ export const api = {
         const pastQuotedRates = getPastQuotedRatesForParty(enq.customerId);
         return {
           ...enq,
+          enquiryType: normalizeEnquiryType(enq.enquiryType),
           customer,
           pastQuotedRates,
           latestQuotedRate: pastQuotedRates[0] ?? null,
@@ -161,7 +174,8 @@ export const api = {
         id: newId,
         date: new Date().toISOString().split('T')[0],
         status: 'Open',
-        ...data
+        enquiryType: normalizeEnquiryType(data?.enquiryType ?? DEFAULT_ENQUIRY_TYPE),
+        ...data,
       };
       enquiries.push(newEnquiry);
       localStorage.setItem(ENQUIRIES_KEY, JSON.stringify(enquiries));
@@ -171,6 +185,7 @@ export const api = {
 
       processErpEvent('enquiry.created', {
         enquiryId: newEnquiry.id,
+        enquiryType: newEnquiry.enquiryType,
         customerId: newEnquiry.customerId,
         customerName: customer?.name,
         customerEmail: customer?.email,

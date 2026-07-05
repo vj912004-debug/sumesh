@@ -22,17 +22,14 @@ import PurchaseOrders from '@/pages/inventory/PurchaseOrders';
 import GoodsReceipt from '@/pages/inventory/GoodsReceipt';
 import Inventory from '@/pages/inventory/Inventory';
 import ReturnableChallan from '@/pages/inventory/ReturnableChallan';
-import PlateTracking from '@/pages/inventory/PlateTracking';
 import InventoryControl from '@/pages/inventory/InventoryControl';
 import Dispatch from '@/pages/dispatch/Dispatch';
 import PackingLists from '@/pages/dispatch/PackingLists';
 import EWayBills from '@/pages/dispatch/EWayBills';
-import WeighBridge from '@/pages/transport/WeighBridge';
 import QualityControl from '@/pages/production/QualityControl';
 import JobWorkOutward from '@/pages/inventory/JobWorkOutward';
 import JobWorkInward from '@/pages/inventory/JobWorkInward';
 import AfterSales from '@/pages/after-sales/AfterSales';
-import FiltrationService from '@/pages/after-sales/FiltrationService';
 import ReportsDashboard from '@/pages/ReportsDashboard';
 import FinalReports from '@/pages/reports/FinalReports';
 import FinanceTaxCompliance from '@/pages/finance/FinanceTaxCompliance';
@@ -40,7 +37,6 @@ import UsersManagement from '@/pages/admin/UsersManagement';
 import Settings from '@/pages/settings/Settings';
 import DocumentManagement from '@/pages/DocumentManagement';
 import VisitorRegistry from '@/pages/visitor/VisitorRegistry';
-import SupplyChainLogistics from '@/pages/logistics/SupplyChainLogistics';
 import SalesRentalsBilling from '@/pages/sales/SalesRentalsBilling';
 import Payroll from '@/pages/production/Payroll';
 
@@ -65,17 +61,14 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
   grn: <GoodsReceipt />,
   inventory: <Inventory />,
   'returnable-challan': <ReturnableChallan />,
-  'plate-tracking': <PlateTracking />,
   'inventory-control': <InventoryControl />,
   dispatch: <Dispatch />,
   'packing-lists': <PackingLists />,
   'eway-bills': <EWayBills />,
-  'weigh-bridge': <WeighBridge />,
   qc: <QualityControl />,
   'job-work-out': <JobWorkOutward />,
   'job-work-in': <JobWorkInward />,
   'after-sales': <AfterSales />,
-  'filtration-service': <FiltrationService />,
   'reports-dashboard': <ReportsDashboard />,
   'final-reports': <FinalReports />,
   finance: <FinanceTaxCompliance />,
@@ -84,10 +77,8 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
   documents: <DocumentManagement />,
   'visitor-registry': <VisitorRegistry />,
   'sales-reports': <ReportsDashboard />,
-  logistics: <SupplyChainLogistics />,
   'sales-client-profiles': <SalesRentalsBilling section="customers" />,
   'sales-po-tracking': <SalesRentalsBilling section="linkage" />,
-  'rentals-contracts': <SalesRentalsBilling section="rentals" />,
   'sales-billing': <SalesRentalsBilling section="rentals" />,
   payroll: <Payroll />,
 };

@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -9,7 +9,10 @@ import { PreviousOffersTable } from '@/components/sales/PreviousOffersTable';
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog';
-import { mockEnquiries, mockCustomers } from '@/lib/mockData';
+import { mockCustomers } from '@/lib/mockData';
+import type { Enquiry } from '@/lib/mockData';
+import { api } from '@/lib/api';
+import { EnquiryTypeBadge } from '@/components/sales/EnquiryTypeBadge';
 import {
   createEstimateFromEnquiry,
   getCostEstimateByEnquiryId,
@@ -26,7 +29,20 @@ import { getCustomerContacts } from '@/lib/customerContacts';
 export default function EnquiryDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const enquiry = mockEnquiries.find(e => e.id === id);
+  const [enquiry, setEnquiry] = useState<Enquiry | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!id) return;
+    api.get('/crm/enquiries')
+      .then(res => {
+        const found = res.data.find((e: Enquiry) => e.id === id);
+        setEnquiry(found ?? null);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, [id]);
+
   const customer = mockCustomers.find(c => c.id === enquiry?.customerId);
 
   const linkedEstimate = useMemo(
@@ -49,11 +65,22 @@ export default function EnquiryDetail() {
     [enquiry?.customerId, customer?.name]
   );
 
-  const [requirements, setRequirements] = useState(enquiry?.requirements ?? '');
-  const [expectedValue, setExpectedValue] = useState(enquiry?.expectedValue ?? 0);
+  const [requirements, setRequirements] = useState('');
+  const [expectedValue, setExpectedValue] = useState(0);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editReq, setEditReq] = useState('');
   const [editValue, setEditValue] = useState('');
+
+  useEffect(() => {
+    if (enquiry) {
+      setRequirements(enquiry.requirements);
+      setExpectedValue(enquiry.expectedValue);
+    }
+  }, [enquiry]);
+
+  if (loading) {
+    return <div className="p-6 text-muted-foreground">Loading enquiry...</div>;
+  }
 
   if (!enquiry) {
     return <div>Enquiry not found</div>;
@@ -103,8 +130,9 @@ export default function EnquiryDetail() {
           </Button>
         </Link>
         <div className="flex-1">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <h2 className="text-3xl font-bold tracking-tight">{enquiry.id}</h2>
+            <EnquiryTypeBadge type={enquiry.enquiryType} />
             <Badge variant={enquiry.status === 'Converted' ? 'default' : 'secondary'}>
               {enquiry.status}
             </Badge>
@@ -179,6 +207,10 @@ export default function EnquiryDetail() {
                 <CardTitle>Enquiry Details</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
+                <div>
+                  <div className="text-sm font-semibold mb-1">Enquiry Type</div>
+                  <EnquiryTypeBadge type={enquiry.enquiryType} />
+                </div>
                 <div>
                   <div className="text-sm font-semibold mb-1">Expected Value</div>
                   <div className="text-2xl font-bold text-accent">₹{expectedValue.toLocaleString('en-IN')}</div>

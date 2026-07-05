@@ -29,14 +29,18 @@ export type Product = {
   stock: number;
 };
 
+import type { EnquiryType } from './enquiryTypes';
+
 export type Enquiry = {
   id: string;
   date: string;
   customerId: string;
-  source: 'Website' | 'Email' | 'Phone' | 'Direct';
-  status: 'Open' | 'Quoted' | 'Lost' | 'Converted';
+  enquiryType: EnquiryType;
+  source: 'Website' | 'Email' | 'Phone' | 'Direct' | 'Referral' | 'Cold Call' | 'Trade Show' | 'Existing Client';
+  status: 'Open' | 'Quoted' | 'Lost' | 'Converted' | 'In Progress';
   requirements: string;
   expectedValue: number;
+  nextFollowUp?: string;
 };
 
 export type Quotation = {
@@ -117,11 +121,12 @@ export const mockProducts: Product[] = [
 
 // Mock Enquiries
 export const mockEnquiries: Enquiry[] = [
-  { id: 'ENQ-2026-001', date: '2026-06-15', customerId: 'CUST-001', source: 'Website', status: 'Quoted', requirements: 'Need a 6000 LPH Filtration Plant for new substation.', expectedValue: 1500000 },
-  { id: 'ENQ-2026-002', date: '2026-06-18', customerId: 'CUST-003', source: 'Direct', status: 'Open', requirements: 'DAG-50 for site operation in Rajasthan.', expectedValue: 850000 },
-  { id: 'ENQ-2026-003', date: '2026-06-20', customerId: 'CUST-005', source: 'Email', status: 'Converted', requirements: 'Vacuum system VS-500 urgent requirement.', expectedValue: 1200000 },
-  { id: 'ENQ-2026-004', date: '2026-06-25', customerId: 'CUST-002', source: 'Phone', status: 'Open', requirements: 'Mobile Storage Tanks (20 KL) - Qty 2', expectedValue: 900000 },
-  { id: 'ENQ-2026-005', date: '2026-06-28', customerId: 'CUST-004', source: 'Website', status: 'Open', requirements: '10000 LPH Filtration plant', expectedValue: 2200000 },
+  { id: 'ENQ-2026-001', date: '2026-06-15', customerId: 'CUST-001', enquiryType: 'supply', source: 'Website', status: 'Quoted', requirements: 'Need a 6000 LPH Filtration Plant for new substation.', expectedValue: 1500000 },
+  { id: 'ENQ-2026-002', date: '2026-06-18', customerId: 'CUST-003', enquiryType: 'service', source: 'Direct', status: 'Open', requirements: 'Annual AMC and on-site filtration service for existing DAG-50 unit at Rajasthan site.', expectedValue: 185000 },
+  { id: 'ENQ-2026-003', date: '2026-06-20', customerId: 'CUST-005', enquiryType: 'supply', source: 'Email', status: 'Converted', requirements: 'Vacuum system VS-500 urgent requirement.', expectedValue: 1200000 },
+  { id: 'ENQ-2026-004', date: '2026-06-25', customerId: 'CUST-002', enquiryType: 'rental', source: 'Phone', status: 'Open', requirements: 'Mobile Storage Tanks (20 KL) on monthly hire — Qty 2 for 6 months.', expectedValue: 300000 },
+  { id: 'ENQ-2026-005', date: '2026-06-28', customerId: 'CUST-004', enquiryType: 'supply', source: 'Website', status: 'Open', requirements: '10000 LPH Filtration plant', expectedValue: 2200000 },
+  { id: 'ENQ-2026-006', date: '2026-06-29', customerId: 'CUST-001', enquiryType: 'spares', source: 'Existing Client', status: 'Open', requirements: 'Replacement filter cartridges, vacuum pump seals, and heater elements for SMP-6000 plant.', expectedValue: 95000 },
 ];
 
 // Mock Quotations (party-wise history for past quoted rate lookup)

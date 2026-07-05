@@ -13,6 +13,7 @@ export type ErpEventType =
 
 export type ErpEventPayload = {
   enquiryId?: string;
+  enquiryType?: string;
   orderId?: string;
   workOrderId?: string;
   customerId?: string;
