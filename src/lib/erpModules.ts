@@ -55,7 +55,6 @@ export const appNavGroups: ErpNavGroup[] = [
     items: [
       { name: 'Enquiries', path: p('enquiries'), componentKey: 'enquiries' },
       { name: 'Quotations', path: p('quotations'), componentKey: 'quotations' },
-      { name: 'Plant Order Book', path: p('sales/orders'), componentKey: 'orders' },
       { name: 'Pending Quotation Follow-up', path: p('sales/pending-quotations') },
       { name: 'Proforma Invoice (PI)', path: p('sales/invoice-entry'), componentKey: 'accounting' },
       { name: 'Tax Invoice (TI)', path: p('sales/ti-entry'), componentKey: 'accounting-ti' },
@@ -91,10 +90,8 @@ export const appNavGroups: ErpNavGroup[] = [
     icon: Factory,
     items: [
       { name: 'CNC Fabrication List', path: p('production/worker-cutting') },
-      { name: 'Plant Assembly Orders', path: p('production/list'), componentKey: 'work-orders' },
       { name: 'Work Order Printing', path: p('mis/work-order-printing') },
       { name: 'Production & Bed Status', path: p('production/status') },
-      { name: 'Ready For Dispatch', path: p('production/ready-dispatch') },
       { name: 'Work Order Shortage Report', path: p('mis/work-order-shortage') },
       { name: 'MTC & Vacuum Vessel Certs', path: p('production/mtc'), componentKey: 'mtc' },
       { name: 'TC Management', path: p('production/tc-management') },

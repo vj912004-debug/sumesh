@@ -11,9 +11,7 @@ import Products from '@/pages/production/Products';
 import Workers from '@/pages/production/Workers';
 import Enquiries from '@/pages/sales/Enquiries';
 import Quotations from '@/pages/sales/Quotations';
-import Orders from '@/pages/sales/Orders';
 import Accounting from '@/pages/accounting/Accounting';
-import WorkOrders from '@/pages/production/WorkOrders';
 import MillTestCertificate from '@/pages/production/MillTestCertificate';
 import QualityManagement from '@/pages/qms/QualityManagement';
 import BuildProfitLoss from '@/pages/reports/BuildProfitLoss';
@@ -48,10 +46,8 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
   workers: <Workers />,
   enquiries: <Enquiries />,
   quotations: <Quotations />,
-  orders: <Orders />,
   accounting: <Accounting />,
   'accounting-ti': <Accounting />,
-  'work-orders': <WorkOrders />,
   mtc: <MillTestCertificate />,
   qms: <QualityManagement />,
   'build-profit': <BuildProfitLoss />,
