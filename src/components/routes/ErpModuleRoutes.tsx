@@ -85,7 +85,10 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
   'visitor-registry': <VisitorRegistry />,
   'sales-reports': <ReportsDashboard />,
   logistics: <SupplyChainLogistics />,
-  'sales-billing': <SalesRentalsBilling />,
+  'sales-client-profiles': <SalesRentalsBilling section="customers" />,
+  'sales-po-tracking': <SalesRentalsBilling section="linkage" />,
+  'rentals-contracts': <SalesRentalsBilling section="rentals" />,
+  'sales-billing': <SalesRentalsBilling section="rentals" />,
   payroll: <Payroll />,
 };
 

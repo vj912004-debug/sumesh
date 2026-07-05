@@ -3,7 +3,7 @@ import {
   LayoutDashboard, Bell, Database, ShoppingCart, Settings, Factory,
   ClipboardList, ShoppingBag, Layers, Truck, ShieldCheck, BarChart3,
   Wrench, Headset, Building2, FileSpreadsheet, Sliders, LineChart, Mail,
-  Users, Wallet, FileText,
+  Users, Wallet, FileText, Calendar,
 } from 'lucide-react';
 
 export type ErpNavItem = {
@@ -49,7 +49,7 @@ export const appNavGroups: ErpNavGroup[] = [
     ],
   },
   {
-    title: 'Sales & Rentals',
+    title: 'Sales',
     isCollapsible: true,
     icon: ShoppingCart,
     items: [
@@ -62,9 +62,19 @@ export const appNavGroups: ErpNavGroup[] = [
       { name: 'Pre-Build Material Pricing', path: p('production/cost-estimates'), componentKey: 'cost-estimates' },
       { name: 'Proforma Invoice (PI)', path: p('sales/invoice-entry'), componentKey: 'accounting' },
       { name: 'Tax Invoice (TI)', path: p('sales/ti-entry'), componentKey: 'accounting-ti' },
+      { name: 'Customer & Consignee Registry', path: p('sales/client-profiles'), componentKey: 'sales-client-profiles' },
+      { name: 'Client PO Tracking', path: p('sales/po-tracking'), componentKey: 'sales-po-tracking' },
       { name: 'Sales Reports', path: p('sales/reports'), componentKey: 'sales-reports' },
       { name: 'Sales Register', path: p('mis/sales-register') },
-      { name: 'Rental Contracts & Billing', path: p('sales-billing'), componentKey: 'sales-billing' },
+    ],
+  },
+  {
+    title: 'Rentals',
+    isCollapsible: true,
+    icon: Calendar,
+    items: [
+      { name: 'Rental Contracts & Leases', path: p('rentals/contracts'), componentKey: 'rentals-contracts' },
+      { name: 'Rental Billing Register', path: p('rentals/billing'), description: 'Recurring rental invoice ledger and challan linkage.' },
     ],
   },
   {
@@ -284,6 +294,11 @@ export const appNavGroups: ErpNavGroup[] = [
 /** @deprecated use appNavGroups */
 export const erpNavGroups = appNavGroups;
 
+/** Routes kept for bookmarks; not shown in sidebar navigation. */
+const LEGACY_MODULE_ROUTES: ErpNavItem[] = [
+  { name: 'Rental Contracts & Billing', path: p('sales-billing'), componentKey: 'sales-billing' },
+];
+
 export function getErpModuleRoutes(): ErpNavItem[] {
   const seen = new Set<string>();
   const routes: ErpNavItem[] = [];
@@ -295,12 +310,19 @@ export function getErpModuleRoutes(): ErpNavItem[] {
       }
     }
   }
+  for (const item of LEGACY_MODULE_ROUTES) {
+    if (!seen.has(item.path)) {
+      seen.add(item.path);
+      routes.push(item);
+    }
+  }
   return routes;
 }
 
 export const USER_RIGHTS_MODULES = [
   'Masters',
   'Sales',
+  'Rentals',
   'Engineering',
   'Production Planning',
   'Material Requirement Planning',

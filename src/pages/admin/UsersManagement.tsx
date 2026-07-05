@@ -12,7 +12,7 @@ const RIGHTS_KEY = 'sp2_user_rights';
 const defaultRights: Record<string, Record<string, boolean>> = {
   Administrator: Object.fromEntries(USER_RIGHTS_MODULES.map(m => [m, true])),
   RMPatel: {
-    Masters: false, Sales: true, Engineering: false, 'Production Planning': false,
+    Masters: false, Sales: true, Rentals: true, Engineering: false, 'Production Planning': false,
     'Material Requirement Planning': true, Purchase: false, Inventory: false,
     Despatch: true, 'Quality Control': false, 'Administration & Setup': false,
     'MIS Reports': true, 'Bill Passing': false, 'Job Work': true, Excise: false,
@@ -20,14 +20,14 @@ const defaultRights: Record<string, Record<string, boolean>> = {
     'Statutory Reports': false,
   },
   Suketu: {
-    Masters: true, Sales: true, Engineering: true, 'Production Planning': true,
+    Masters: true, Sales: true, Rentals: true, Engineering: true, 'Production Planning': true,
     'Material Requirement Planning': true, Purchase: true, Inventory: true,
     Despatch: true, 'Quality Control': true, 'Administration & Setup': true,
     'MIS Reports': true, 'Bill Passing': false, 'Job Work': true, Excise: false,
     Service: true, 'Fixed Assets': true, 'Graphical Reports': true, Utility: true,
     'Statutory Reports': true,
   },
-  Mansi: Object.fromEntries(USER_RIGHTS_MODULES.map(m => [m, m === 'Sales' || m === 'MIS Reports'])),
+  Mansi: Object.fromEntries(USER_RIGHTS_MODULES.map(m => [m, m === 'Sales' || m === 'Rentals' || m === 'MIS Reports'])),
   Production: Object.fromEntries(USER_RIGHTS_MODULES.map(m => [m, ['Production Planning', 'Material Requirement Planning', 'Inventory', 'Job Work', 'Despatch'].includes(m)])),
   Vraj: Object.fromEntries(USER_RIGHTS_MODULES.map(m => [m, true])),
 };

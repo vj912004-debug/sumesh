@@ -44,7 +44,32 @@ interface PoLinkage {
   matchingStatus: 'Matched' | 'PO Pending' | 'Verification Required';
 }
 
-export default function SalesRentalsBilling() {
+export type SalesRentalsSection = 'customers' | 'rentals' | 'linkage' | 'all';
+
+const PAGE_HEADERS: Record<SalesRentalsSection, { title: string; description: string }> = {
+  all: {
+    title: 'Plant Sales & CRM Directory',
+    description: 'Manage Bill-To vs Ship-To client profiles, time-bound rentals, and complete Client PO tracking arrays.',
+  },
+  customers: {
+    title: 'Customer & Consignee Registry',
+    description: 'Setup distinct Bill-To headquarters and Ship-To factory site destinations alongside statutory GSTIN profiles.',
+  },
+  rentals: {
+    title: 'Rental Contracts & Leases',
+    description: 'Manage time-bound recurring equipment leases, rental rates, and active contract billing periods.',
+  },
+  linkage: {
+    title: 'Client PO Tracking',
+    description: 'Bind manufacturing engineering files, product serial numbers, and invoice registers to client purchase orders.',
+  },
+};
+
+interface SalesRentalsBillingProps {
+  section?: SalesRentalsSection;
+}
+
+export default function SalesRentalsBilling({ section = 'all' }: SalesRentalsBillingProps) {
   const [customers, setCustomers] = useState<Customer[]>([
     { id: 'CUST-001', name: 'Reliance Industries Ltd', contact: 'Ketan Shah', email: 'kshah@ril.com', gstin: '24AAACR8821B1Z2', billToAddress: 'Maker Chambers, Nariman Point, Mumbai', shipToAddress: 'Jamanagar Refinery, Block C, Gujarat' },
     { id: 'CUST-002', name: 'Tata Power Company Ltd', contact: 'M. Vasudevan', email: 'mvasu@tatapower.com', gstin: '27AAACT9012K1Z9', billToAddress: 'Carnac Bunder, Fort, Mumbai', shipToAddress: 'Trombay Thermal Station Yard, Mumbai' },
@@ -121,21 +146,28 @@ export default function SalesRentalsBilling() {
     alert(`Purchase Order details bound successfully to Invoice ${bindInvoice}. Tracking serials & drawing coordinates initialized.`);
   };
 
+  const header = PAGE_HEADERS[section];
+  const showTabs = section === 'all';
+  const activeTab = section === 'all' ? 'customers' : section;
+
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight">Plant Sales & CRM Directory</h2>
-        <p className="text-muted-foreground">Manage Bill-To vs Ship-To client profiles, time-bound rentals, and complete Client PO tracking arrays.</p>
+        <h2 className="text-3xl font-bold tracking-tight">{header.title}</h2>
+        <p className="text-muted-foreground">{header.description}</p>
       </div>
 
-      <Tabs defaultValue="customers" className="w-full">
-        <TabsList className="mb-4">
-          <TabsTrigger value="customers"><Users className="w-4 h-4 mr-2" /> Customer & Consignee Registry</TabsTrigger>
-          <TabsTrigger value="rentals"><Calendar className="w-4 h-4 mr-2" /> Service & Rentals Leases</TabsTrigger>
-          <TabsTrigger value="linkage"><Link className="w-4 h-4 mr-2" /> Order & Client PO Tracking</TabsTrigger>
-        </TabsList>
+      <Tabs value={activeTab} className="w-full">
+        {showTabs && (
+          <TabsList className="mb-4">
+            <TabsTrigger value="customers"><Users className="w-4 h-4 mr-2" /> Customer & Consignee Registry</TabsTrigger>
+            <TabsTrigger value="rentals"><Calendar className="w-4 h-4 mr-2" /> Service & Rentals Leases</TabsTrigger>
+            <TabsTrigger value="linkage"><Link className="w-4 h-4 mr-2" /> Order & Client PO Tracking</TabsTrigger>
+          </TabsList>
+        )}
 
         {/* Tab 1: Customer Database */}
+        {(showTabs || section === 'customers') && (
         <TabsContent value="customers">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -236,8 +268,10 @@ export default function SalesRentalsBilling() {
             </CardContent>
           </Card>
         </TabsContent>
+        )}
 
         {/* Tab 2: Rentals Manager */}
+        {(showTabs || section === 'rentals') && (
         <TabsContent value="rentals">
           <Card>
             <CardHeader>
@@ -282,8 +316,10 @@ export default function SalesRentalsBilling() {
             </CardContent>
           </Card>
         </TabsContent>
+        )}
 
         {/* Tab 3: Order PO Linkage & Serial Tracker Arrays */}
+        {(showTabs || section === 'linkage') && (
         <TabsContent value="linkage">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -398,6 +434,7 @@ export default function SalesRentalsBilling() {
             </CardContent>
           </Card>
         </TabsContent>
+        )}
       </Tabs>
     </div>
   );
