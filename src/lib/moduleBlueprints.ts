@@ -64,33 +64,6 @@ const INV_REPORTS = ['Stock Ledger', 'Fast Moving Items', 'Aging Analysis', 'Reo
 /** Path → blueprint (routes from erpModules.ts) */
 export const MODULE_BLUEPRINTS: Record<string, ModuleBlueprint> = {
   // ─── 1. SERVICE MODULE ───────────────────────────────────────────────
-  '/service/complaint-type': {
-    detailFields: [
-      f('complaintCode', 'Complaint Category Code', 'text', { placeholder: 'Auto or manual entry' }),
-      f('complaintName', 'Complaint Type Name', 'text', { placeholder: 'e.g. Vacuum Leakage, Heater Coil Burnout' }),
-      f('category', 'Complaint Category', 'select', { options: MECH_ELEC_STRUCT_CAL }),
-      f('resolutionHours', 'Standard Resolution Time (Hours)', 'number'),
-      f('priority', 'Priority Level', 'select', { options: PRIORITY }),
-      f('severity', 'Default Severity Level', 'select', { options: SEVERITY }),
-    ],
-    buttons: [btn('Save'), btn('Update'), btn('Delete', 'destructive'), btn('Close', 'outline')],
-  },
-  '/service/contract-master': {
-    detailFields: [
-      f('contractId', 'Contract ID / AMC Slip No.', 'text'),
-      f('customer', 'Customer Name', 'select', { options: ['Tata Power', 'Reliance Ind.', 'Adani Electricity', 'Gujarat State Electricity'] }),
-      f('contractType', 'Contract Type', 'select', { options: CONTRACT_TYPES }),
-      f('startDate', 'Start Date', 'date'),
-      f('endDate', 'End Date', 'date'),
-      f('contractValue', 'Total Contract Value (₹)', 'currency'),
-      f('serviceFreq', 'Service Frequency', 'select', { options: SERVICE_FREQ }),
-      f('pmVisits', 'No. of PM Visits Allowed', 'number'),
-      f('terms', 'Terms & Conditions', 'textarea'),
-    ],
-    gridColumns: ['Scheduled PM Visit Date', 'Assigned Service Hub Location'],
-    gridTitle: 'PM Visit Schedule',
-    buttons: [btn('Generate Contract'), btn('Renew Contract'), btn('Attach Document', 'outline'), btn('Cancel', 'destructive')],
-  },
   '/service/service-call': {
     detailFields: [
       f('ticketNo', 'Ticket No (Auto)', 'readonly'),
@@ -106,31 +79,6 @@ export const MODULE_BLUEPRINTS: Record<string, ModuleBlueprint> = {
     gridColumns: ['Item Code', 'Qty Required'],
     gridTitle: 'Spare Parts for Site Deployment',
     buttons: [btn('Log Complaint'), btn('Assign Technician'), btn('Send Customer SMS', 'outline'), btn('Close Ticket')],
-  },
-  '/service/erection-commissioning': {
-    detailFields: [
-      f('projectId', 'Project / Commissioning ID', 'text'),
-      f('customer', 'Customer Name', 'text'),
-      f('plantCapacity', 'Plant Capacity', 'text', { placeholder: 'e.g. 6000 LPH Filtration Plant' }),
-      f('siteReady', 'Site Ready Status', 'select', { options: ['Ready', 'Delayed', 'Incomplete'] }),
-      f('installStart', 'Installation Start Date', 'date'),
-      f('handoverDate', 'Handover Date', 'date'),
-      f('bdvKv', 'BDV Voltage Achieved (kV)', 'number'),
-      f('moisturePpm', 'Moisture PPM Achieved', 'number'),
-      f('engineer', 'Commissioning Engineer Name', 'text'),
-    ],
-    gridColumns: ['Checkpoint', 'Status', 'Remarks'],
-    gridTitle: 'Commissioning Checkpoints (Vacuum Test, Heater Load, BDV Validation)',
-    buttons: [btn('Start Commissioning'), btn('Log Test Results'), btn('Generate Handover Certificate')],
-  },
-  '/service/feedback-questions': {
-    detailFields: [
-      f('questionId', 'Question ID', 'text'),
-      f('moduleOrigin', 'Module Origin', 'select', { options: MODULE_ORIGIN }),
-      f('questionText', 'Question Text', 'textarea', { placeholder: 'e.g. How do you rate the vacuum pump performance?' }),
-      f('responseType', 'Response Type', 'select', { options: RESPONSE_TYPES }),
-    ],
-    buttons: [btn('Add Question'), btn('Modify', 'outline'), btn('Deactivate Question', 'destructive')],
   },
   '/service/feedback-answers': {
     detailFields: [
@@ -326,15 +274,6 @@ export const MODULE_BLUEPRINTS: Record<string, ModuleBlueprint> = {
     ],
     buttons: [btn('Open Form', 'outline'), btn('Export Summary to Excel')],
   },
-  '/inventory/material-issue-multi': {
-    detailFields: [
-      f('parentAssembly', 'Parent Assembly Code', 'text', { placeholder: 'e.g. Control Panel Assembly' }),
-      f('subAssembly', 'Sub-Assembly Code', 'text', { placeholder: 'e.g. Relay Wiring Kit' }),
-    ],
-    gridColumns: ['Level', 'Item Code', 'Description', 'Required Qty', 'Issue Qty'],
-    gridTitle: 'Multi-Level BOM Issue Grid',
-    buttons: [btn('Issue Complete Hierarchy'), btn('Collapse/Expand Levels', 'outline')],
-  },
   '/inventory/issue-against-so': {
     detailFields: [
       f('soNumber', 'Sales Order Number', 'text'),
@@ -344,17 +283,6 @@ export const MODULE_BLUEPRINTS: Record<string, ModuleBlueprint> = {
     gridColumns: ['Component Code', 'Required Qty', 'Allocated Qty', 'Pick Qty'],
     gridTitle: 'SO Component Allocation',
     buttons: [btn('Allocate to SO'), btn('Print Picking List', 'outline')],
-  },
-  '/inventory/batch-heat-tracking': {
-    detailFields: [
-      f('heatBatchNo', 'Heat / Batch No Search', 'text'),
-      f('steelGrade', 'Steel Plate Grade', 'select', { options: ['MS', 'SS 304', 'SS 316', 'Alloy Steel'] }),
-      f('millCertNo', 'Mill Certificate Number', 'text'),
-      f('supplier', 'Parent Supplier Name', 'text'),
-    ],
-    gridColumns: ['Work Order', 'Usage Qty', 'Storage Tank / Location', 'Date Used'],
-    gridTitle: 'Batch Usage Ledger',
-    buttons: [btn('Trace Genealogy'), btn('Download Mill Certificate', 'outline')],
   },
   '/inventory/serial-tracking': {
     detailFields: [
@@ -660,25 +588,6 @@ export const MODULE_BLUEPRINTS: Record<string, ModuleBlueprint> = {
     ],
     gridColumns: ['Group', 'Target', 'Booked', 'Dispatched', 'Pending'],
     gridTitle: 'Group-Wise Target Progress',
-    buttons: [btn('View On Screen'), btn('Export to Excel', 'outline')],
-  },
-  '/mis/despatch-summary': {
-    detailFields: [
-      f('dateFrom', 'Start Date', 'date'),
-      f('dateTo', 'End Date', 'date'),
-      f('location', 'Dispatch Location', 'select', { options: ['Makarpura GIDC', 'All'] }),
-    ],
-    gridColumns: ['DC No', 'Date', 'Customer', 'Plant Model', 'Transporter', 'Status'],
-    gridTitle: 'Despatch Manifests',
-    buttons: [btn('View On Screen'), btn('Export to Excel', 'outline')],
-  },
-  '/mis/delivery-analysis': {
-    detailFields: [
-      f('dateFrom', 'Start Date', 'date'),
-      f('dateTo', 'End Date', 'date'),
-    ],
-    gridColumns: ['SO No', 'Target Date', 'Actual Dispatch', 'Delay (Days)', 'Reason'],
-    gridTitle: 'Delivery Performance',
     buttons: [btn('View On Screen'), btn('Export to Excel', 'outline')],
   },
   '/mis/delay-quotation': {

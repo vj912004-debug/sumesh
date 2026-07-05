@@ -16,7 +16,6 @@ import Accounting from '@/pages/accounting/Accounting';
 import WorkOrders from '@/pages/production/WorkOrders';
 import MillTestCertificate from '@/pages/production/MillTestCertificate';
 import QualityManagement from '@/pages/qms/QualityManagement';
-import CostEstimates from '@/pages/production/CostEstimates';
 import BuildProfitLoss from '@/pages/reports/BuildProfitLoss';
 import PurchaseOrders from '@/pages/inventory/PurchaseOrders';
 import GoodsReceipt from '@/pages/inventory/GoodsReceipt';
@@ -55,7 +54,6 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
   'work-orders': <WorkOrders />,
   mtc: <MillTestCertificate />,
   qms: <QualityManagement />,
-  'cost-estimates': <CostEstimates />,
   'build-profit': <BuildProfitLoss />,
   'purchase-orders': <PurchaseOrders />,
   grn: <GoodsReceipt />,
@@ -79,7 +77,6 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
   'sales-reports': <ReportsDashboard />,
   'sales-client-profiles': <SalesRentalsBilling section="customers" />,
   'sales-po-tracking': <SalesRentalsBilling section="linkage" />,
-  'sales-billing': <SalesRentalsBilling section="rentals" />,
   payroll: <Payroll />,
 };
 

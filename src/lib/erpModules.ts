@@ -93,7 +93,6 @@ export const appNavGroups: ErpNavGroup[] = [
       { name: 'CNC Fabrication List', path: p('production/worker-cutting') },
       { name: 'Plant Assembly Orders', path: p('production/list'), componentKey: 'work-orders' },
       { name: 'Work Order Printing', path: p('mis/work-order-printing') },
-      { name: 'Pre-Build Cost Estimate', path: p('production/cost-estimates'), componentKey: 'cost-estimates' },
       { name: 'Production & Bed Status', path: p('production/status') },
       { name: 'Ready For Dispatch', path: p('production/ready-dispatch') },
       { name: 'Work Order Shortage Report', path: p('mis/work-order-shortage') },
@@ -277,11 +276,6 @@ export const appNavGroups: ErpNavGroup[] = [
 /** @deprecated use appNavGroups */
 export const erpNavGroups = appNavGroups;
 
-/** Routes kept for bookmarks; not shown in sidebar navigation. */
-const LEGACY_MODULE_ROUTES: ErpNavItem[] = [
-  { name: 'Rental Contracts & Billing', path: p('sales-billing'), componentKey: 'sales-billing' },
-];
-
 export function getErpModuleRoutes(): ErpNavItem[] {
   const seen = new Set<string>();
   const routes: ErpNavItem[] = [];
@@ -291,12 +285,6 @@ export function getErpModuleRoutes(): ErpNavItem[] {
         seen.add(item.path);
         routes.push(item);
       }
-    }
-  }
-  for (const item of LEGACY_MODULE_ROUTES) {
-    if (!seen.has(item.path)) {
-      seen.add(item.path);
-      routes.push(item);
     }
   }
   return routes;
