@@ -26,6 +26,9 @@ import EWayBills from '@/pages/dispatch/EWayBills';
 import QualityControl from '@/pages/production/QualityControl';
 import JobWorkOutward from '@/pages/inventory/JobWorkOutward';
 import JobWorkInward from '@/pages/inventory/JobWorkInward';
+import ContractorBillBooking from '@/pages/inventory/ContractorBillBooking';
+import WorkOrders from '@/pages/production/WorkOrders';
+import MaterialIssue from '@/pages/inventory/MaterialIssue';
 import AfterSales from '@/pages/after-sales/AfterSales';
 import ReportsDashboard from '@/pages/ReportsDashboard';
 import FinalReports from '@/pages/reports/FinalReports';
@@ -64,6 +67,9 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
   qc: <QualityControl />,
   'job-work-out': <JobWorkOutward />,
   'job-work-in': <JobWorkInward />,
+  'contractor-bills': <ContractorBillBooking />,
+  'work-orders': <WorkOrders />,
+  'material-issue': <MaterialIssue />,
   'after-sales': <AfterSales />,
   'reports-dashboard': <ReportsDashboard />,
   'final-reports': <FinalReports />,

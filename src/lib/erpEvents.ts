@@ -26,6 +26,9 @@ export type ErpEventPayload = {
   expectedValue?: number;
   totalAmount?: number;
   status?: string;
+  quotationId?: string;
+  bomIds?: (string | undefined)[];
+  estimateId?: string;
 };
 
 function findCustomer(payload: ErpEventPayload) {

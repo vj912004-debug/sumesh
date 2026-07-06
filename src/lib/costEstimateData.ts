@@ -92,6 +92,15 @@ export function getCostEstimateById(id: string): CostEstimate | undefined {
   return load().find(e => e.id === id);
 }
 
+export function getCostEstimateByQuotationId(quotationId: string): CostEstimate | undefined {
+  return load().find(e => e.quotationId === quotationId);
+}
+
+export function getCostEstimateByEnquiryId(enquiryId: string): CostEstimate | undefined {
+  if (!enquiryId) return undefined;
+  return load().find(e => e.enquiryId === enquiryId);
+}
+
 export function createCostEstimate(
   data: Omit<CostEstimate, 'id' | 'date'>
 ): CostEstimate {

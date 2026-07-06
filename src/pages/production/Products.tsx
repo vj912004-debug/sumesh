@@ -22,8 +22,8 @@ export default function Products() {
       )}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Products & BOM</h2>
-          <p className="text-muted-foreground">Manage machine catalog and Engineering Bill of Materials.</p>
+          <h2 className="text-3xl font-bold tracking-tight">Plant Catalog</h2>
+          <p className="text-muted-foreground">Standard fixed products — link to BOM and use in quotations with auto-estimate.</p>
         </div>
         <Button onClick={() => { setToast('New product wizard opened — add details in Master Items.'); navigate('/master/items'); }}>
           <PackageSearch className="mr-2 h-4 w-4" /> New Product

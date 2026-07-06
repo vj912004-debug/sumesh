@@ -8,8 +8,11 @@ import {
 import {
   createCostEstimate,
   getCostEstimates,
+  getCostEstimateByEnquiryId,
   type CostEstimate,
 } from './costEstimateData';
+
+export { getCostEstimateByEnquiryId };
 
 export function inferProductFromRequirements(requirements: string): string {
   const r = requirements.toLowerCase();
@@ -59,10 +62,6 @@ export function parseSpecFromRequirements(
   }
 
   return spec;
-}
-
-export function getCostEstimateByEnquiryId(enquiryId: string): CostEstimate | undefined {
-  return getCostEstimates().find(e => e.enquiryId === enquiryId);
 }
 
 export function createEstimateFromEnquiry(enquiry: Enquiry): CostEstimate {

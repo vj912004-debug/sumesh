@@ -44,7 +44,6 @@ export const appNavGroups: ErpNavGroup[] = [
       { name: 'Master Configurations', path: p('master/saved-data'), description: 'System configurations and rate sheets.' },
       { name: 'Client & Party Master', path: p('master/parties'), componentKey: 'customers' },
       { name: 'Customer & Consignee Registry', path: p('sales/client-profiles'), componentKey: 'sales-client-profiles' },
-      { name: 'Plant Catalog (Item Master)', path: p('master/items'), componentKey: 'products' },
       { name: 'Grade & Alloy Master', path: p('master/grades') },
       { name: 'Worker Directory', path: p('master/workers'), componentKey: 'workers' },
       { name: 'Transporter Master', path: p('master/transports') },
@@ -80,6 +79,7 @@ export const appNavGroups: ErpNavGroup[] = [
     isCollapsible: true,
     icon: Settings,
     items: [
+      { name: 'Plant Catalog (Item Master)', path: p('master/items'), componentKey: 'products' },
       { name: 'Bill Of Material', path: p('master/items'), componentKey: 'products' },
       { name: 'Replace Item In BOM', path: p('engineering/replace-bom-item') },
       { name: 'Replace Sales Order Items', path: p('engineering/replace-so-items') },
@@ -93,6 +93,7 @@ export const appNavGroups: ErpNavGroup[] = [
     icon: Factory,
     items: [
       { name: 'Work Order Shortage Report', path: p('mis/work-order-shortage') },
+      { name: 'Work Orders', path: p('production/list'), componentKey: 'work-orders' },
       { name: 'Ready For Dispatch', path: p('production/ready-dispatch') },
       { name: 'MTC & Vacuum Vessel Certs', path: p('production/mtc'), componentKey: 'mtc' },
       { name: 'TC Management', path: p('production/tc-management') },
@@ -126,7 +127,7 @@ export const appNavGroups: ErpNavGroup[] = [
       { name: 'GRN View', path: p('inventory/grn-view') },
       { name: 'GRN Modifications', path: p('inventory/grn-modifications') },
       { name: 'GRN Item Serial No.', path: p('inventory/grn-serial') },
-      { name: 'Material Issue', path: p('inventory/material-issue') },
+      { name: 'Material Requisition & Issue', path: p('inventory/material-issue'), componentKey: 'material-issue' },
       { name: 'Issue Material Against SO', path: p('inventory/issue-against-so') },
       { name: 'Material Issue Against Project', path: p('inventory/issue-project') },
       { name: 'GIR (Gate Inward)', path: p('inventory/gir') },
@@ -160,6 +161,7 @@ export const appNavGroups: ErpNavGroup[] = [
     items: [
       { name: 'Job Work Outward', path: p('inventory/job-work-out'), componentKey: 'job-work-out' },
       { name: 'Job Work Inward', path: p('inventory/job-work-in'), componentKey: 'job-work-in' },
+      { name: 'Contractor Bill Booking', path: p('inventory/contractor-bills'), componentKey: 'contractor-bills' },
       { name: 'Job Work Pending Report', path: p('inventory/job-work-pending') },
     ],
   },

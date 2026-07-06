@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,19 +7,20 @@ import { Input } from '@/components/ui/input';
 import { 
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter 
 } from '@/components/ui/dialog';
-import { mockOrders, mockCustomers, mockQuotations, mockProducts, mockPackingLists, getMockOrders, saveMockOrders } from '@/lib/mockData';
+import { mockOrders, mockCustomers, mockProducts, mockPackingLists, getMockOrders, saveMockOrders } from '@/lib/mockData';
 import type { Order } from '@/lib/mockData';
+import { getQuotationById } from '@/lib/quotationService';
 import { processErpEvent } from '@/lib/erpEvents';
 import { sendEmail, sendWhatsApp, openWhatsAppDeepLink } from '@/lib/communicationService';
 import { getIntegrationSettings } from '@/lib/integrationConfig';
-import { ArrowLeft, Truck, Wrench, Mail, Package, FileText, Receipt } from 'lucide-react';
+import { ArrowLeft, Truck, Wrench, Mail, Package, FileText, Receipt, Factory } from 'lucide-react';
 
 export default function OrderDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>(() => getMockOrders());
   const order = orders.find(o => o.id === id);
-  const quotation = mockQuotations.find(q => q.id === order?.quotationId);
+  const quotation = order ? getQuotationById(order.quotationId) : undefined;
   const customer = mockCustomers.find(c => c.id === order?.customerId);
   const packingList = mockPackingLists.find(pl => pl.orderId === order?.id);
 
@@ -110,7 +111,22 @@ export default function OrderDetail() {
               {order.status}
             </Badge>
           </div>
-          <p className="text-muted-foreground">Placed on {order.date} from {quotation?.id}</p>
+          <p className="text-muted-foreground">
+            Placed on {order.date}
+            {quotation && <> · Quotation <Link to={`/quotations/${quotation.id}`} className="text-primary hover:underline">{quotation.id}</Link></>}
+            {order.clientPoNumber && <> · Client PO <strong>{order.clientPoNumber}</strong></>}
+          </p>
+          {order.workOrderIds && order.workOrderIds.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-2">
+              {order.workOrderIds.map(woId => (
+                <Link key={woId} to={`/work-orders/${woId}`}>
+                  <Badge variant="outline" className="hover:bg-muted cursor-pointer">
+                    <Factory className="h-3 w-3 mr-1 inline" />{woId}
+                  </Badge>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
         <div className="flex gap-2">
           {packingList ? (
@@ -140,8 +156,11 @@ export default function OrderDetail() {
               </Button>
             </Link>
           )}
-          <Button variant="outline" onClick={() => navigate('/production/list')}>
-            <Wrench className="mr-2 h-4 w-4" /> Issue to Production
+          <Button variant="outline" onClick={() => {
+            const woId = order.workOrderIds?.[0];
+            navigate(woId ? `/work-orders/${woId}` : '/production/list');
+          }}>
+            <Wrench className="mr-2 h-4 w-4" /> View Work Orders
           </Button>
           <Button onClick={handleGenerateDispatch}>
             <Truck className="mr-2 h-4 w-4" /> Generate Dispatch

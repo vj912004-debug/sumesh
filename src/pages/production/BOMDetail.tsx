@@ -11,9 +11,12 @@ import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose
 } from '@/components/ui/dialog';
 import { 
-  mockBOMs, mockInventory
+  mockInventory
 } from '@/lib/mockData2';
-import type { BOM, BOMItem, InventoryItem } from '@/lib/mockData2';
+import type { BOM, BOMItem } from '@/lib/mockData2';
+import { getBomForProduct, saveBom, createDraftBom } from '@/lib/bomService';
+import { getInventoryItemOptions } from '@/lib/plantCatalogQuote';
+import SearchableSelect from '@/components/ui/SearchableSelect';
 import { mockProducts } from '@/lib/mockData';
 import { 
   ArrowLeft, Plus, Trash2, Printer, CheckCircle, Sliders, DollarSign, ListChecks, Layers, Info
@@ -27,19 +30,15 @@ export default function BOMDetail() {
 
   // Load initial BOM or mock a new one if it doesn't exist
   const [bom, setBom] = useState<BOM>(() => {
-    const existing = mockBOMs.find(b => b.productId === productId);
+    const existing = getBomForProduct(productId ?? '');
     if (existing) return existing;
-    
-    // Create default draft BOM if none exists
-    return {
-      id: `BOM-SP${Math.floor(1000 + Math.random() * 9000)}`,
-      productId: productId || '',
-      version: 'v1.0',
-      status: 'Draft',
-      lastUpdated: new Date().toISOString().split('T')[0],
-      items: []
-    };
+    return createDraftBom(productId || '');
   });
+
+  const persistBom = (next: BOM) => {
+    setBom(next);
+    saveBom(next);
+  };
 
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState('');
@@ -74,7 +73,7 @@ export default function BOMDetail() {
     const updatedItems = bom.items.map(item => 
       item.inventoryItemId === itemId ? { ...item, quantity: newQty } : item
     );
-    setBom({
+    persistBom({
       ...bom,
       items: updatedItems,
       lastUpdated: new Date().toISOString().split('T')[0]
@@ -83,7 +82,7 @@ export default function BOMDetail() {
 
   const handleDeleteItem = (itemId: string) => {
     const updatedItems = bom.items.filter(item => item.inventoryItemId !== itemId);
-    setBom({
+    persistBom({
       ...bom,
       items: updatedItems,
       lastUpdated: new Date().toISOString().split('T')[0]
@@ -107,7 +106,7 @@ export default function BOMDetail() {
       updatedItems = [...bom.items, { inventoryItemId: selectedItemId, quantity: qty }];
     }
 
-    setBom({
+    persistBom({
       ...bom,
       items: updatedItems,
       lastUpdated: new Date().toISOString().split('T')[0]
@@ -119,31 +118,22 @@ export default function BOMDetail() {
   };
 
   const handleStatusChange = (newStatus: 'Draft' | 'Approved' | 'Obsolete') => {
-    setBom({
+    persistBom({
       ...bom,
       status: newStatus,
       lastUpdated: new Date().toISOString().split('T')[0]
     });
-    
-    // Also save back to session mock list
-    const idx = mockBOMs.findIndex(b => b.id === bom.id);
-    if (idx !== -1) {
-      mockBOMs[idx].status = newStatus;
-    }
   };
 
   const handleVersionChange = (newVersion: string) => {
-    setBom({
+    persistBom({
       ...bom,
       version: newVersion,
       lastUpdated: new Date().toISOString().split('T')[0]
     });
   };
 
-  // Filter items in database that can be added
-  const availableInventory = mockInventory.filter(inv => 
-    !bom.items.some(item => item.inventoryItemId === inv.id)
-  );
+  const inventoryOptions = getInventoryItemOptions();
 
   return (
     <div className="space-y-6">
@@ -469,22 +459,16 @@ export default function BOMDetail() {
             <div className="space-y-4 py-4 border-b border-t my-3 text-xs">
               <div className="space-y-2">
                 <label className="font-bold text-zinc-500 uppercase">Select Inventory Item *</label>
-                <select 
-                  value={selectedItemId} 
-                  onChange={(e) => setSelectedItemId(e.target.value)}
-                  required
-                  className="w-full bg-zinc-50 dark:bg-zinc-900 border rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20"
-                >
-                  <option value="">-- Choose Item --</option>
-                  {availableInventory.map(inv => (
-                    <option key={inv.id} value={inv.id}>
-                      {inv.name} ({inv.partNumber}) - ₹{inv.unitCost}/{inv.uom}
-                    </option>
-                  ))}
-                  {availableInventory.length === 0 && (
-                    <option disabled>No additional items available in inventory</option>
-                  )}
-                </select>
+                <SearchableSelect
+                  options={inventoryOptions}
+                  value={selectedItemId}
+                  onChange={setSelectedItemId}
+                  placeholder="Type 2–3 words e.g. MS Plate, Gear Pump…"
+                  emptyMessage="No parts match — try first words of name or part number"
+                />
+                <p className="text-[10px] text-muted-foreground">
+                  Search by starting letters of item name or part code. Already in BOM? Qty will be added.
+                </p>
               </div>
 
               <div className="space-y-2">

@@ -67,6 +67,8 @@ export default function WorkOrders() {
               <TableRow>
                 <TableHead>Work Order ID</TableHead>
                 <TableHead>Sales Order Ref</TableHead>
+                <TableHead>Client PO</TableHead>
+                <TableHead>Quotation</TableHead>
                 <TableHead>Product</TableHead>
                 <TableHead>Target Date</TableHead>
                 <TableHead>Progress</TableHead>
@@ -81,6 +83,14 @@ export default function WorkOrders() {
                   <TableRow key={wo.id}>
                     <TableCell className="font-medium">{wo.id}</TableCell>
                     <TableCell className="text-muted-foreground">{wo.orderId}</TableCell>
+                    <TableCell className="text-xs">{wo.clientPoNumber ?? '—'}</TableCell>
+                    <TableCell className="text-xs">
+                      {wo.quotationId ? (
+                        <Link to={`/quotations/${wo.quotationId}`} className="text-primary hover:underline">
+                          {wo.quotationId}
+                        </Link>
+                      ) : '—'}
+                    </TableCell>
                     <TableCell>
                       {product?.name}
                       <div className="text-xs text-muted-foreground">{product?.model}</div>

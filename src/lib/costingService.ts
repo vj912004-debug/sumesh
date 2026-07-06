@@ -1,4 +1,5 @@
-import { mockBOMs, mockInventory, type BOM, type BOMItem } from './mockData2';
+import { mockInventory, type BOMItem } from './mockData2';
+import { getBomForProduct } from './bomService';
 import { mockProducts } from './mockData';
 
 export type RequirementSpec = {
@@ -58,9 +59,7 @@ export function getDefaultRequirementSpec(productId: string): RequirementSpec {
   return { ...DEFAULT_SPEC, capacityLph: capacity };
 }
 
-export function getBomForProduct(productId: string): BOM | undefined {
-  return mockBOMs.find(b => b.productId === productId);
-}
+export { getBomForProduct } from './bomService';
 
 function scaleQty(baseQty: number, itemId: string, spec: RequirementSpec, baseCapacity: number): number {
   const inv = mockInventory.find(i => i.id === itemId);

@@ -15,7 +15,9 @@ import {
   getBuildProfitByWorkOrder,
   addLaborHours,
 } from '@/lib/buildProfitLoss';
-import { ArrowLeft, CheckCircle2, Factory, FileCheck, TrendingUp, TrendingDown } from 'lucide-react';
+import { getPlannedBomForWo } from '@/lib/quotationEstimatedBom';
+import { getWoLedger } from '@/lib/woMaterialIssue';
+import { ArrowLeft, CheckCircle2, Factory, FileCheck, TrendingUp, TrendingDown, Package } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function WorkOrderDetail() {
@@ -31,6 +33,8 @@ export default function WorkOrderDetail() {
   const wo = wos.find(w => w.id === id);
   const product = mockProducts.find(p => p.id === wo?.productId);
   const profitRecord = wo ? getBuildProfitByWorkOrder(wo.id) : undefined;
+  const plannedBom = wo ? getPlannedBomForWo(wo.id) : [];
+  const actualLedger = wo ? getWoLedger(wo.id) : null;
 
   const [isHoursOpen, setIsHoursOpen] = useState(false);
   const [loggedHours, setLoggedHours] = useState('');
@@ -110,9 +114,6 @@ export default function WorkOrderDetail() {
     alert(`Successfully logged ${hours} hours: "${logDesc}"`);
   };
 
-  const handleRequestMaterial = () => {
-    alert('Material request issued successfully. Stores notified.');
-  };
 
   return (
     <div className="space-y-6">
@@ -129,7 +130,17 @@ export default function WorkOrderDetail() {
               {wo.status}
             </Badge>
           </div>
-          <p className="text-muted-foreground">SO Ref: {wo.orderId} | Due Date: {wo.endDate}</p>
+          <p className="text-muted-foreground">
+            SO Ref: <Link to={`/orders/${wo.orderId}`} className="text-primary hover:underline">{wo.orderId}</Link>
+            {' · '}Due: {wo.endDate}
+            {wo.clientPoNumber && <> · Client PO: <strong>{wo.clientPoNumber}</strong></>}
+          </p>
+          {wo.quotationId && (
+            <p className="text-sm text-muted-foreground mt-1">
+              From quotation{' '}
+              <Link to={`/quotations/${wo.quotationId}`} className="text-primary hover:underline">{wo.quotationId}</Link>
+            </p>
+          )}
         </div>
         <div className="flex gap-2">
           {wo.status !== 'Completed' && (
@@ -246,45 +257,75 @@ export default function WorkOrderDetail() {
               </TabsContent>
               <TabsContent value="materials" className="mt-0">
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center bg-muted/50 p-3 rounded-md">
-                    <span className="text-sm font-medium">BOM Link:</span>
-                    <Link to={`/production/bom/${product.id}`}>
-                      <span className="text-sm font-bold text-primary cursor-pointer hover:underline">
-                        {product.id === 'PROD-001' ? 'BOM-SP1012' : product.id === 'PROD-002' ? 'BOM-SP1013' : product.id === 'PROD-003' ? 'BOM-SP1014' : `BOM-${product.id}`}
-                      </span>
+                  {plannedBom.length > 0 && (
+                    <div className="rounded-md border border-teal-200 bg-teal-50/40 p-3">
+                      <p className="text-sm font-medium text-teal-800">
+                        Estimated BOM from quotation — starting baseline for material planning
+                      </p>
+                    </div>
+                  )}
+                  <div className="flex justify-between items-center bg-muted/50 p-3 rounded-md flex-wrap gap-2">
+                    <span className="text-sm font-medium">
+                      Actual material cost: ₹{(actualLedger?.totalMaterialCost ?? 0).toLocaleString('en-IN')}
+                    </span>
+                    <Link to={`/inventory/material-issue?tab=requisition`}>
+                      <Button variant="outline" size="sm">
+                        <Package className="mr-2 h-4 w-4" /> Issue / Return Material
+                      </Button>
                     </Link>
                   </div>
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b">
-                        <th className="py-2 text-left font-medium">Item Description</th>
-                        <th className="py-2 text-center font-medium">Required Qty</th>
-                        <th className="py-2 text-center font-medium">Consumed</th>
+                        <th className="py-2 text-left font-medium">Item</th>
+                        <th className="py-2 text-center font-medium">Planned (Est.)</th>
+                        <th className="py-2 text-center font-medium">Consumed (Actual)</th>
                         <th className="py-2 text-right font-medium">Status</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y">
-                      <tr>
-                        <td className="py-3">Vacuum Pump 300m3/hr</td>
-                        <td className="py-3 text-center">1 Nos</td>
-                        <td className="py-3 text-center font-medium text-green-600">1 Nos</td>
-                        <td className="py-3 text-right"><Badge variant="outline">Issued</Badge></td>
-                      </tr>
-                      <tr>
-                        <td className="py-3">SS 304 Sheet 2mm</td>
-                        <td className="py-3 text-center">450 Kg</td>
-                        <td className="py-3 text-center font-medium text-cyan-600">200 Kg</td>
-                        <td className="py-3 text-right"><Badge variant="secondary">Material Issued</Badge></td>
-                      </tr>
-                      <tr>
-                        <td className="py-3">Control Panel Relays</td>
-                        <td className="py-3 text-center">12 Nos</td>
-                        <td className="py-3 text-center text-muted-foreground">0 Nos</td>
-                        <td className="py-3 text-right"><Badge variant="outline">Pending</Badge></td>
-                      </tr>
+                      {(() => {
+                        const itemIds = new Set([
+                          ...plannedBom.map(l => l.inventoryItemId),
+                          ...(actualLedger?.lines ?? []).map(l => l.inventoryItemId),
+                        ]);
+                        if (itemIds.size === 0) {
+                          return (
+                            <tr>
+                              <td colSpan={4} className="py-6 text-center text-muted-foreground">
+                                No BOM yet — link quotation estimated BOM on PO award, then issue material from stores.
+                              </td>
+                            </tr>
+                          );
+                        }
+                        return [...itemIds].map(itemId => {
+                          const planned = plannedBom.find(l => l.inventoryItemId === itemId);
+                          const actual = actualLedger?.lines.find(l => l.inventoryItemId === itemId);
+                          const net = actual ? actual.qtyIssued - actual.qtyReturned : 0;
+                          const name = planned?.itemName ?? actual?.itemName ?? itemId;
+                          const plannedQty = planned ? `${planned.quantity} ${planned.uom}` : '—';
+                          const consumedQty = net > 0 ? `${net} ${actual?.uom ?? ''}` : '0';
+                          let status = 'Pending';
+                          if (net > 0 && planned && net >= planned.quantity) status = 'Issued';
+                          else if (net > 0) status = 'Partial';
+                          return (
+                            <tr key={itemId}>
+                              <td className="py-3">{name}</td>
+                              <td className="py-3 text-center">{plannedQty}</td>
+                              <td className={`py-3 text-center font-medium ${net > 0 ? 'text-green-600' : 'text-muted-foreground'}`}>
+                                {consumedQty}
+                              </td>
+                              <td className="py-3 text-right">
+                                <Badge variant={status === 'Issued' ? 'outline' : status === 'Partial' ? 'secondary' : 'outline'}>
+                                  {status}
+                                </Badge>
+                              </td>
+                            </tr>
+                          );
+                        });
+                      })()}
                     </tbody>
                   </table>
-                  <Button variant="outline" className="w-full mt-2" onClick={handleRequestMaterial}>Request Material from Stores</Button>
                 </div>
               </TabsContent>
             </CardContent>

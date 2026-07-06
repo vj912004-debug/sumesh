@@ -49,8 +49,12 @@ export type Quotation = {
   enquiryId: string;
   customerId: string;
   totalAmount: number;
-  status: 'Draft' | 'Sent' | 'Accepted' | 'Rejected';
+  status: 'Draft' | 'Sent' | 'Accepted' | 'Rejected' | 'PO Awarded';
   items: { productId: string; quantity: number; unitPrice: number }[];
+  /** Set when client PO is awarded */
+  orderId?: string;
+  clientPoNumber?: string;
+  workOrderIds?: string[];
 };
 
 export type Order = {
@@ -60,6 +64,9 @@ export type Order = {
   customerId: string;
   status: 'Pending' | 'In Production' | 'Ready for Dispatch' | 'Dispatched' | 'Delivered';
   totalAmount: number;
+  clientPoNumber?: string;
+  clientPoDate?: string;
+  workOrderIds?: string[];
 };
 
 // Mock Customers
