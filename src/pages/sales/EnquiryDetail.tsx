@@ -19,9 +19,11 @@ import {
 } from '@/lib/estimateFromEnquiry';
 import {
   createQuotationFromEstimate,
+  getEnquiryQuoteStatusForEnquiry,
   getSubmittedOffersForParty,
   getSubmittedOffersForEnquiry,
 } from '@/lib/quotationService';
+import EnquiryQuoteStatusBadge from '@/components/sales/EnquiryQuoteStatusBadge';
 import { ArrowLeft, Edit, FileText, Calculator, ExternalLink } from 'lucide-react';
 import { CustomerContactsList } from '@/components/sales/CustomerContactsList';
 import { getCustomerContacts } from '@/lib/customerContacts';
@@ -44,6 +46,8 @@ export default function EnquiryDetail() {
   }, [id]);
 
   const customer = mockCustomers.find(c => c.id === enquiry?.customerId);
+
+  const quotePipelineStatus = id ? getEnquiryQuoteStatusForEnquiry(id) : 'quotation_pending';
 
   const linkedEstimate = useMemo(
     () => (id ? getCostEstimateByEnquiryId(id) : undefined),
@@ -136,6 +140,7 @@ export default function EnquiryDetail() {
             <Badge variant={enquiry.status === 'Converted' ? 'default' : 'secondary'}>
               {enquiry.status}
             </Badge>
+            <EnquiryQuoteStatusBadge status={quotePipelineStatus} />
           </div>
           <p className="text-muted-foreground">Received on {enquiry.date} via {enquiry.source}</p>
         </div>
@@ -152,6 +157,24 @@ export default function EnquiryDetail() {
           </Button>
         </div>
       </div>
+
+      {quotePipelineStatus === 'quotation_pending' && (
+        <Card className="border-amber-300 bg-amber-50/60">
+          <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <p className="font-semibold text-amber-900">Quotation Pending</p>
+              <p className="text-sm text-amber-800/90">
+                This enquiry is visible on the Quotations page awaiting a linked quote.
+              </p>
+            </div>
+            <Link to="/quotations">
+              <Button size="sm" variant="outline" className="border-amber-400 bg-white">
+                <FileText className="mr-2 h-4 w-4" /> Create Quotation
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      )}
 
       {linkedEstimate && (
         <Card className="border-primary/30 bg-primary/5">

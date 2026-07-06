@@ -5,9 +5,16 @@ import * as z from 'zod';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,
+} from '@/components/ui/dialog';
+import { CustomerForm, type CustomerFormData } from '@/components/forms/CustomerForm';
 import { api } from '@/lib/api';
 import { getPastQuotedRatesForParty, formatQuotedAmount } from '@/lib/quotationService';
 import { ENQUIRY_TYPES, DEFAULT_ENQUIRY_TYPE, type EnquiryType } from '@/lib/enquiryTypes';
+import { UserPlus } from 'lucide-react';
+
+const ADD_NEW_CUSTOMER = '__add_new_customer__';
 
 const enquirySchema = z.object({
   customerId: z.string().min(1, 'Customer is required'),
@@ -31,12 +38,18 @@ interface EnquiryFormProps {
 
 export function EnquiryForm({ initialData, defaultType, onSubmit, onCancel, isLoading }: EnquiryFormProps) {
   const [customers, setCustomers] = useState<any[]>([]);
+  const [addCustomerOpen, setAddCustomerOpen] = useState(false);
+  const [savingCustomer, setSavingCustomer] = useState(false);
+  const [newCustomerNote, setNewCustomerNote] = useState<string | null>(null);
+
+  const loadCustomers = () =>
+    api.get('/crm/customers').then(res => setCustomers(res.data)).catch(console.error);
 
   useEffect(() => {
-    api.get('/crm/customers').then(res => setCustomers(res.data)).catch(console.error);
+    loadCustomers();
   }, []);
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<EnquiryFormData>({
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<EnquiryFormData>({
     resolver: zodResolver(enquirySchema) as any,
     defaultValues: initialData || {
       customerId: '',
@@ -55,6 +68,23 @@ export function EnquiryForm({ initialData, defaultType, onSubmit, onCancel, isLo
     [selectedCustomerId]
   );
 
+  const handleSaveNewCustomer = async (data: CustomerFormData) => {
+    setSavingCustomer(true);
+    try {
+      const res = await api.post('/crm/customers', data);
+      const newCustomer = res.data;
+      await loadCustomers();
+      setValue('customerId', newCustomer.id, { shouldValidate: true });
+      setAddCustomerOpen(false);
+      setNewCustomerNote(`${newCustomer.name} saved to Customer Master (${newCustomer.id}) and selected.`);
+    } catch (err) {
+      console.error('Failed to create customer:', err);
+      alert('Failed to save customer. Please try again.');
+    } finally {
+      setSavingCustomer(false);
+    }
+  };
+
   const inputClass = "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
 
   return (
@@ -70,14 +100,41 @@ export function EnquiryForm({ initialData, defaultType, onSubmit, onCancel, isLo
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Customer <span className="text-red-500">*</span></label>
-        <select {...register('customerId')} className={inputClass}>
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-medium">Customer <span className="text-red-500">*</span></label>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-7 text-xs"
+            onClick={() => setAddCustomerOpen(true)}
+          >
+            <UserPlus className="h-3.5 w-3.5 mr-1" /> Add New Customer
+          </Button>
+        </div>
+        <select
+          {...register('customerId', {
+            onChange: e => {
+              if (e.target.value === ADD_NEW_CUSTOMER) {
+                setValue('customerId', '');
+                setAddCustomerOpen(true);
+              }
+            },
+          })}
+          className={inputClass}
+        >
           <option value="">Select a customer</option>
           {customers.map(c => (
             <option key={c.id} value={c.id}>{c.name} ({c.company})</option>
           ))}
+          <option value={ADD_NEW_CUSTOMER}>➕ Customer not in list? Add new…</option>
         </select>
         {errors.customerId && <p className="text-xs text-red-500">{errors.customerId.message}</p>}
+        {newCustomerNote && (
+          <p className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-md px-2 py-1.5">
+            {newCustomerNote}
+          </p>
+        )}
         {pastQuotedRates.length > 0 && (
           <div className="rounded-md border bg-muted/40 p-3 text-xs space-y-1.5">
             <p className="font-semibold text-muted-foreground uppercase tracking-wide">Past quoted rates for this party</p>
@@ -150,6 +207,22 @@ export function EnquiryForm({ initialData, defaultType, onSubmit, onCancel, isLo
           {isLoading ? 'Saving...' : 'Save Enquiry'}
         </Button>
       </div>
+
+      <Dialog open={addCustomerOpen} onOpenChange={setAddCustomerOpen}>
+        <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Add New Customer to Master</DialogTitle>
+            <DialogDescription>
+              Customer will be saved in the Customer Master and auto-selected for this enquiry.
+            </DialogDescription>
+          </DialogHeader>
+          <CustomerForm
+            onSubmit={handleSaveNewCustomer}
+            onCancel={() => setAddCustomerOpen(false)}
+            isLoading={savingCustomer}
+          />
+        </DialogContent>
+      </Dialog>
     </form>
   );
 }

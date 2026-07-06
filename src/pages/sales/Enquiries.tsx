@@ -13,9 +13,10 @@ import { EnquiryForm, type EnquiryFormData } from '@/components/forms/EnquiryFor
 import { PreviousOffersTable } from '@/components/sales/PreviousOffersTable';
 import { EnquiryTypeBadge } from '@/components/sales/EnquiryTypeBadge';
 import { api } from '@/lib/api';
-import { formatQuotedAmount, getSubmittedOffers } from '@/lib/quotationService';
+import { formatQuotedAmount, getEnquiryQuoteStatusForEnquiry, getSubmittedOffers } from '@/lib/quotationService';
 import { ENQUIRY_TYPES, type EnquiryType } from '@/lib/enquiryTypes';
 import { mockCustomers } from '@/lib/mockData';
+import EnquiryQuoteStatusBadge from '@/components/sales/EnquiryQuoteStatusBadge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Plus } from 'lucide-react';
 import { format } from 'date-fns';
@@ -209,6 +210,7 @@ function EnquiriesTable({
                 <TableHead>Quotation (Past Rates)</TableHead>
                 <TableHead>Source</TableHead>
                 <TableHead>Expected Value</TableHead>
+                <TableHead>Quote Status</TableHead>
                 <TableHead>Next Follow-up</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Action</TableHead>
@@ -259,6 +261,9 @@ function EnquiriesTable({
                     <Badge variant="outline">{enq.source}</Badge>
                   </TableCell>
                   <TableCell>₹{enq.expectedValue?.toLocaleString('en-IN')}</TableCell>
+                  <TableCell>
+                    <EnquiryQuoteStatusBadge status={getEnquiryQuoteStatusForEnquiry(enq.id)} />
+                  </TableCell>
                   <TableCell>
                     {enq.nextFollowUp ? (
                       <span className="text-cyan-600 font-medium text-sm">

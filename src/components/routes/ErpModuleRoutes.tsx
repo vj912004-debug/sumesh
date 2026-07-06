@@ -19,6 +19,8 @@ import PurchaseOrders from '@/pages/inventory/PurchaseOrders';
 import GoodsReceipt from '@/pages/inventory/GoodsReceipt';
 import Inventory from '@/pages/inventory/Inventory';
 import ReturnableChallan from '@/pages/inventory/ReturnableChallan';
+import WarrantyRepairChallan from '@/pages/inventory/WarrantyRepairChallan';
+import AssetAvailabilityDashboard from '@/pages/inventory/AssetAvailabilityDashboard';
 import InventoryControl from '@/pages/inventory/InventoryControl';
 import Dispatch from '@/pages/dispatch/Dispatch';
 import PackingLists from '@/pages/dispatch/PackingLists';
@@ -26,9 +28,13 @@ import EWayBills from '@/pages/dispatch/EWayBills';
 import QualityControl from '@/pages/production/QualityControl';
 import JobWorkOutward from '@/pages/inventory/JobWorkOutward';
 import JobWorkInward from '@/pages/inventory/JobWorkInward';
+import JobWorkChallan from '@/pages/inventory/JobWorkChallan';
 import ContractorBillBooking from '@/pages/inventory/ContractorBillBooking';
 import WorkOrders from '@/pages/production/WorkOrders';
 import MaterialIssue from '@/pages/inventory/MaterialIssue';
+import FinishItemStock from '@/pages/inventory/FinishItemStock';
+import AreaWiseCustomerReport from '@/pages/reports/AreaWiseCustomerReport';
+import PendingClientPo from '@/pages/sales/PendingClientPo';
 import AfterSales from '@/pages/after-sales/AfterSales';
 import ReportsDashboard from '@/pages/ReportsDashboard';
 import FinalReports from '@/pages/reports/FinalReports';
@@ -40,6 +46,7 @@ import VisitorRegistry from '@/pages/visitor/VisitorRegistry';
 import SalesRentalsBilling from '@/pages/sales/SalesRentalsBilling';
 import Payroll from '@/pages/production/Payroll';
 import ErpWorkflow from '@/pages/ErpWorkflow';
+import ItemMaster from '@/pages/master/ItemMaster';
 
 const COMPONENT_MAP: Record<string, ReactNode> = {
   dashboard: <Dashboard />,
@@ -47,6 +54,7 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
   tasks: <Tasks />,
   communication: <CommunicationAlerts />,
   customers: <Customers />,
+  'item-master': <ItemMaster />,
   products: <Products />,
   workers: <Workers />,
   enquiries: <Enquiries />,
@@ -60,6 +68,8 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
   grn: <GoodsReceipt />,
   inventory: <Inventory />,
   'returnable-challan': <ReturnableChallan />,
+  'warranty-repair': <WarrantyRepairChallan />,
+  'asset-availability': <AssetAvailabilityDashboard />,
   'inventory-control': <InventoryControl />,
   dispatch: <Dispatch />,
   'packing-lists': <PackingLists />,
@@ -67,9 +77,13 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
   qc: <QualityControl />,
   'job-work-out': <JobWorkOutward />,
   'job-work-in': <JobWorkInward />,
+  'job-work-challan': <JobWorkChallan />,
   'contractor-bills': <ContractorBillBooking />,
   'work-orders': <WorkOrders />,
   'material-issue': <MaterialIssue />,
+  'finish-stock': <FinishItemStock />,
+  'customers-by-area': <AreaWiseCustomerReport />,
+  'pending-po': <PendingClientPo />,
   'after-sales': <AfterSales />,
   'reports-dashboard': <ReportsDashboard />,
   'final-reports': <FinalReports />,

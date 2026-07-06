@@ -144,6 +144,8 @@ export const mockQuotations: Quotation[] = [
   { id: 'QT-26-004', date: '2026-04-10', enquiryId: '', customerId: 'CUST-002', totalAmount: 880000, status: 'Rejected', items: [{ productId: 'PROD-004', quantity: 2, unitPrice: 440000 }] },
   { id: 'QT-26-005', date: '2026-03-15', enquiryId: '', customerId: 'CUST-001', totalAmount: 1450000, status: 'Rejected', items: [{ productId: 'PROD-001', quantity: 1, unitPrice: 1450000 }] },
   { id: 'QT-26-006', date: '2026-02-20', enquiryId: '', customerId: 'CUST-004', totalAmount: 2100000, status: 'Sent', items: [{ productId: 'PROD-002', quantity: 1, unitPrice: 2100000 }] },
+  { id: 'QT-26-007', date: '2026-06-28', enquiryId: 'ENQ-2026-006', customerId: 'CUST-001', totalAmount: 95000, status: 'Sent', items: [{ productId: 'PROD-003', quantity: 1, unitPrice: 95000 }] },
+  { id: 'QT-26-008', date: '2026-06-26', enquiryId: 'ENQ-2026-002', customerId: 'CUST-003', totalAmount: 185000, status: 'Accepted', items: [{ productId: 'PROD-003', quantity: 1, unitPrice: 185000 }] },
 ];
 
 // Mock Orders

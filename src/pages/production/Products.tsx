@@ -4,7 +4,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { mockProducts } from '@/lib/mockData';
+import { loadProducts } from '@/lib/finishedGoodsService';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PackageSearch, Network } from 'lucide-react';
@@ -12,6 +12,7 @@ import { PackageSearch, Network } from 'lucide-react';
 export default function Products() {
   const navigate = useNavigate();
   const [toast, setToast] = useState<string | null>(null);
+  const products = loadProducts();
 
   return (
     <div className="space-y-6">
@@ -43,11 +44,12 @@ export default function Products() {
                 <TableHead>Model</TableHead>
                 <TableHead>Category</TableHead>
                 <TableHead className="text-right">Base Price</TableHead>
+                <TableHead className="text-right">FG Stock</TableHead>
                 <TableHead className="text-right">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockProducts.map((product) => (
+              {products.map((product) => (
                 <TableRow key={product.id}>
                   <TableCell className="font-medium">{product.id}</TableCell>
                   <TableCell>{product.name}</TableCell>
@@ -56,6 +58,9 @@ export default function Products() {
                     <Badge variant="outline">{product.category}</Badge>
                   </TableCell>
                   <TableCell className="text-right">₹{product.basePrice.toLocaleString('en-IN')}</TableCell>
+                  <TableCell className="text-right">
+                    <Badge variant={product.stock > 0 ? 'default' : 'secondary'}>{product.stock} Nos</Badge>
+                  </TableCell>
                   <TableCell className="text-right">
                     <Link to={`/production/bom/${product.id}`}>
                       <Button variant="ghost" size="sm">

@@ -1,4 +1,4 @@
-import { mockQuotations, mockProducts, type Quotation } from './mockData';
+import { mockQuotations, mockProducts, getStoredEnquiries, type Quotation, type Enquiry } from './mockData';
 import type { CostEstimate } from './costEstimateData';
 import {
   updateCostEstimate,
@@ -40,6 +40,84 @@ function saveQuotations(quotations: Quotation[]): void {
 
 export function getQuotations(): Quotation[] {
   return loadQuotations();
+}
+
+export type EnquiryForQuotation = Enquiry & {
+  linkedQuotationId?: string;
+  linkedQuotationStatus?: Quotation['status'];
+  quotePipelineStatus: EnquiryQuotePipelineStatus;
+};
+
+export type EnquiryQuotePipelineStatus =
+  | 'quotation_pending'
+  | 'draft'
+  | 'sent'
+  | 'accepted'
+  | 'po_awarded'
+  | 'rejected';
+
+export function resolveEnquiryQuoteStatus(
+  linkedQuotationId?: string,
+  linkedQuotationStatus?: Quotation['status']
+): EnquiryQuotePipelineStatus {
+  if (!linkedQuotationId) return 'quotation_pending';
+  switch (linkedQuotationStatus) {
+    case 'Draft': return 'draft';
+    case 'Sent': return 'sent';
+    case 'Accepted': return 'accepted';
+    case 'PO Awarded': return 'po_awarded';
+    case 'Rejected': return 'rejected';
+    default: return 'draft';
+  }
+}
+
+export function getEnquiryQuoteStatusLabel(status: EnquiryQuotePipelineStatus): string {
+  const labels: Record<EnquiryQuotePipelineStatus, string> = {
+    quotation_pending: 'Quotation Pending',
+    draft: 'Quote Draft',
+    sent: 'Quote Sent',
+    accepted: 'Quote Accepted',
+    po_awarded: 'PO Awarded',
+    rejected: 'Quote Rejected',
+  };
+  return labels[status];
+}
+
+export function getEnquiryQuoteStatusForEnquiry(enquiryId: string): EnquiryQuotePipelineStatus {
+  const row = getEnquiriesForQuotation().find(e => e.id === enquiryId);
+  return row?.quotePipelineStatus ?? 'quotation_pending';
+}
+
+/** Open enquiries visible on the Quotations page — includes newly entered enquiries */
+export function getEnquiriesForQuotation(): EnquiryForQuotation[] {
+  const quotations = loadQuotations();
+  return getStoredEnquiries()
+    .filter(e => ['Open', 'Quoted', 'In Progress'].includes(e.status))
+    .map(e => {
+      const linked = quotations.find(q => q.enquiryId === e.id);
+      const linkedQuotationId = linked?.id;
+      const linkedQuotationStatus = linked?.status;
+      return {
+        ...e,
+        linkedQuotationId,
+        linkedQuotationStatus,
+        quotePipelineStatus: resolveEnquiryQuoteStatus(linkedQuotationId, linkedQuotationStatus),
+      };
+    })
+    .sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
+}
+
+export function getPendingQuotationEnquiries(): EnquiryForQuotation[] {
+  return getEnquiriesForQuotation().filter(e => e.quotePipelineStatus === 'quotation_pending');
+}
+
+export function createQuotationFromEnquiry(enquiry: Enquiry): Quotation {
+  const existing = loadQuotations().find(q => q.enquiryId === enquiry.id);
+  if (existing) return existing;
+  return createDirectQuotation({
+    customerId: enquiry.customerId,
+    enquiryId: enquiry.id,
+  });
 }
 
 export function getQuotationById(id: string): Quotation | undefined {

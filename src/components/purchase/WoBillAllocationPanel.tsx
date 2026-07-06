@@ -16,7 +16,8 @@ import {
   type PurchaseBillInput,
   type WoAllocationResult,
 } from '@/lib/woBillAllocation';
-import { AlertTriangle, CheckCircle2, Sparkles, Split } from 'lucide-react';
+import { getOpenWarrantyChallanOptions, validateRepairCostBooking } from '@/lib/warrantyRepairService';
+import { AlertTriangle, CheckCircle2, Shield, Sparkles, Split } from 'lucide-react';
 
 type Props = {
   initialBillRef?: string;
@@ -47,6 +48,10 @@ export default function WoBillAllocationPanel({
   const [billDate, setBillDate] = useState(initialDate);
   const [siteCode, setSiteCode] = useState('');
   const [approvalOverride, setApprovalOverride] = useState(false);
+  const [warrantyChallanRef, setWarrantyChallanRef] = useState('');
+  const [repairCostAmount, setRepairCostAmount] = useState('');
+  const [warrantyCostOverride, setWarrantyCostOverride] = useState(false);
+  const [warrantyCostError, setWarrantyCostError] = useState<string | null>(null);
   const [nlQuery, setNlQuery] = useState('');
   const [result, setResult] = useState<WoAllocationResult | null>(null);
   const [booked, setBooked] = useState(false);
@@ -57,6 +62,8 @@ export default function WoBillAllocationPanel({
     () => getPendingWoLinesForItem(itemCode, selectedItem?.name, siteCode || undefined),
     [itemCode, selectedItem?.name, siteCode, auditRefresh]
   );
+
+  const warrantyChallanOptions = useMemo(() => getOpenWarrantyChallanOptions(), [auditRefresh, booked]);
 
   const buildInput = (): PurchaseBillInput => ({
     billRef: billRef || `BILL-${Date.now()}`,
@@ -69,25 +76,48 @@ export default function WoBillAllocationPanel({
     poRef: poRef || undefined,
     woRef: woRef || undefined,
     approvalOverride,
+    warrantyChallanRef: warrantyChallanRef || undefined,
+    repairCostAmount: Number(repairCostAmount) || 0,
+    warrantyCostOverride,
   });
+
+  const checkWarrantyCost = (input: PurchaseBillInput) => {
+    const check = validateRepairCostBooking(
+      input.warrantyChallanRef,
+      input.repairCostAmount ?? 0,
+      input.warrantyCostOverride
+    );
+    if (!check.ok) {
+      setWarrantyCostError(check.message);
+      return false;
+    }
+    setWarrantyCostError(check.warning ?? null);
+    return true;
+  };
 
   const handlePreview = () => {
     setBooked(false);
     const input = buildInput();
     if (input.quantity <= 0) return;
+    if (!checkWarrantyCost(input)) return;
     setResult(allocateBillToWorkOrders(input, { dryRun: true }));
   };
 
   const handleConfirm = () => {
     const input = buildInput();
-    const audit = confirmBillAllocation(input);
-    setResult(allocateBillToWorkOrders(input, { dryRun: true }));
-    setBooked(true);
-    setAuditRefresh(n => n + 1);
-    onBooked?.(
-      `Bill ${input.billRef} booked — ${audit.allocations.length} WO line(s), ` +
-      `${audit.excessQty > 0 ? `${audit.excessQty} excess flagged` : 'fully allocated'}`
-    );
+    if (!checkWarrantyCost(input)) return;
+    try {
+      const audit = confirmBillAllocation(input);
+      setResult(allocateBillToWorkOrders(input, { dryRun: true }));
+      setBooked(true);
+      setAuditRefresh(n => n + 1);
+      onBooked?.(
+        `Bill ${input.billRef} booked — ${audit.allocations.length} WO line(s), ` +
+        `${audit.excessQty > 0 ? `${audit.excessQty} excess flagged` : 'fully allocated'}`
+      );
+    } catch (err) {
+      setWarrantyCostError(err instanceof Error ? err.message : 'Booking failed.');
+    }
   };
 
   const handleNlQuery = () => {
@@ -205,6 +235,66 @@ export default function WoBillAllocationPanel({
           </label>
         </div>
       </div>
+
+      <Card className="border-dashed border-teal-200 bg-teal-50/30">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base flex items-center gap-2">
+            <Shield className="h-4 w-4 text-teal-600" />
+            Warranty Repair Bill Link
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            If this purchase bill is for vendor repair linked to a warranty outward challan, select the challan.
+            Repair cost is blocked when warranty status is Under/Extended Warranty.
+          </p>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className={fieldClass}>
+              <label className={labelClass}>Warranty Outward Challan Ref</label>
+              <select
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                value={warrantyChallanRef}
+                onChange={e => { setWarrantyChallanRef(e.target.value); setWarrantyCostError(null); }}
+              >
+                <option value="">— Not a warranty repair bill —</option>
+                {warrantyChallanOptions.map(o => (
+                  <option key={o.value} value={o.value}>{o.label} — {o.sublabel}</option>
+                ))}
+              </select>
+            </div>
+            <div className={fieldClass}>
+              <label className={labelClass}>Repair Cost (₹)</label>
+              <Input
+                type="number"
+                min={0}
+                step="0.01"
+                value={repairCostAmount}
+                onChange={e => { setRepairCostAmount(e.target.value); setWarrantyCostError(null); }}
+                placeholder="0 — leave blank if no repair charge"
+              />
+            </div>
+          </div>
+          <label className="flex items-center gap-2 text-sm cursor-pointer">
+            <input
+              type="checkbox"
+              checked={warrantyCostOverride}
+              onChange={e => setWarrantyCostOverride(e.target.checked)}
+              className="rounded border-zinc-300"
+            />
+            Warranty cost override (explicit approval to book repair cost on covered warranty)
+          </label>
+          {warrantyCostError && (
+            <div className={`flex items-start gap-2 rounded-lg border p-3 text-sm ${
+              warrantyCostError.includes('override') || warrantyCostError.includes('blocked')
+                ? 'border-red-300 bg-red-50 text-red-900'
+                : 'border-amber-300 bg-amber-50 text-amber-900'
+            }`}>
+              <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+              {warrantyCostError}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       <div className="flex gap-2">
         <Button onClick={handlePreview}>Preview WO Allocation (FIFO)</Button>

@@ -8,7 +8,7 @@ import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter 
 } from '@/components/ui/dialog';
 import { mockWorkOrders, type WorkOrder } from '@/lib/mockData2';
-import { mockProducts, getMockOrders, saveMockOrders } from '@/lib/mockData';
+import { getMockOrders, saveMockOrders } from '@/lib/mockData';
 import { processErpEvent } from '@/lib/erpEvents';
 import {
   finalizeBuildProfit,
@@ -17,7 +17,8 @@ import {
 } from '@/lib/buildProfitLoss';
 import { getPlannedBomForWo } from '@/lib/quotationEstimatedBom';
 import { getWoLedger } from '@/lib/woMaterialIssue';
-import { ArrowLeft, CheckCircle2, Factory, FileCheck, TrendingUp, TrendingDown, Package } from 'lucide-react';
+import { getFgReceiptByWo, loadProducts, receiveFinishedGoodsFromWo } from '@/lib/finishedGoodsService';
+import { ArrowLeft, CheckCircle2, Factory, FileCheck, TrendingUp, TrendingDown, Package, Boxes } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function WorkOrderDetail() {
@@ -31,8 +32,9 @@ export default function WorkOrderDetail() {
   });
 
   const wo = wos.find(w => w.id === id);
-  const product = mockProducts.find(p => p.id === wo?.productId);
+  const product = loadProducts().find(p => p.id === wo?.productId);
   const profitRecord = wo ? getBuildProfitByWorkOrder(wo.id) : undefined;
+  const fgReceipt = wo ? getFgReceiptByWo(wo.id) : undefined;
   const plannedBom = wo ? getPlannedBomForWo(wo.id) : [];
   const actualLedger = wo ? getWoLedger(wo.id) : null;
 
@@ -87,8 +89,11 @@ export default function WorkOrderDetail() {
       saveMockOrders(updatedSales);
       const completedWo = updated.find(w => w.id === wo.id)!;
       finalizeBuildProfit(completedWo);
+      const fg = receiveFinishedGoodsFromWo(completedWo, 'Production');
       const result = await processErpEvent('workorder.completed', { orderId: wo.orderId, workOrderId: wo.id });
-      alert(`Job card completed!\n• Order ${wo.orderId} → Ready for Dispatch\n• Build P&L recorded\n• ${result.tasksCreated.length} task(s) created\n• ${result.notificationsSent} notification(s) sent`);
+      alert(
+        `Job card completed!\n• Order ${wo.orderId} → Ready for Dispatch\n• Build P&L recorded\n• FG received: ${fg.receiptRef} — ${fg.quantity} unit(s) → Finished Goods (${fg.serialNo})\n• ${result.tasksCreated.length} task(s) created\n• ${result.notificationsSent} notification(s) sent`
+      );
     }
   };
 
@@ -155,6 +160,27 @@ export default function WorkOrderDetail() {
           )}
         </div>
       </div>
+
+      {wo.status === 'Completed' && fgReceipt && (
+        <Card className="border-blue-200 bg-blue-50/40">
+          <CardContent className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <Boxes className="w-8 h-8 text-blue-600 shrink-0" />
+              <div>
+                <p className="font-semibold text-lg">Finished Goods Received</p>
+                <p className="text-sm text-muted-foreground">
+                  {fgReceipt.receiptRef} · Serial {fgReceipt.serialNo} · {fgReceipt.quantity} unit(s) in FG Storage
+                  {' · '}Material cost ₹{fgReceipt.materialCost.toLocaleString('en-IN')}
+                  {' · '}QA: {fgReceipt.qaStatus}
+                </p>
+              </div>
+            </div>
+            <Link to="/inventory/finish-stock">
+              <Button variant="outline" size="sm">View FG Stock</Button>
+            </Link>
+          </CardContent>
+        </Card>
+      )}
 
       {wo.status === 'Completed' && profitRecord && (
         <Card className={profitRecord.profitLoss >= 0 ? 'border-emerald-200 bg-emerald-50/40' : 'border-rose-200 bg-rose-50/40'}>

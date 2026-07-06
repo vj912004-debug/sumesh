@@ -1,4 +1,5 @@
 import { mockInventory } from '@/lib/mockData2';
+import { validateRepairCostBooking } from '@/lib/warrantyRepairService';
 
 export type WoBillingStatus = 'Pending' | 'Partially Billed' | 'Fully Billed';
 
@@ -28,6 +29,12 @@ export type PurchaseBillInput = {
   woRef?: string;
   /** Allow booking beyond sanctioned qty (approval override) */
   approvalOverride?: boolean;
+  /** Link to warranty repair outward challan when booking vendor repair bill */
+  warrantyChallanRef?: string;
+  /** Repair cost amount (distinct from material qty) — blocked if under warranty */
+  repairCostAmount?: number;
+  /** Override warranty repair cost block (requires explicit approval) */
+  warrantyCostOverride?: boolean;
 };
 
 export type WoAllocationLine = {
@@ -299,6 +306,15 @@ export function allocateBillToWorkOrders(
 }
 
 export function confirmBillAllocation(input: PurchaseBillInput): WoAllocationAuditEntry {
+  const costCheck = validateRepairCostBooking(
+    input.warrantyChallanRef,
+    input.repairCostAmount ?? 0,
+    input.warrantyCostOverride
+  );
+  if (!costCheck.ok) {
+    throw new Error(costCheck.message);
+  }
+
   const result = allocateBillToWorkOrders(input, { dryRun: false });
   const entry: WoAllocationAuditEntry = {
     id: `AUD-${Date.now()}`,
