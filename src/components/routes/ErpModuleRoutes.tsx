@@ -36,9 +36,11 @@ import DocumentManagement from '@/pages/DocumentManagement';
 import VisitorRegistry from '@/pages/visitor/VisitorRegistry';
 import SalesRentalsBilling from '@/pages/sales/SalesRentalsBilling';
 import Payroll from '@/pages/production/Payroll';
+import ErpWorkflow from '@/pages/ErpWorkflow';
 
 const COMPONENT_MAP: Record<string, ReactNode> = {
   dashboard: <Dashboard />,
+  'erp-workflow': <ErpWorkflow />,
   tasks: <Tasks />,
   communication: <CommunicationAlerts />,
   customers: <Customers />,

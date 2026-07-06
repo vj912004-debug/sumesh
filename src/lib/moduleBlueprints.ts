@@ -600,16 +600,6 @@ export const MODULE_BLUEPRINTS: Record<string, ModuleBlueprint> = {
     gridTitle: 'Delayed Quotations',
     buttons: [btn('View On Screen'), btn('Export to Excel', 'outline')],
   },
-  '/mis/work-order-printing': {
-    detailFields: [
-      f('dateFrom', 'Start Date', 'date'),
-      f('dateTo', 'End Date', 'date'),
-      f('woStatus', 'WO Status', 'select', { options: ['All', 'Planned', 'In Progress', 'QC Pending'] }),
-    ],
-    gridColumns: ['WO No', 'Date', 'Machine Model', 'Stage', 'Print Status'],
-    gridTitle: 'Work Orders for Printing',
-    buttons: [btn('Bulk Print'), btn('Export to Excel', 'outline')],
-  },
   '/mis/work-order-shortage': {
     detailFields: [
       f('woNo', 'Work Order No', 'text'),

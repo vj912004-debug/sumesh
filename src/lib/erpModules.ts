@@ -2,8 +2,8 @@ import type { LucideIcon } from 'lucide-react';
 import {
   LayoutDashboard, Bell, Database, ShoppingCart, Settings, Factory,
   ClipboardList, ShoppingBag, Layers, Truck, ShieldCheck, BarChart3,
-  Wrench, Headset, Building2, FileSpreadsheet, Sliders, LineChart, Mail,
-  Users, Wallet, FileText, Calendar,
+  Wrench, Headset, Building2, Sliders, LineChart, Mail,
+  Users, Wallet, FileText, Calendar, GitBranch,
 } from 'lucide-react';
 
 export type ErpNavItem = {
@@ -30,6 +30,7 @@ export const appNavGroups: ErpNavGroup[] = [
     isCollapsible: false,
     items: [
       { name: 'Dashboard', path: '/', icon: LayoutDashboard, componentKey: 'dashboard' },
+      { name: 'ERP Interlock Workflow', path: p('workflow/interlocks'), icon: GitBranch, componentKey: 'erp-workflow' },
       { name: 'Tasks', path: '/tasks', icon: Bell, componentKey: 'tasks' },
       { name: 'Visitor Pass & Gate Registry', path: p('visitor-registry'), icon: Users, componentKey: 'visitor-registry' },
       { name: 'Communication Alerts', path: p('communication'), icon: Mail, componentKey: 'communication' },
@@ -42,10 +43,14 @@ export const appNavGroups: ErpNavGroup[] = [
     items: [
       { name: 'Master Configurations', path: p('master/saved-data'), description: 'System configurations and rate sheets.' },
       { name: 'Client & Party Master', path: p('master/parties'), componentKey: 'customers' },
+      { name: 'Customer & Consignee Registry', path: p('sales/client-profiles'), componentKey: 'sales-client-profiles' },
       { name: 'Plant Catalog (Item Master)', path: p('master/items'), componentKey: 'products' },
       { name: 'Grade & Alloy Master', path: p('master/grades') },
       { name: 'Worker Directory', path: p('master/workers'), componentKey: 'workers' },
       { name: 'Transporter Master', path: p('master/transports') },
+      { name: 'Supplier Ledger', path: p('purchase/ledgers') },
+      { name: 'Sales Reports', path: p('sales/reports'), componentKey: 'sales-reports' },
+      { name: 'Sales Register', path: p('mis/sales-register') },
     ],
   },
   {
@@ -58,10 +63,8 @@ export const appNavGroups: ErpNavGroup[] = [
       { name: 'Pending Quotation Follow-up', path: p('sales/pending-quotations') },
       { name: 'Proforma Invoice (PI)', path: p('sales/invoice-entry'), componentKey: 'accounting' },
       { name: 'Tax Invoice (TI)', path: p('sales/ti-entry'), componentKey: 'accounting-ti' },
-      { name: 'Customer & Consignee Registry', path: p('sales/client-profiles'), componentKey: 'sales-client-profiles' },
       { name: 'Client PO Tracking', path: p('sales/po-tracking'), componentKey: 'sales-po-tracking' },
-      { name: 'Sales Reports', path: p('sales/reports'), componentKey: 'sales-reports' },
-      { name: 'Sales Register', path: p('mis/sales-register') },
+      { name: 'Purchase Order', path: p('purchase/orders'), componentKey: 'purchase-orders' },
     ],
   },
   {
@@ -89,10 +92,8 @@ export const appNavGroups: ErpNavGroup[] = [
     isCollapsible: true,
     icon: Factory,
     items: [
-      { name: 'CNC Fabrication List', path: p('production/worker-cutting') },
-      { name: 'Work Order Printing', path: p('mis/work-order-printing') },
-      { name: 'Production & Bed Status', path: p('production/status') },
       { name: 'Work Order Shortage Report', path: p('mis/work-order-shortage') },
+      { name: 'Ready For Dispatch', path: p('production/ready-dispatch') },
       { name: 'MTC & Vacuum Vessel Certs', path: p('production/mtc'), componentKey: 'mtc' },
       { name: 'TC Management', path: p('production/tc-management') },
       { name: 'Build Profit & Loss', path: p('reports/build-profit'), componentKey: 'build-profit' },
@@ -108,7 +109,6 @@ export const appNavGroups: ErpNavGroup[] = [
       { name: 'PO (Pumps, Heaters, Spares)', path: p('purchase/orders'), componentKey: 'purchase-orders' },
       { name: 'Gate GRN & Inward Check', path: p('purchase/grn'), componentKey: 'grn' },
       { name: 'Purchase Returns', path: p('purchase/returns') },
-      { name: 'Supplier Ledger', path: p('purchase/ledgers') },
       { name: 'Purchase Summary', path: p('mis/purchase-summary') },
       { name: 'Purchase Register', path: p('mis/purchase-register') },
     ],
