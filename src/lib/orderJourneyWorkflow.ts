@@ -2,6 +2,7 @@
  * The Journey of One Order — end-to-end business flow for Sumesh Petroleum ERP.
  * Each step maps to a live module path in the application.
  */
+import type { WorkflowDefinition } from './workflowTypes';
 
 export type JourneyPhaseId =
   | 'sales-quote'
@@ -291,3 +292,31 @@ export const JOURNEY_PHASE_ORDER: JourneyPhaseId[] = [
   'after-sales',
   'finance-history',
 ];
+
+const MANUFACTURE_PHASE_RING: Record<JourneyPhaseId, string> = {
+  'sales-quote': 'border-teal-500 bg-teal-50 text-teal-800',
+  'buy-stock': 'border-blue-500 bg-blue-50 text-blue-800',
+  'make-move': 'border-amber-500 bg-amber-50 text-amber-800',
+  'finish-deliver': 'border-emerald-500 bg-emerald-50 text-emerald-800',
+  'after-sales': 'border-violet-500 bg-violet-50 text-violet-800',
+  'finance-history': 'border-zinc-500 bg-zinc-50 text-zinc-800',
+};
+
+export const MANUFACTURE_ORDER_WORKFLOW: WorkflowDefinition = {
+  id: 'manufacture',
+  title: 'The Journey of One Order',
+  subtitle: 'Lead → quote → WO → purchase → production → dispatch → finance',
+  steps: ORDER_JOURNEY_STEPS,
+  phaseOrder: JOURNEY_PHASE_ORDER,
+  phases: Object.fromEntries(
+    JOURNEY_PHASE_ORDER.map(phase => [
+      phase,
+      {
+        label: JOURNEY_PHASES[phase].label,
+        subtitle: JOURNEY_PHASES[phase].subtitle,
+        color: JOURNEY_PHASES[phase].color,
+      },
+    ])
+  ),
+  phaseRing: MANUFACTURE_PHASE_RING,
+};

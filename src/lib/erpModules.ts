@@ -30,7 +30,7 @@ export const appNavGroups: ErpNavGroup[] = [
     isCollapsible: false,
     items: [
       { name: 'Dashboard', path: '/', icon: LayoutDashboard, componentKey: 'dashboard' },
-      { name: 'Order Journey Workflow', path: p('workflow/interlocks'), icon: GitBranch, componentKey: 'erp-workflow' },
+      { name: 'Order Journey & Workflows', path: p('workflow/interlocks'), icon: GitBranch, componentKey: 'erp-workflow' },
       { name: 'Live Demo Order', path: p('workflow/demo-order'), icon: Play, componentKey: 'demo-order' },
       { name: 'Tasks', path: '/tasks', icon: Bell, componentKey: 'tasks' },
       { name: 'Visitor Pass & Gate Registry', path: p('visitor-registry'), icon: Users, componentKey: 'visitor-registry' },

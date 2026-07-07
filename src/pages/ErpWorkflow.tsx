@@ -9,60 +9,66 @@ import {
   ERP_WORKFLOW_STEPS,
   ERP_CONFIGURATION_NOTES,
 } from '@/lib/erpWorkflow';
+import { MANUFACTURE_ORDER_WORKFLOW } from '@/lib/orderJourneyWorkflow';
+import { SERVICE_AMC_WORKFLOW } from '@/lib/serviceAmcWorkflow';
+import { EQUIPMENT_RENTAL_WORKFLOW } from '@/lib/equipmentRentalWorkflow';
 import {
-  JOURNEY_PHASE_ORDER,
-  JOURNEY_PHASES,
-  ORDER_JOURNEY_STEPS,
-  getJourneyStepsByPhase,
-  type JourneyPhaseId,
-  type OrderJourneyStep,
-} from '@/lib/orderJourneyWorkflow';
+  getStepsByPhase,
+  type WorkflowDefinition,
+  type WorkflowStep,
+} from '@/lib/workflowTypes';
 import {
   ArrowRight, GitBranch, ExternalLink, CheckCircle2, Link2, BookOpen, Route, Play,
+  Factory, Headset, Package,
 } from 'lucide-react';
 
-const PHASE_RING: Record<JourneyPhaseId, string> = {
-  'sales-quote': 'border-teal-500 bg-teal-50 text-teal-800',
-  'buy-stock': 'border-blue-500 bg-blue-50 text-blue-800',
-  'make-move': 'border-amber-500 bg-amber-50 text-amber-800',
-  'finish-deliver': 'border-emerald-500 bg-emerald-50 text-emerald-800',
-  'after-sales': 'border-violet-500 bg-violet-50 text-violet-800',
-  'finance-history': 'border-zinc-500 bg-zinc-50 text-zinc-800',
+const WORKFLOWS: WorkflowDefinition[] = [
+  MANUFACTURE_ORDER_WORKFLOW,
+  SERVICE_AMC_WORKFLOW,
+  EQUIPMENT_RENTAL_WORKFLOW,
+];
+
+const WORKFLOW_ICONS: Record<string, typeof Factory> = {
+  manufacture: Factory,
+  'service-amc': Headset,
+  'equipment-rental': Package,
 };
 
 function JourneyStepCard({
   step,
+  phaseRing,
   isActive,
   onSelect,
 }: {
-  step: OrderJourneyStep;
+  step: WorkflowStep;
+  phaseRing: Record<string, string>;
   isActive: boolean;
   onSelect: () => void;
 }) {
-  const phase = JOURNEY_PHASES[step.phase];
+  const ring = phaseRing[step.phase] ?? 'border-border bg-muted text-foreground';
   return (
     <button
       type="button"
       onClick={onSelect}
-      className={`w-full text-left rounded-xl border p-4 transition-all hover:shadow-sm ${
+      className={`w-full rounded-xl border p-4 text-left transition-all hover:shadow-sm ${
         isActive ? 'border-teal-500 bg-teal-50/50 ring-1 ring-teal-500/25' : 'border-border bg-card'
       }`}
     >
       <div className="flex items-start gap-3">
-        <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold border-2 ${PHASE_RING[step.phase]}`}>
+        <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold ${ring}`}>
           {step.step}
         </span>
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2 mb-1">
+          <div className="mb-1 flex flex-wrap items-center gap-2">
             <span className="font-semibold">{step.title}</span>
             <Badge variant="outline" className="text-[10px]">{step.module}</Badge>
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">{step.narrative}</p>
-          <div className="flex flex-wrap gap-2 mt-3">
+          <p className="text-sm leading-relaxed text-muted-foreground">{step.narrative}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
             <Link
               to={step.path}
               onClick={e => e.stopPropagation()}
-              className="inline-flex items-center gap-1 text-xs font-medium text-teal-700 hover:underline bg-teal-50 px-2 py-1 rounded"
+              className="inline-flex items-center gap-1 rounded bg-teal-50 px-2 py-1 text-xs font-medium text-teal-700 hover:underline"
             >
               Open {step.module} <ExternalLink className="h-3 w-3" />
             </Link>
@@ -78,8 +84,8 @@ function JourneyStepCard({
             ))}
           </div>
           {step.handoff && (
-            <p className="text-[11px] text-teal-700/80 mt-2 flex items-start gap-1">
-              <ArrowRight className="h-3 w-3 shrink-0 mt-0.5" />
+            <p className="mt-2 flex items-start gap-1 text-[11px] text-teal-700/80">
+              <ArrowRight className="mt-0.5 h-3 w-3 shrink-0" />
               <span><strong>Hands off:</strong> {step.handoff}</span>
             </p>
           )}
@@ -89,115 +95,176 @@ function JourneyStepCard({
   );
 }
 
-export default function ErpWorkflow() {
+function WorkflowJourneyPanel({ workflow }: { workflow: WorkflowDefinition }) {
   const [activeStep, setActiveStep] = useState<number | null>(1);
-  const [activePhase, setActivePhase] = useState<JourneyPhaseId | 'all'>('all');
-
-  const selected = ORDER_JOURNEY_STEPS.find(s => s.step === activeStep);
+  const [activePhase, setActivePhase] = useState<string | 'all'>('all');
+  const selected = workflow.steps.find(s => s.step === activeStep);
+  const Icon = WORKFLOW_ICONS[workflow.id] ?? Route;
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-            <Route className="h-8 w-8 text-teal-600" />
-            The Journey of One Order
-          </h2>
-          <p className="text-muted-foreground mt-2 max-w-3xl">
-            From the first customer call for an Oil Filtration Plant through quotation, production, dispatch,
-            AMC, rental, and month-end — every step links to a live module in this ERP.
-          </p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <h3 className="flex items-center gap-2 text-xl font-bold">
+            <Icon className="h-5 w-5 shrink-0 text-teal-600" />
+            {workflow.title}
+          </h3>
+          <p className="mt-1 max-w-3xl text-sm text-muted-foreground">{workflow.subtitle}</p>
         </div>
-        <Link to="/workflow/demo-order" className="shrink-0">
-          <Button variant="outline" className="border-teal-300 text-teal-700">
-            <Play className="h-4 w-4 mr-2" /> Run Live Demo
-          </Button>
-        </Link>
+        {workflow.id === 'manufacture' && (
+          <Link to="/workflow/demo-order" className="shrink-0">
+            <Button variant="outline" className="w-full border-teal-300 text-teal-700 sm:w-auto">
+              <Play className="mr-2 h-4 w-4" /> Run Live Demo
+            </Button>
+          </Link>
+        )}
       </div>
 
-      {/* Quick phase strip */}
-      <div className="flex flex-wrap gap-2 print:hidden">
+      <div className="flex flex-wrap gap-2">
         <Button
           size="sm"
           variant={activePhase === 'all' ? 'default' : 'outline'}
           onClick={() => setActivePhase('all')}
         >
-          All 17 steps
+          All {workflow.steps.length} steps
         </Button>
-        {JOURNEY_PHASE_ORDER.map(phase => (
+        {workflow.phaseOrder.map(phase => (
           <Button
             key={phase}
             size="sm"
             variant={activePhase === phase ? 'default' : 'outline'}
             onClick={() => setActivePhase(phase)}
           >
-            {JOURNEY_PHASES[phase].label}
+            {workflow.phases[phase]?.label ?? phase}
           </Button>
         ))}
       </div>
 
-      <Tabs defaultValue="journey" className="print:hidden">
-        <TabsList>
-          <TabsTrigger value="journey">Order Journey (17 steps)</TabsTrigger>
-          <TabsTrigger value="interlocks">Technical Interlocks</TabsTrigger>
+      {workflow.phaseOrder.map(phase => {
+        const steps = getStepsByPhase(workflow.steps, phase);
+        if (activePhase !== 'all' && activePhase !== phase) return null;
+        const meta = workflow.phases[phase];
+        if (!meta) return null;
+        return (
+          <Card key={phase}>
+            <CardHeader className="pb-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge className={workflow.phaseRing[phase]}>{meta.label}</Badge>
+                <CardTitle className="text-lg">{meta.subtitle}</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {steps.map(step => (
+                <JourneyStepCard
+                  key={step.step}
+                  step={step}
+                  phaseRing={workflow.phaseRing}
+                  isActive={activeStep === step.step}
+                  onSelect={() => setActiveStep(step.step)}
+                />
+              ))}
+            </CardContent>
+          </Card>
+        );
+      })}
+
+      {selected && (
+        <Card className="border-teal-200 bg-teal-50/30">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <CheckCircle2 className="h-5 w-5 text-teal-600" />
+              Step {selected.step}: {selected.title}
+            </CardTitle>
+            <CardDescription>{selected.narrative}</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-2">
+            <Link to={selected.path}>
+              <Button size="sm" className="bg-teal-600 text-white hover:bg-teal-700">
+                Go to {selected.module} <ExternalLink className="ml-2 h-3 w-3" />
+              </Button>
+            </Link>
+            {selected.related?.map(r => (
+              <Link key={r.path} to={r.path}>
+                <Button size="sm" variant="outline">{r.label}</Button>
+              </Link>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Link2 className="h-5 w-5 text-teal-600" />
+            {workflow.title} at a glance
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap items-center gap-1 text-xs">
+            {workflow.steps.map((s, i) => (
+              <div key={s.step} className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => setActiveStep(s.step)}
+                  className={`rounded-md border px-2 py-1 transition-colors hover:border-teal-400 ${
+                    activeStep === s.step ? 'border-teal-500 bg-teal-100 font-semibold' : 'bg-card'
+                  }`}
+                  title={s.title}
+                >
+                  {s.step}
+                </button>
+                {i < workflow.steps.length - 1 && (
+                  <ArrowRight className="h-3 w-3 shrink-0 text-muted-foreground" />
+                )}
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+export default function ErpWorkflow() {
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight sm:text-3xl">
+          <Route className="h-7 w-7 shrink-0 text-teal-600 sm:h-8 sm:w-8" />
+          Order Journey & Workflows
+        </h2>
+        <p className="mt-2 max-w-4xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+          Manufacture, Service & AMC, and Equipment Rental — each workflow maps every business step
+          to a live module in this ERP.
+        </p>
+      </div>
+
+      <Tabs defaultValue="manufacture">
+        <TabsList className="flex h-auto w-full flex-wrap gap-1">
+          <TabsTrigger value="manufacture" className="flex-1 sm:flex-none">
+            <Factory className="mr-2 h-4 w-4" /> Manufacture (17)
+          </TabsTrigger>
+          <TabsTrigger value="service-amc" className="flex-1 sm:flex-none">
+            <Headset className="mr-2 h-4 w-4" /> Service & AMC (7)
+          </TabsTrigger>
+          <TabsTrigger value="equipment-rental" className="flex-1 sm:flex-none">
+            <Package className="mr-2 h-4 w-4" /> Equipment Rental (7)
+          </TabsTrigger>
+          <TabsTrigger value="interlocks" className="flex-1 sm:flex-none">
+            <GitBranch className="mr-2 h-4 w-4" /> Interlocks
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="journey" className="mt-4 space-y-6">
-          {JOURNEY_PHASE_ORDER.map(phase => {
-            const steps = getJourneyStepsByPhase(phase);
-            if (activePhase !== 'all' && activePhase !== phase) return null;
-            const meta = JOURNEY_PHASES[phase];
-            return (
-              <Card key={phase}>
-                <CardHeader className="pb-3">
-                  <div className="flex items-center gap-2">
-                    <Badge className={PHASE_RING[phase]}>{meta.label}</Badge>
-                    <CardTitle className="text-lg">{meta.subtitle}</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {steps.map(step => (
-                    <JourneyStepCard
-                      key={step.step}
-                      step={step}
-                      isActive={activeStep === step.step}
-                      onSelect={() => setActiveStep(step.step)}
-                    />
-                  ))}
-                </CardContent>
-              </Card>
-            );
-          })}
-
-          {selected && (
-            <Card className="border-teal-200 bg-teal-50/30">
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-teal-600" />
-                  Step {selected.step}: {selected.title}
-                </CardTitle>
-                <CardDescription>{selected.narrative}</CardDescription>
-              </CardHeader>
-              <CardContent className="flex flex-wrap gap-2">
-                <Link to={selected.path}>
-                  <Button size="sm" className="bg-teal-600 hover:bg-teal-700 text-white">
-                    Go to {selected.module} <ExternalLink className="h-3 w-3 ml-2" />
-                  </Button>
-                </Link>
-                {selected.related?.map(r => (
-                  <Link key={r.path} to={r.path}>
-                    <Button size="sm" variant="outline">{r.label}</Button>
-                  </Link>
-                ))}
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
+        {WORKFLOWS.map(wf => (
+          <TabsContent key={wf.id} value={wf.id} className="mt-4">
+            <WorkflowJourneyPanel workflow={wf} />
+          </TabsContent>
+        ))}
 
         <TabsContent value="interlocks" className="mt-4 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-lg">
                 <GitBranch className="h-5 w-5 text-teal-600" />
                 Manufacturing interlocks (order → stock → shop → bill)
               </CardTitle>
@@ -221,12 +288,12 @@ export default function ErpWorkflow() {
                       <tr key={interlock.id} className="hover:bg-muted/30">
                         <td className="px-4 py-3 font-medium">{interlock.name}</td>
                         <td className="px-4 py-3">
-                          <Link to={interlock.fromPath} className="text-primary hover:underline inline-flex items-center gap-1">
+                          <Link to={interlock.fromPath} className="inline-flex items-center gap-1 text-primary hover:underline">
                             {interlock.fromModule} <ExternalLink className="h-3 w-3" />
                           </Link>
                         </td>
                         <td className="px-4 py-3">
-                          <Link to={interlock.toPath} className="text-primary hover:underline inline-flex items-center gap-1">
+                          <Link to={interlock.toPath} className="inline-flex items-center gap-1 text-primary hover:underline">
                             {interlock.toModule} <ExternalLink className="h-3 w-3" />
                           </Link>
                         </td>
@@ -243,53 +310,23 @@ export default function ErpWorkflow() {
             {ERP_CONFIGURATION_NOTES.map(note => (
               <Card key={note.title}>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-sm">
                     <BookOpen className="h-4 w-4 text-teal-600" />
                     {note.title}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{note.body}</p>
+                  <p className="text-xs leading-relaxed text-muted-foreground">{note.body}</p>
                 </CardContent>
               </Card>
             ))}
           </div>
+
+          <p className="text-xs text-muted-foreground">
+            {ERP_WORKFLOW_STEPS.length} core manufacturing interlocks underpin the manufacture journey (WO → buy → GRN → issue → dispatch → invoice).
+          </p>
         </TabsContent>
       </Tabs>
-
-      {/* Compact visual flow */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Link2 className="h-5 w-5 text-teal-600" />
-            End-to-end flow at a glance
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap items-center gap-1 text-xs">
-            {ORDER_JOURNEY_STEPS.map((s, i) => (
-              <div key={s.step} className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() => setActiveStep(s.step)}
-                  className={`rounded-md px-2 py-1 border transition-colors hover:border-teal-400 ${
-                    activeStep === s.step ? 'bg-teal-100 border-teal-500 font-semibold' : 'bg-card'
-                  }`}
-                  title={s.title}
-                >
-                  {s.step}
-                </button>
-                {i < ORDER_JOURNEY_STEPS.length - 1 && (
-                  <ArrowRight className="h-3 w-3 text-muted-foreground shrink-0" />
-                )}
-              </div>
-            ))}
-          </div>
-          <p className="text-xs text-muted-foreground mt-3">
-            {ERP_WORKFLOW_STEPS.length} core manufacturing interlocks underpin steps 4–12 (WO → buy → GRN → issue → dispatch → invoice).
-          </p>
-        </CardContent>
-      </Card>
     </div>
   );
 }
