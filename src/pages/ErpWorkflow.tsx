@@ -12,6 +12,7 @@ import {
 import { MANUFACTURE_ORDER_WORKFLOW } from '@/lib/orderJourneyWorkflow';
 import { SERVICE_AMC_WORKFLOW } from '@/lib/serviceAmcWorkflow';
 import { EQUIPMENT_RENTAL_WORKFLOW } from '@/lib/equipmentRentalWorkflow';
+import { MASTER_ERP_JOURNEY } from '@/lib/masterErpJourney';
 import {
   getStepsByPhase,
   type WorkflowDefinition,
@@ -19,16 +20,18 @@ import {
 } from '@/lib/workflowTypes';
 import {
   ArrowRight, GitBranch, ExternalLink, CheckCircle2, Link2, BookOpen, Route, Play,
-  Factory, Headset, Package,
+  Factory, Headset, Package, Map,
 } from 'lucide-react';
 
 const WORKFLOWS: WorkflowDefinition[] = [
+  MASTER_ERP_JOURNEY,
   MANUFACTURE_ORDER_WORKFLOW,
   SERVICE_AMC_WORKFLOW,
   EQUIPMENT_RENTAL_WORKFLOW,
 ];
 
 const WORKFLOW_ICONS: Record<string, typeof Factory> = {
+  'master-journey': Map,
   manufacture: Factory,
   'service-amc': Headset,
   'equipment-rental': Package,
@@ -111,6 +114,13 @@ function WorkflowJourneyPanel({ workflow }: { workflow: WorkflowDefinition }) {
           </h3>
           <p className="mt-1 max-w-3xl text-sm text-muted-foreground">{workflow.subtitle}</p>
         </div>
+        {workflow.id === 'master-journey' && (
+          <Link to="/workflow/demo-order" className="shrink-0">
+            <Button variant="outline" className="w-full border-teal-300 text-teal-700 sm:w-auto">
+              <Play className="mr-2 h-4 w-4" /> Run Live Demo
+            </Button>
+          </Link>
+        )}
         {workflow.id === 'manufacture' && (
           <Link to="/workflow/demo-order" className="shrink-0">
             <Button variant="outline" className="w-full border-teal-300 text-teal-700 sm:w-auto">
@@ -234,13 +244,16 @@ export default function ErpWorkflow() {
           Order Journey & Workflows
         </h2>
         <p className="mt-2 max-w-4xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-          Manufacture, Service & AMC, and Equipment Rental — each workflow maps every business step
-          to a live module in this ERP.
+          One complete map — 37 steps from first enquiry through manufacture, dispatch, AMC, rental,
+          and month-end rollup. Each step links to a live ERP module.
         </p>
       </div>
 
-      <Tabs defaultValue="manufacture">
+      <Tabs defaultValue="master-journey">
         <TabsList className="flex h-auto w-full flex-wrap gap-1">
+          <TabsTrigger value="master-journey" className="flex-1 sm:flex-none">
+            <Map className="mr-2 h-4 w-4" /> Complete Journey (37)
+          </TabsTrigger>
           <TabsTrigger value="manufacture" className="flex-1 sm:flex-none">
             <Factory className="mr-2 h-4 w-4" /> Manufacture (17)
           </TabsTrigger>
