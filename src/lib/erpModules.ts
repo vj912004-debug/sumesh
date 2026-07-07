@@ -1,9 +1,9 @@
 import type { LucideIcon } from 'lucide-react';
 import {
   LayoutDashboard, Bell, Database, ShoppingCart, Settings, Factory,
-  ClipboardList, ShoppingBag, Layers, Truck, ShieldCheck, BarChart3,
+  ClipboardList, Layers, Truck, ShieldCheck, BarChart3,
   Wrench, Headset, Building2, Sliders, LineChart, Mail,
-  Users, Wallet, FileText, Calendar, GitBranch,
+  Users, Wallet, FileText, Calendar, GitBranch, Play,
 } from 'lucide-react';
 
 export type ErpNavItem = {
@@ -30,7 +30,8 @@ export const appNavGroups: ErpNavGroup[] = [
     isCollapsible: false,
     items: [
       { name: 'Dashboard', path: '/', icon: LayoutDashboard, componentKey: 'dashboard' },
-      { name: 'ERP Interlock Workflow', path: p('workflow/interlocks'), icon: GitBranch, componentKey: 'erp-workflow' },
+      { name: 'Order Journey Workflow', path: p('workflow/interlocks'), icon: GitBranch, componentKey: 'erp-workflow' },
+      { name: 'Live Demo Order', path: p('workflow/demo-order'), icon: Play, componentKey: 'demo-order' },
       { name: 'Tasks', path: '/tasks', icon: Bell, componentKey: 'tasks' },
       { name: 'Visitor Pass & Gate Registry', path: p('visitor-registry'), icon: Users, componentKey: 'visitor-registry' },
       { name: 'Communication Alerts', path: p('communication'), icon: Mail, componentKey: 'communication' },
@@ -65,7 +66,6 @@ export const appNavGroups: ErpNavGroup[] = [
       { name: 'Tax Invoice (TI)', path: p('sales/ti-entry'), componentKey: 'accounting-ti' },
       { name: 'Client PO Tracking', path: p('sales/po-tracking'), componentKey: 'sales-po-tracking' },
       { name: 'Pending Client PO', path: p('sales/pending-po'), componentKey: 'pending-po' },
-      { name: 'Purchase Order', path: p('purchase/orders'), componentKey: 'purchase-orders' },
     ],
   },
   {
@@ -105,22 +105,11 @@ export const appNavGroups: ErpNavGroup[] = [
     ],
   },
   {
-    title: 'Purchase & Procurement',
-    isCollapsible: true,
-    icon: ShoppingBag,
-    items: [
-      { name: 'PO (Pumps, Heaters, Spares)', path: p('purchase/orders'), componentKey: 'purchase-orders' },
-      { name: 'Gate GRN & Inward Check', path: p('purchase/grn'), componentKey: 'grn' },
-      { name: 'Purchase Returns', path: p('purchase/returns') },
-      { name: 'Purchase Summary', path: p('mis/purchase-summary') },
-      { name: 'Purchase Register', path: p('mis/purchase-register') },
-    ],
-  },
-  {
     title: 'Inventory & Stores',
     isCollapsible: true,
     icon: Layers,
     items: [
+      { name: 'Gate GRN & Inward Check', path: p('purchase/grn'), componentKey: 'grn' },
       { name: 'Stock Summary', path: p('inventory/summary') },
       { name: 'Stock Register', path: p('inventory/register') },
       { name: 'Item Stock Status', path: p('inventory'), componentKey: 'inventory' },
@@ -138,6 +127,7 @@ export const appNavGroups: ErpNavGroup[] = [
       { name: 'Stock Transfer (Stores)', path: p('inventory/stock-transfer-stores') },
       { name: 'Stock Transfer (Godowns)', path: p('inventory/stock-transfer-godowns') },
       { name: 'Returnable/Non-Returnable Challan', path: p('inventory/returnable-challan'), componentKey: 'returnable-challan' },
+      { name: 'Pending Item List', path: p('inventory/pending-items'), componentKey: 'pending-item-list' },
       { name: 'Warranty Repair Challan', path: p('inventory/warranty-repair'), componentKey: 'warranty-repair' },
       { name: 'Asset Availability & Ageing', path: p('inventory/asset-availability'), componentKey: 'asset-availability' },
       { name: 'Returnable Receipt', path: p('inventory/returnable-receipt') },

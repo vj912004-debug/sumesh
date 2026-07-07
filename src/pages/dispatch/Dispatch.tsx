@@ -13,7 +13,7 @@ export default function Dispatch() {
   const dispatchableOrders = mockOrders.filter(o => o.status === 'Ready for Dispatch' || o.status === 'Dispatched');
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-demo-page="dispatch">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Dispatch & Logistics</h2>

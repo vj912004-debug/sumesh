@@ -19,6 +19,7 @@ import PurchaseOrders from '@/pages/inventory/PurchaseOrders';
 import GoodsReceipt from '@/pages/inventory/GoodsReceipt';
 import Inventory from '@/pages/inventory/Inventory';
 import ReturnableChallan from '@/pages/inventory/ReturnableChallan';
+import PendingItemList from '@/pages/inventory/PendingItemList';
 import WarrantyRepairChallan from '@/pages/inventory/WarrantyRepairChallan';
 import AssetAvailabilityDashboard from '@/pages/inventory/AssetAvailabilityDashboard';
 import InventoryControl from '@/pages/inventory/InventoryControl';
@@ -46,11 +47,13 @@ import VisitorRegistry from '@/pages/visitor/VisitorRegistry';
 import SalesRentalsBilling from '@/pages/sales/SalesRentalsBilling';
 import Payroll from '@/pages/production/Payroll';
 import ErpWorkflow from '@/pages/ErpWorkflow';
+import DemoOrderShowcase from '@/pages/DemoOrderShowcase';
 import ItemMaster from '@/pages/master/ItemMaster';
 
 const COMPONENT_MAP: Record<string, ReactNode> = {
   dashboard: <Dashboard />,
   'erp-workflow': <ErpWorkflow />,
+  'demo-order': <DemoOrderShowcase />,
   tasks: <Tasks />,
   communication: <CommunicationAlerts />,
   customers: <Customers />,
@@ -68,6 +71,7 @@ const COMPONENT_MAP: Record<string, ReactNode> = {
   grn: <GoodsReceipt />,
   inventory: <Inventory />,
   'returnable-challan': <ReturnableChallan />,
+  'pending-item-list': <PendingItemList />,
   'warranty-repair': <WarrantyRepairChallan />,
   'asset-availability': <AssetAvailabilityDashboard />,
   'inventory-control': <InventoryControl />,

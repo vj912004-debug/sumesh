@@ -46,7 +46,7 @@ export default function WorkOrders() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-demo-page="work-orders">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Work Orders</h2>

@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
+import { DemoBotProvider } from '@/context/DemoBotContext';
+import { VisualDemoBotOverlay } from '@/components/demo/VisualDemoBotOverlay';
 import { appNavGroups } from '@/lib/erpModules';
 import {
   Search, Settings as SettingsIcon, Sliders,
@@ -354,115 +356,118 @@ export function AppLayout() {
   );
 
   return (
-    <div className="flex h-screen bg-background antialiased text-foreground font-sans">
-      {/* Desktop Sidebar */}
-      <aside className="w-64 bg-zinc-900 border-r border-zinc-800 max-md:hidden md:flex flex-col text-zinc-200 flex-shrink-0">
-        {renderSidebarContent()}
-      </aside>
+    <DemoBotProvider>
+      <div className="flex h-screen bg-background font-sans text-foreground antialiased">
+        {/* Desktop Sidebar */}
+        <aside className="hidden w-64 flex-shrink-0 flex-col border-r border-zinc-800 bg-zinc-900 text-zinc-200 md:flex">
+          {renderSidebarContent()}
+        </aside>
 
-      {/* Mobile Drawer Overlay */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 max-md:flex md:hidden">
-          {/* Backdrop */}
-          <div 
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-          {/* Drawer Content */}
-          <aside className="relative w-64 bg-zinc-900 border-r border-zinc-800 text-zinc-200 flex flex-col z-10 animate-in slide-in-from-left duration-200">
-            {renderSidebarContent()}
-          </aside>
-        </div>
-      )}
-
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Top Header - White background */}
-        <header className="h-16 bg-card border-b border-border flex items-center justify-between px-6 lg:px-8 shadow-sm z-10">
-          <div className="flex items-center flex-1">
-            {/* Hamburger Button for mobile */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="md:hidden mr-3 text-muted-foreground hover:text-foreground"
-              onClick={() => setIsMobileMenuOpen(true)}
-            >
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle mobile navigation</span>
-            </Button>
-            
-            {/* Wide Search Bar in the Center */}
-            <div className="relative w-full max-w-lg hidden sm:block">
-              <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="Search resources, documents, or systems..."
-                className="w-full bg-muted border-0 rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-foreground placeholder:text-muted-foreground"
-              />
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            {/* Theme Toggle Button */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={toggleTheme} 
-              className="text-muted-foreground hover:text-foreground"
-            >
-              {theme === 'light' ? (
-                <Moon className="h-5 w-5" />
-              ) : (
-                <Sun className="h-5 w-5 text-teal-400" />
-              )}
-              <span className="sr-only">Toggle theme</span>
-            </Button>
-
-            <Link to="/communication">
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
-                <Mail className="h-5 w-5" />
-                <span className="sr-only">Messages</span>
-                <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary"></span>
-              </Button>
-            </Link>
-
-            <Link to="/tasks">
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
-                <Bell className="h-5 w-5" />
-                <span className="sr-only">Notifications</span>
-                <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center border border-white dark:border-zinc-950">
-                  3
-                </span>
-              </Button>
-            </Link>
-
-            {/* User Profile Avatar with dropdown */}
+        {/* Mobile Drawer Overlay */}
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-50 max-md:flex md:hidden">
+            {/* Backdrop */}
             <div
-              className="flex items-center gap-2 border-l border-border pl-4 cursor-pointer hover:opacity-85"
-              onClick={() => navigate('/settings')}
-              onKeyDown={e => { if (e.key === 'Enter') navigate('/settings'); }}
-              role="button"
-              tabIndex={0}
-            >
-              <div className="h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs shadow-sm">
-                SS
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+            {/* Drawer Content */}
+            <aside className="relative z-10 flex w-64 animate-in flex-col border-r border-zinc-800 bg-zinc-900 text-zinc-200 duration-200 slide-in-from-left">
+              {renderSidebarContent()}
+            </aside>
+          </div>
+        )}
+
+        {/* Main Content */}
+        <main className="flex min-w-0 flex-1 flex-col overflow-hidden">
+          {/* Top Header - White background */}
+          <header className="z-10 flex h-16 items-center justify-between gap-3 border-b border-border bg-card px-3 shadow-sm sm:px-4 lg:px-8">
+            <div className="flex min-w-0 flex-1 items-center">
+              {/* Hamburger Button for mobile */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="mr-2 shrink-0 text-muted-foreground hover:text-foreground md:hidden"
+                onClick={() => setIsMobileMenuOpen(true)}
+              >
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle mobile navigation</span>
+              </Button>
+
+              {/* Wide Search Bar in the Center */}
+              <div className="relative hidden w-full max-w-lg sm:block">
+                <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <input
+                  type="text"
+                  placeholder="Search resources, documents, or systems..."
+                  className="w-full rounded-full border-0 bg-muted py-2 pl-10 pr-4 text-sm text-foreground transition-all placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                />
               </div>
-              <div className="hidden lg:block text-left">
-                <p className="text-xs font-semibold text-foreground leading-none">Suketu Shah</p>
-                <p className="text-[10px] text-muted-foreground mt-0.5">Admin Director</p>
+            </div>
+
+            <div className="flex shrink-0 items-center gap-1 sm:gap-2 lg:gap-4">
+              {/* Theme Toggle Button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTheme}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                {theme === 'light' ? (
+                  <Moon className="h-5 w-5" />
+                ) : (
+                  <Sun className="h-5 w-5 text-teal-400" />
+                )}
+                <span className="sr-only">Toggle theme</span>
+              </Button>
+
+              <Link to="/communication">
+                <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground">
+                  <Mail className="h-5 w-5" />
+                  <span className="sr-only">Messages</span>
+                  <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-primary"></span>
+                </Button>
+              </Link>
+
+              <Link to="/tasks">
+                <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground">
+                  <Bell className="h-5 w-5" />
+                  <span className="sr-only">Notifications</span>
+                  <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full border border-white bg-red-500 text-[10px] font-bold text-white dark:border-zinc-950">
+                    3
+                  </span>
+                </Button>
+              </Link>
+
+              {/* User Profile Avatar with dropdown */}
+              <div
+                className="flex cursor-pointer items-center gap-2 border-l border-border pl-2 hover:opacity-85 sm:pl-4"
+                onClick={() => navigate('/settings')}
+                onKeyDown={e => { if (e.key === 'Enter') navigate('/settings'); }}
+                role="button"
+                tabIndex={0}
+              >
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground shadow-sm">
+                  SS
+                </div>
+                <div className="hidden text-left lg:block">
+                  <p className="text-xs font-semibold leading-none text-foreground">Suketu Shah</p>
+                  <p className="mt-0.5 text-[10px] text-muted-foreground">Admin Director</p>
+                </div>
+                <ChevronDown className="hidden h-3.5 w-3.5 text-muted-foreground sm:block" />
               </div>
-              <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+            </div>
+          </header>
+
+          {/* Page Content */}
+          <div className="flex-1 overflow-auto bg-background p-3 sm:p-5 lg:p-8">
+            <div className="mx-auto w-full max-w-7xl space-y-6 lg:space-y-8">
+              <Outlet />
             </div>
           </div>
-        </header>
-
-        {/* Page Content */}
-        <div className="flex-1 overflow-auto bg-background p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto space-y-8">
-            <Outlet />
-          </div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+      <VisualDemoBotOverlay />
+    </DemoBotProvider>
   );
 }

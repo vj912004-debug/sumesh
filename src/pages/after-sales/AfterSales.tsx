@@ -10,23 +10,15 @@ import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter 
 } from '@/components/ui/dialog';
 import { Wrench, PhoneCall, Plus } from 'lucide-react';
-
-interface ServiceTicket {
-  id: string;
-  customer: string;
-  machine: string;
-  type: string;
-  status: string;
-  date: string;
-  sparesUsed?: string;
-}
+import {
+  createServiceTicket,
+  loadServiceTickets,
+  updateServiceTicket,
+  type ServiceTicket,
+} from '@/lib/serviceTicketService';
 
 export default function AfterSales() {
-  const [tickets, setTickets] = useState<ServiceTicket[]>([
-    { id: 'SRV-26-401', customer: 'Tata Power', machine: 'SP/26/1012', type: 'Warranty', status: 'Open', date: '2026-06-29' },
-    { id: 'SRV-26-402', customer: 'Reliance Ind.', machine: 'SP/24/0905', type: 'AMC Routine', status: 'Scheduled', date: '2026-07-05' },
-    { id: 'SRV-26-403', customer: 'Adani Electricity', machine: 'SP/21/0401', type: 'Breakdown', status: 'In Progress', date: '2026-06-30', sparesUsed: 'Filter Cartridges (x2)' },
-  ]);
+  const [tickets, setTickets] = useState<ServiceTicket[]>(() => loadServiceTickets());
 
   const [isOpen, setIsOpen] = useState(false);
   const [customer, setCustomer] = useState('');
@@ -36,17 +28,13 @@ export default function AfterSales() {
 
   const handleLogCall = (e: React.FormEvent) => {
     e.preventDefault();
-    const newId = `SRV-26-${401 + tickets.length}`;
-    const newTicket: ServiceTicket = {
-      id: newId,
+    const newTicket = createServiceTicket({
       customer,
       machine,
-      type: callType,
-      status: 'Open',
-      date: new Date().toISOString().split('T')[0],
-      sparesUsed: spares || '-'
-    };
-    setTickets([...tickets, newTicket]);
+      type: callType as ServiceTicket['type'],
+      sparesUsed: spares || undefined,
+    });
+    setTickets([newTicket, ...loadServiceTickets()]);
     setIsOpen(false);
     setCustomer('');
     setMachine('');
@@ -54,24 +42,23 @@ export default function AfterSales() {
   };
 
   const handleDispatch = (id: string) => {
-    setTickets(tickets.map(t => {
-      if (t.id === id) {
-        let nextStatus = 'In Progress';
-        if (t.status === 'In Progress') nextStatus = 'Closed';
-        return { ...t, status: nextStatus };
-      }
-      return t;
+    setTickets(prev => prev.map(t => {
+      if (t.id !== id) return t;
+      let nextStatus: ServiceTicket['status'] = 'In Progress';
+      if (t.status === 'In Progress') nextStatus = 'Closed';
+      updateServiceTicket(id, { status: nextStatus });
+      return { ...t, status: nextStatus };
     }));
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-demo-page="after-sales">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">After-Sales & AMC</h2>
           <p className="text-muted-foreground">Manage service tickets, field engineers, and maintenance contracts.</p>
         </div>
-        <Button onClick={() => setIsOpen(true)}>
+        <Button onClick={() => setIsOpen(true)} data-demo="log-service-call">
           <PhoneCall className="mr-2 h-4 w-4" /> Log Service Call
         </Button>
       </div>
@@ -146,7 +133,8 @@ export default function AfterSales() {
                   placeholder="e.g. Adani Electricity" 
                   value={customer} 
                   onChange={e => setCustomer(e.target.value)} 
-                  required 
+                  required
+                  data-demo="service-customer"
                 />
               </div>
               <div className="space-y-2">
@@ -155,7 +143,8 @@ export default function AfterSales() {
                   placeholder="e.g. SP/26/1024" 
                   value={machine} 
                   onChange={e => setMachine(e.target.value)} 
-                  required 
+                  required
+                  data-demo="service-machine"
                 />
               </div>
               <div className="space-y-2">
@@ -164,6 +153,7 @@ export default function AfterSales() {
                   className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   value={callType} 
                   onChange={e => setCallType(e.target.value)}
+                  data-demo="service-type"
                 >
                   <option value="Warranty">Warranty</option>
                   <option value="AMC Routine">AMC Routine</option>

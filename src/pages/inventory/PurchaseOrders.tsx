@@ -1,35 +1,27 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { 
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
+import { useMemo } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ShoppingCart, Plus } from 'lucide-react';
+import { getPoTotal, loadPurchaseOrders } from '@/lib/purchaseOrderService';
 
 export default function PurchaseOrders() {
   const navigate = useNavigate();
-  const [toast, setToast] = useState<string | null>(null);
-  const mockPOs = [
-    { id: 'PO-26-050', vendor: 'Laxmi Steels', date: '2026-06-25', amount: 450000, status: 'Received' },
-    { id: 'PO-26-051', vendor: 'ABB India Ltd', date: '2026-06-28', amount: 1200000, status: 'Pending' },
-    { id: 'PO-26-052', vendor: 'Gujarat Pipes', date: '2026-06-29', amount: 85000, status: 'Pending' },
-  ];
+  const location = useLocation();
+  const orders = useMemo(() => loadPurchaseOrders(), [location.key]);
 
   return (
-    <div className="space-y-6">
-      {toast && (
-        <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg">
-          {toast}
-        </div>
-      )}
+    <div className="space-y-6" data-demo-page="purchase-orders">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Purchase Orders</h2>
           <p className="text-muted-foreground">Manage vendor POs and track incoming materials.</p>
         </div>
-        <Button onClick={() => setToast('New PO draft created — PO-26-053')}>
+        <Button onClick={() => navigate('/purchase/orders/new')}>
           <Plus className="mr-2 h-4 w-4" /> Create PO
         </Button>
       </div>
@@ -44,21 +36,29 @@ export default function PurchaseOrders() {
               <TableRow>
                 <TableHead>PO Number</TableHead>
                 <TableHead>Date</TableHead>
+                <TableHead>PO For</TableHead>
                 <TableHead>Vendor</TableHead>
-                <TableHead>Amount</TableHead>
+                <TableHead className="text-right">Amount</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockPOs.map((po) => (
+              {orders.map(po => (
                 <TableRow key={po.id}>
-                  <TableCell className="font-medium">{po.id}</TableCell>
-                  <TableCell>{po.date}</TableCell>
-                  <TableCell>{po.vendor}</TableCell>
-                  <TableCell>₹{po.amount.toLocaleString('en-IN')}</TableCell>
+                  <TableCell className="font-medium">
+                    <Link to={`/purchase-orders/${po.id}`} className="text-primary hover:underline">
+                      {po.id}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{po.poDate}</TableCell>
                   <TableCell>
-                    <Badge variant={po.status === 'Received' ? 'default' : 'secondary'}>
+                    <Badge variant="outline">{po.poPurpose}</Badge>
+                  </TableCell>
+                  <TableCell>{po.vendorName}</TableCell>
+                  <TableCell className="text-right">₹{getPoTotal(po).toLocaleString('en-IN')}</TableCell>
+                  <TableCell>
+                    <Badge variant={po.status === 'Received' ? 'default' : po.status === 'Pending' ? 'secondary' : 'outline'}>
                       {po.status}
                     </Badge>
                   </TableCell>
@@ -66,9 +66,14 @@ export default function PurchaseOrders() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => po.status === 'Pending' ? navigate('/purchase/grn') : navigate(`/purchase-orders/${po.id}`)}
+                      onClick={() =>
+                        po.status === 'Pending'
+                          ? navigate('/purchase/grn')
+                          : navigate(`/purchase-orders/${po.id}`)
+                      }
                     >
-                      <ShoppingCart className="mr-2 h-4 w-4" /> {po.status === 'Pending' ? 'Receive (GRN)' : 'View'}
+                      <ShoppingCart className="mr-2 h-4 w-4" />
+                      {po.status === 'Pending' ? 'Receive (GRN)' : 'View'}
                     </Button>
                   </TableCell>
                 </TableRow>

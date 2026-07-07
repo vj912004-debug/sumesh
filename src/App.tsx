@@ -10,6 +10,8 @@ import WorkOrderDetail from '@/pages/production/WorkOrderDetail';
 import BOMDetail from '@/pages/production/BOMDetail';
 import CostEstimateDetail from '@/pages/production/CostEstimateDetail';
 import PurchaseOrderDetail from '@/pages/inventory/PurchaseOrderDetail';
+import PurchaseOrderCreate from '@/pages/inventory/PurchaseOrderCreate';
+import PurchaseOrders from '@/pages/inventory/PurchaseOrders';
 import DeliveryChallan from '@/pages/dispatch/DeliveryChallan';
 import PackingListDetail from '@/pages/dispatch/PackingListDetail';
 import InvoiceDetail from '@/pages/accounting/InvoiceDetail';
@@ -51,6 +53,8 @@ function App() {
             <Route path="work-orders/:id" element={<WorkOrderDetail />} />
             <Route path="production/cost-estimate/:id" element={<CostEstimateDetail />} />
             <Route path="production/bom/:productId" element={<BOMDetail />} />
+            <Route path="purchase/orders" element={<PurchaseOrders />} />
+            <Route path="purchase/orders/new" element={<PurchaseOrderCreate />} />
             <Route path="purchase-orders/:id" element={<PurchaseOrderDetail />} />
             <Route path="dispatch/:id" element={<DeliveryChallan />} />
             <Route path="dispatch/packing-list/:id" element={<PackingListDetail />} />

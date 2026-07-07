@@ -144,7 +144,7 @@ export default function WarrantyRepairChallan() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-demo-page="warranty-repair">
       <div>
         <h2 className="text-3xl font-bold tracking-tight text-zinc-800">Warranty Repair — Returnable Challan</h2>
         <p className="text-zinc-500 font-medium">

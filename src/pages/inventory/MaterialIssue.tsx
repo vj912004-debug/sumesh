@@ -272,7 +272,7 @@ export default function MaterialIssue() {
   const maxMrsIssueQty = selectedMrs ? selectedMrs.qtyApproved - selectedMrs.qtyIssued : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-demo-page="material-issue">
       {toast && (
         <div className="fixed top-20 right-6 z-50 bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg max-w-md">
           {toast}

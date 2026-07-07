@@ -91,7 +91,7 @@ export default function Enquiries() {
     }
   };
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-demo-page="enquiries">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Enquiries</h2>
@@ -103,7 +103,7 @@ export default function Enquiries() {
           if (!open) setNewEnquiryType(undefined);
         }}>
           <DialogTrigger asChild>
-            <Button onClick={() => openNewEnquiry(activeTab !== 'all' && activeTab !== 'previous-offers' ? activeTab as EnquiryType : undefined)}>
+            <Button onClick={() => openNewEnquiry(activeTab !== 'all' && activeTab !== 'previous-offers' ? activeTab as EnquiryType : undefined)} data-demo="new-enquiry">
               <Plus className="mr-2 h-4 w-4" /> New Enquiry
             </Button>
           </DialogTrigger>
@@ -218,7 +218,7 @@ function EnquiriesTable({
             </TableHeader>
             <TableBody>
               {enquiries.map((enq) => (
-                <TableRow key={enq.id}>
+                <TableRow key={enq.id} data-demo-doc={enq.id}>
                   <TableCell className="font-medium text-xs">{enq.id}</TableCell>
                   <TableCell>
                     <EnquiryTypeBadge type={enq.enquiryType} />

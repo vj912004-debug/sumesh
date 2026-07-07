@@ -111,7 +111,7 @@ export default function Quotations() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-demo-page="quotations">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Quotations</h2>

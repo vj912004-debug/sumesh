@@ -18,10 +18,17 @@ import {
   Package, BarChart3, RotateCcw,
 } from 'lucide-react';
 import { format, isAfter, parseISO } from 'date-fns';
+import { useAuth } from '@/context/AuthContext';
 import {
   getAllRentalStockStatus,
   getAvailableSerials,
+  getAddressWisePendingReport,
+  getChallanItemStatusRows,
+  getCustomerOptions,
+  getCustomerPendingItemsReport,
   getCustomerRentalReport,
+  getItemWisePendingReport,
+  filterChallanItemStatusRows,
   getNextChallanNo,
   peekNextChallanNo,
   getOverdueReturnReport,
@@ -33,6 +40,8 @@ import {
   recordReturn,
   saveRentalItem,
   validateIssueQty,
+  CHALLAN_REASONS,
+  type ChallanReason,
   type RentalChallan,
   type RentalReturnLog,
 } from '@/lib/rentalAssetService';
@@ -47,6 +56,7 @@ type NewItemRow = {
 };
 
 export default function ReturnableChallan() {
+  const { user } = useAuth();
   const [refresh, setRefresh] = useState(0);
   const bump = () => setRefresh(n => n + 1);
 
@@ -56,9 +66,20 @@ export default function ReturnableChallan() {
   const rentalItemOptions = useMemo(() => getRentalItemOptions(), [refresh]);
   const customerRentalReport = useMemo(() => getCustomerRentalReport(), [refresh]);
   const overdueReport = useMemo(() => getOverdueReturnReport(), [refresh]);
+  const customerOptions = useMemo(() => getCustomerOptions(), [refresh]);
+  const allItemStatusRows = useMemo(() => getChallanItemStatusRows(), [refresh]);
+  const itemWisePending = useMemo(() => getItemWisePendingReport(), [refresh]);
+  const addressWisePending = useMemo(() => getAddressWisePendingReport(), [refresh]);
+  const customerPendingReport = useMemo(() => getCustomerPendingItemsReport(), [refresh]);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'All' | RentalChallan['status']>('All');
+  const [balanceCustomer, setBalanceCustomer] = useState('');
+  const [balanceItemId, setBalanceItemId] = useState('');
+  const [balanceAddress, setBalanceAddress] = useState('');
+  const [balanceStatus, setBalanceStatus] = useState<'All' | 'Pending' | 'Partial' | 'Closed' | 'Not Returned' | 'Fully Returned'>('Pending');
+  const [balanceDateFrom, setBalanceDateFrom] = useState('');
+  const [balanceDateTo, setBalanceDateTo] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('register');
 
@@ -66,11 +87,13 @@ export default function ReturnableChallan() {
   const challanDate = useMemo(() => new Date().toISOString().split('T')[0], []);
 
   // Outward form
+  const [selectedCustomerId, setSelectedCustomerId] = useState('');
   const [newBuyerName, setNewBuyerName] = useState('');
   const [newBuyerAddress, setNewBuyerAddress] = useState('');
   const [newBuyerGstin, setNewBuyerGstin] = useState('');
   const [newBuyerPhone, setNewBuyerPhone] = useState('');
   const [newExpectedDate, setNewExpectedDate] = useState('');
+  const [newReason, setNewReason] = useState<ChallanReason>('Rental');
   const [newPurpose, setNewPurpose] = useState('');
   const [newItems, setNewItems] = useState<NewItemRow[]>([{ rentalItemId: '', qty: 1, serialNos: [] }]);
 
@@ -128,6 +151,35 @@ export default function ReturnableChallan() {
     return matchesSearch && c.status === statusFilter;
   });
 
+  const filteredBalanceRows = useMemo(
+    () => filterChallanItemStatusRows(allItemStatusRows, {
+      customer: balanceCustomer || undefined,
+      itemId: balanceItemId || undefined,
+      address: balanceAddress || undefined,
+      status: balanceStatus,
+      dateFrom: balanceDateFrom || undefined,
+      dateTo: balanceDateTo || undefined,
+    }),
+    [allItemStatusRows, balanceCustomer, balanceItemId, balanceAddress, balanceStatus, balanceDateFrom, balanceDateTo]
+  );
+
+  const handleCustomerSelect = (customerId: string) => {
+    setSelectedCustomerId(customerId);
+    const opt = customerOptions.find(o => o.value === customerId);
+    if (opt?.meta) {
+      setNewBuyerName(opt.meta.name);
+      setNewBuyerAddress(opt.meta.address);
+      setNewBuyerGstin(opt.meta.gstin);
+      setNewBuyerPhone(opt.meta.phone);
+    }
+  };
+
+  const lineStatusBadge = (status: string) => {
+    if (status === 'Fully Returned') return <Badge className="bg-emerald-100 text-emerald-800 border-emerald-200">Closed</Badge>;
+    if (status === 'Partial') return <Badge className="bg-amber-100 text-amber-800 border-amber-200">Partial</Badge>;
+    return <Badge variant="outline">Not Returned</Badge>;
+  };
+
   const handleAddItemRow = () => {
     setNewItems([...newItems, { rentalItemId: '', qty: 1, serialNos: [] }]);
   };
@@ -171,13 +223,15 @@ export default function ReturnableChallan() {
         id: getNextChallanNo(),
         dateIssued: new Date().toISOString().split('T')[0],
         expectedReturnDate: newExpectedDate,
+        customerId: selectedCustomerId || undefined,
         buyerName: newBuyerName,
         buyerAddress: newBuyerAddress,
         buyerGstin: newBuyerGstin,
         buyerPhone: newBuyerPhone,
         consigneeName: newBuyerName,
         consigneeAddress: newBuyerAddress,
-        purpose: newPurpose,
+        reason: newReason,
+        purpose: newPurpose || `${newReason} dispatch`,
         jobWorkNo: `RNT-${format(new Date(), 'yy')}-${Math.floor(1000 + Math.random() * 9000)}`,
         status: 'Pending',
         preparedBy: 'store',
@@ -198,11 +252,13 @@ export default function ReturnableChallan() {
       };
 
       issueOutwardChallan(challan);
+      setSelectedCustomerId('');
       setNewBuyerName('');
       setNewBuyerAddress('');
       setNewBuyerGstin('');
       setNewBuyerPhone('');
       setNewExpectedDate('');
+      setNewReason('Rental');
       setNewPurpose('');
       setNewItems([{ rentalItemId: '', qty: 1, serialNos: [] }]);
       bump();
@@ -241,7 +297,7 @@ export default function ReturnableChallan() {
     if (!returnChallanId) return;
     setError(null);
     try {
-      recordReturn(returnChallanId, returnDate, returnCondition, returnQtys, returnRemarks);
+      recordReturn(returnChallanId, returnDate, returnCondition, returnQtys, returnRemarks, user?.name);
       setReturnChallanId('');
       setReturnQtys({});
       setReturnRemarks('');
@@ -266,7 +322,7 @@ export default function ReturnableChallan() {
     if (!selectedChallan) return;
     setError(null);
     try {
-      recordReturn(selectedChallan.id, modalReturnDate, modalReturnCondition, modalReturnQtys);
+      recordReturn(selectedChallan.id, modalReturnDate, modalReturnCondition, modalReturnQtys, undefined, user?.name);
       setIsReturnModalOpen(false);
       setSelectedChallan(null);
       bump();
@@ -276,7 +332,7 @@ export default function ReturnableChallan() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-demo-page="returnable-challan">
       <style>{`
         @media print {
           body, html { background: white !important; margin: 0 !important; overflow: visible !important; }
@@ -294,9 +350,9 @@ export default function ReturnableChallan() {
 
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-zinc-800">Rental & Returnable Challan</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-zinc-800">Returnable Challan</h2>
           <p className="text-zinc-500 font-medium">
-            Maintain rental asset stock and issue returnable delivery challans with real-time availability checks.
+            Issue outward challans, track item-wise sent vs returned balance per customer & site, and book inward returns.
           </p>
         </div>
       </div>
@@ -356,6 +412,7 @@ export default function ReturnableChallan() {
         <TabsList className="flex flex-wrap h-auto gap-1">
           <TabsTrigger value="master">Rental Master</TabsTrigger>
           <TabsTrigger value="outward">Issue Outward</TabsTrigger>
+          <TabsTrigger value="pending">Pending Balance</TabsTrigger>
           <TabsTrigger value="register">Challan Register</TabsTrigger>
           <TabsTrigger value="return">Return Inward</TabsTrigger>
           <TabsTrigger value="reports">Reports</TabsTrigger>
@@ -456,16 +513,47 @@ export default function ReturnableChallan() {
                 </div>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-1">
-                    <label className="text-sm font-medium">Customer Name</label>
-                    <Input value={newBuyerName} onChange={e => setNewBuyerName(e.target.value)} placeholder="Customer / Buyer name" required />
+                    <label className="text-sm font-medium">Customer Name *</label>
+                    <SearchableSelect
+                      options={customerOptions}
+                      value={selectedCustomerId}
+                      onChange={handleCustomerSelect}
+                      placeholder="Search customer from master…"
+                    />
+                    {!selectedCustomerId && (
+                      <Input
+                        className="mt-2"
+                        value={newBuyerName}
+                        onChange={e => setNewBuyerName(e.target.value)}
+                        placeholder="Or type customer name manually"
+                        required
+                      />
+                    )}
                   </div>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium">Expected Return Date</label>
+                    <label className="text-sm font-medium">Expected Return Date *</label>
                     <Input type="date" value={newExpectedDate} onChange={e => setNewExpectedDate(e.target.value)} required />
                   </div>
                   <div className="md:col-span-2 space-y-1">
-                    <label className="text-sm font-medium">Address</label>
-                    <Input value={newBuyerAddress} onChange={e => setNewBuyerAddress(e.target.value)} required />
+                    <label className="text-sm font-medium">Delivery Address *</label>
+                    <Input
+                      value={newBuyerAddress}
+                      onChange={e => setNewBuyerAddress(e.target.value)}
+                      placeholder="Site / consignee address — auto-filled from customer, editable"
+                      required
+                    />
+                    <p className="text-xs text-zinc-500">Physical location where items are sent. Edit if different from billing address.</p>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium">Reason *</label>
+                    <select
+                      className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+                      value={newReason}
+                      onChange={e => setNewReason(e.target.value as ChallanReason)}
+                      required
+                    >
+                      {CHALLAN_REASONS.map(r => <option key={r} value={r}>{r}</option>)}
+                    </select>
                   </div>
                   <div className="space-y-1">
                     <label className="text-sm font-medium">GSTIN</label>
@@ -476,8 +564,8 @@ export default function ReturnableChallan() {
                     <Input value={newBuyerPhone} onChange={e => setNewBuyerPhone(e.target.value)} />
                   </div>
                   <div className="md:col-span-2 space-y-1">
-                    <label className="text-sm font-medium">Purpose</label>
-                    <Input value={newPurpose} onChange={e => setNewPurpose(e.target.value)} placeholder="Reason for dispatch" required />
+                    <label className="text-sm font-medium">Additional Notes</label>
+                    <Input value={newPurpose} onChange={e => setNewPurpose(e.target.value)} placeholder="Optional dispatch notes" />
                   </div>
                 </div>
 
@@ -558,6 +646,104 @@ export default function ReturnableChallan() {
           </Card>
         </TabsContent>
 
+        <TabsContent value="pending" className="mt-4 space-y-4">
+          <Card>
+            <CardHeader className="border-b pb-4">
+              <CardTitle className="text-lg">Customer-wise Item Status & Pending Balance</CardTitle>
+              <p className="text-sm text-zinc-500 font-normal mt-1">
+                Qty Pending = Qty Sent − Qty Returned. Auto-updates when inward return is booked against the outward challan.
+              </p>
+            </CardHeader>
+            <CardContent className="pt-4 space-y-4">
+              <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-zinc-600">Customer</label>
+                  <Input placeholder="Filter customer…" value={balanceCustomer} onChange={e => setBalanceCustomer(e.target.value)} />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-zinc-600">Item</label>
+                  <select
+                    className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+                    value={balanceItemId}
+                    onChange={e => setBalanceItemId(e.target.value)}
+                  >
+                    <option value="">All items</option>
+                    {rentalItems.map(i => <option key={i.id} value={i.id}>{i.name}</option>)}
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-zinc-600">Address / Site</label>
+                  <Input placeholder="Filter address…" value={balanceAddress} onChange={e => setBalanceAddress(e.target.value)} />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-zinc-600">Status</label>
+                  <select
+                    className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+                    value={balanceStatus}
+                    onChange={e => setBalanceStatus(e.target.value as typeof balanceStatus)}
+                  >
+                    <option value="All">All</option>
+                    <option value="Pending">Pending (any balance)</option>
+                    <option value="Not Returned">Not Returned</option>
+                    <option value="Partial">Partial</option>
+                    <option value="Closed">Closed / Fully Returned</option>
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-zinc-600">Date From</label>
+                  <Input type="date" value={balanceDateFrom} onChange={e => setBalanceDateFrom(e.target.value)} />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-zinc-600">Date To</label>
+                  <Input type="date" value={balanceDateTo} onChange={e => setBalanceDateTo(e.target.value)} />
+                </div>
+              </div>
+
+              <div className="overflow-x-auto rounded-lg border">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-zinc-50">
+                      <TableHead>Customer</TableHead>
+                      <TableHead>Item</TableHead>
+                      <TableHead>Challan No</TableHead>
+                      <TableHead>Date Sent</TableHead>
+                      <TableHead className="min-w-[180px]">Delivery Address</TableHead>
+                      <TableHead className="text-right">Sent</TableHead>
+                      <TableHead className="text-right">Returned</TableHead>
+                      <TableHead className="text-right">Pending</TableHead>
+                      <TableHead>Reason</TableHead>
+                      <TableHead>Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredBalanceRows.map((row, i) => (
+                      <TableRow key={`${row.challanNo}-${row.rentalItemId}-${i}`}>
+                        <TableCell className="font-medium">{row.customerName}</TableCell>
+                        <TableCell>{row.itemName}</TableCell>
+                        <TableCell className="font-mono text-xs text-teal-700">{row.challanNo}</TableCell>
+                        <TableCell>{format(new Date(row.dateSent), 'dd MMM yyyy')}</TableCell>
+                        <TableCell className="text-xs text-zinc-600 max-w-[220px] truncate" title={row.deliveryAddress}>
+                          {row.deliveryAddress}
+                        </TableCell>
+                        <TableCell className="text-right">{row.qtySent} {row.uom}</TableCell>
+                        <TableCell className="text-right text-emerald-700">{row.qtyReturned}</TableCell>
+                        <TableCell className="text-right font-semibold text-amber-700">{row.qtyPending}</TableCell>
+                        <TableCell><Badge variant="outline" className="text-xs">{row.reason}</Badge></TableCell>
+                        <TableCell>{lineStatusBadge(row.lineStatus)}</TableCell>
+                      </TableRow>
+                    ))}
+                    {filteredBalanceRows.length === 0 && (
+                      <TableRow>
+                        <TableCell colSpan={10} className="text-center py-8 text-zinc-400">No matching challan lines.</TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="register" className="mt-4">
           <Card>
             <CardHeader className="border-b pb-4">
@@ -595,49 +781,70 @@ export default function ReturnableChallan() {
                     <TableHead>Challan No</TableHead>
                     <TableHead>Issued</TableHead>
                     <TableHead>Customer</TableHead>
-                    <TableHead>Items Out</TableHead>
-                    <TableHead>Expected Return</TableHead>
+                    <TableHead>Delivery Address</TableHead>
+                    <TableHead>Item</TableHead>
+                    <TableHead className="text-right">Sent</TableHead>
+                    <TableHead className="text-right">Returned</TableHead>
+                    <TableHead className="text-right">Pending</TableHead>
+                    <TableHead>Reason</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredChallans.map(challan => {
-                    const unitsOut = challan.items.reduce((s, i) => s + (i.qtyDispatched - i.qtyReturned), 0);
-                    const isOverdue = challan.status !== 'Returned' && isAfter(new Date(), parseISO(challan.expectedReturnDate));
-                    return (
-                      <TableRow key={challan.id}>
-                        <TableCell className="font-semibold text-teal-600 text-xs">{challan.id}</TableCell>
-                        <TableCell>{format(new Date(challan.dateIssued), 'dd MMM yyyy')}</TableCell>
-                        <TableCell>{challan.buyerName}</TableCell>
-                        <TableCell className="text-xs">
-                          {unitsOut.toFixed(0)} unit(s)
-                          <div className="text-zinc-400 truncate max-w-[200px]">
-                            {challan.items.map(i => i.description).join(', ')}
-                          </div>
-                        </TableCell>
-                        <TableCell className={isOverdue ? 'text-red-600 font-semibold' : ''}>
-                          {format(new Date(challan.expectedReturnDate), 'dd MMM yyyy')}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={challan.status === 'Returned' ? 'default' : isOverdue ? 'destructive' : 'outline'}>
-                            {isOverdue && challan.status !== 'Returned' ? 'Overdue' : challan.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-right space-x-1">
-                          <Button variant="ghost" size="sm" onClick={() => { setPrintChallan(challan); setIsPrintModalOpen(true); }}>
-                            <Printer className="h-4 w-4" />
-                          </Button>
-                          {challan.status !== 'Returned' && (
-                            <Button size="sm" className="h-8" onClick={() => handleOpenReturnDialog(challan)}>Return</Button>
+                  {filteredChallans.flatMap(challan =>
+                    challan.items.map((item, lineIdx) => {
+                      const pending = item.qtyDispatched - item.qtyReturned;
+                      const lineStatus = pending <= 0 ? 'Fully Returned' : item.qtyReturned > 0 ? 'Partial' : 'Not Returned';
+                      const isOverdue = challan.status !== 'Returned' && pending > 0 && isAfter(new Date(), parseISO(challan.expectedReturnDate));
+                      return (
+                        <TableRow key={`${challan.id}-${item.id}`}>
+                          {lineIdx === 0 && (
+                            <>
+                              <TableCell rowSpan={challan.items.length} className="font-semibold text-teal-600 text-xs align-top">
+                                {challan.id}
+                              </TableCell>
+                              <TableCell rowSpan={challan.items.length} className="align-top">
+                                {format(new Date(challan.dateIssued), 'dd MMM yyyy')}
+                              </TableCell>
+                              <TableCell rowSpan={challan.items.length} className="align-top">{challan.buyerName}</TableCell>
+                              <TableCell rowSpan={challan.items.length} className="text-xs text-zinc-600 max-w-[160px] align-top">
+                                {challan.consigneeAddress || challan.buyerAddress}
+                              </TableCell>
+                            </>
                           )}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                          <TableCell className="text-sm">{item.description}</TableCell>
+                          <TableCell className="text-right">{item.qtyDispatched}</TableCell>
+                          <TableCell className="text-right text-emerald-700">{item.qtyReturned}</TableCell>
+                          <TableCell className="text-right font-semibold text-amber-700">{pending}</TableCell>
+                          {lineIdx === 0 && (
+                            <>
+                              <TableCell rowSpan={challan.items.length} className="align-top">
+                                <Badge variant="outline" className="text-xs">{challan.reason ?? 'Rental'}</Badge>
+                              </TableCell>
+                              <TableCell rowSpan={challan.items.length} className="align-top">
+                                <Badge variant={challan.status === 'Returned' ? 'default' : isOverdue ? 'destructive' : 'outline'}>
+                                  {isOverdue && challan.status !== 'Returned' ? 'Overdue' : challan.status}
+                                </Badge>
+                                <div className="mt-1">{lineStatusBadge(lineStatus)}</div>
+                              </TableCell>
+                              <TableCell rowSpan={challan.items.length} className="text-right align-top space-x-1">
+                                <Button variant="ghost" size="sm" onClick={() => { setPrintChallan(challan); setIsPrintModalOpen(true); }}>
+                                  <Printer className="h-4 w-4" />
+                                </Button>
+                                {challan.status !== 'Returned' && (
+                                  <Button size="sm" className="h-8" onClick={() => handleOpenReturnDialog(challan)}>Return</Button>
+                                )}
+                              </TableCell>
+                            </>
+                          )}
+                        </TableRow>
+                      );
+                    })
+                  )}
                   {filteredChallans.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-center py-8 text-zinc-400">No challans found.</TableCell>
+                      <TableCell colSpan={11} className="text-center py-8 text-zinc-400">No challans found.</TableCell>
                     </TableRow>
                   )}
                 </TableBody>
@@ -725,6 +932,108 @@ export default function ReturnableChallan() {
         <TabsContent value="reports" className="mt-4 space-y-4">
           <Card>
             <CardHeader>
+              <CardTitle className="text-lg">Customer-wise Pending Items</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Customer</TableHead>
+                    <TableHead>Address</TableHead>
+                    <TableHead>Item</TableHead>
+                    <TableHead>Challan No</TableHead>
+                    <TableHead>Date Sent</TableHead>
+                    <TableHead className="text-right">Qty Sent</TableHead>
+                    <TableHead className="text-right">Qty Pending</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {customerPendingReport.map((r, i) => (
+                    <TableRow key={`cp-${i}`}>
+                      <TableCell>{r.customer}</TableCell>
+                      <TableCell className="text-xs text-zinc-600 max-w-[200px] truncate" title={r.address}>{r.address}</TableCell>
+                      <TableCell>{r.itemName}</TableCell>
+                      <TableCell className="font-mono text-xs">{r.challanNo}</TableCell>
+                      <TableCell>{r.issueDate}</TableCell>
+                      <TableCell className="text-right">{r.qtySent} {r.uom}</TableCell>
+                      <TableCell className="text-right font-semibold text-amber-700">{r.qtyPending}</TableCell>
+                    </TableRow>
+                  ))}
+                  {customerPendingReport.length === 0 && (
+                    <TableRow><TableCell colSpan={7} className="text-center py-6 text-zinc-400">No pending items with customers.</TableCell></TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Item-wise Pending Summary</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Item</TableHead>
+                    <TableHead className="text-right">Total Sent</TableHead>
+                    <TableHead className="text-right">Total Returned</TableHead>
+                    <TableHead className="text-right">Total Pending</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {itemWisePending.map(row => (
+                    <TableRow key={row.rentalItemId}>
+                      <TableCell className="font-medium">{row.itemName}</TableCell>
+                      <TableCell className="text-right">{row.totalQtySent} {row.uom}</TableCell>
+                      <TableCell className="text-right text-emerald-700">{row.totalQtyReturned}</TableCell>
+                      <TableCell className="text-right font-semibold text-amber-700">{row.totalQtyPending}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Address-wise — Items at Customer Sites</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Customer</TableHead>
+                    <TableHead>Delivery Address / Site</TableHead>
+                    <TableHead>Item</TableHead>
+                    <TableHead>Challan</TableHead>
+                    <TableHead>Since</TableHead>
+                    <TableHead className="text-right">Qty Pending</TableHead>
+                    <TableHead>Reason</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {addressWisePending.map((r, i) => (
+                    <TableRow key={`addr-${i}`}>
+                      <TableCell>{r.customerName}</TableCell>
+                      <TableCell className="text-xs text-zinc-600 max-w-[220px]">{r.deliveryAddress}</TableCell>
+                      <TableCell>{r.itemName}</TableCell>
+                      <TableCell className="font-mono text-xs">{r.challanNo}</TableCell>
+                      <TableCell>{r.dateSent}</TableCell>
+                      <TableCell className="text-right font-semibold text-amber-700">{r.qtyPending} {r.uom}</TableCell>
+                      <TableCell><Badge variant="outline" className="text-xs">{r.reason}</Badge></TableCell>
+                    </TableRow>
+                  ))}
+                  {addressWisePending.length === 0 && (
+                    <TableRow><TableCell colSpan={7} className="text-center py-6 text-zinc-400">No items pending at customer sites.</TableCell></TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2"><BarChart3 className="h-5 w-5" /> Rental Stock Status</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
@@ -754,7 +1063,7 @@ export default function ReturnableChallan() {
           </Card>
 
           <Card>
-            <CardHeader><CardTitle className="text-lg">Customer-wise Rental</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-lg">Active Rentals (with balance)</CardTitle></CardHeader>
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
@@ -911,7 +1220,10 @@ export default function ReturnableChallan() {
                     ))}
                   </tbody>
                 </table>
-                <p className="mt-4 text-[9px]"><strong>Purpose:</strong> {printChallan.purpose}</p>
+                <p className="mt-4 text-[9px]"><strong>Reason:</strong> {printChallan.reason ?? 'Rental'}</p>
+                {printChallan.purpose && (
+                  <p className="text-[9px]"><strong>Notes:</strong> {printChallan.purpose}</p>
+                )}
               </div>
             </div>
           )}

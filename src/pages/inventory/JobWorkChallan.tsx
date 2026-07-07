@@ -132,7 +132,7 @@ export default function JobWorkChallan() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-demo-page="job-work">
       <div>
         <h2 className="text-3xl font-bold tracking-tight">Job Work Challan</h2>
         <p className="text-muted-foreground">

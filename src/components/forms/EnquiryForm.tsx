@@ -62,6 +62,35 @@ export function EnquiryForm({ initialData, defaultType, onSubmit, onCancel, isLo
     }
   });
 
+  useEffect(() => {
+    const onFill = (e: Event) => {
+      const { field, value } = (e as CustomEvent<{ field: keyof EnquiryFormData; value: string }>).detail;
+      if (!field) return;
+      const str = String(value);
+      if (field === 'enquiryType' || field === 'customerId' || field === 'source' || field === 'status') {
+        setValue(field, str as EnquiryFormData[typeof field], { shouldValidate: true });
+        return;
+      }
+      if (field === 'expectedValue') {
+        let i = 0;
+        const timer = window.setInterval(() => {
+          i += 1;
+          setValue(field, Number(str.slice(0, i)), { shouldValidate: true });
+          if (i >= str.length) window.clearInterval(timer);
+        }, 35);
+        return;
+      }
+      let i = 0;
+      const timer = window.setInterval(() => {
+        i += 1;
+        setValue(field, str.slice(0, i) as EnquiryFormData[typeof field], { shouldValidate: true });
+        if (i >= str.length) window.clearInterval(timer);
+      }, 35);
+    };
+    window.addEventListener('demo-fill-field', onFill);
+    return () => window.removeEventListener('demo-fill-field', onFill);
+  }, [setValue]);
+
   const selectedCustomerId = watch('customerId');
   const pastQuotedRates = useMemo(
     () => (selectedCustomerId ? getPastQuotedRatesForParty(selectedCustomerId) : []),
@@ -91,7 +120,7 @@ export function EnquiryForm({ initialData, defaultType, onSubmit, onCancel, isLo
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="space-y-2">
         <label className="text-sm font-medium">Enquiry Type <span className="text-red-500">*</span></label>
-        <select {...register('enquiryType')} className={inputClass}>
+        <select {...register('enquiryType')} className={inputClass} data-demo="enquiry-type">
           {ENQUIRY_TYPES.map(type => (
             <option key={type.value} value={type.value}>{type.label}</option>
           ))}
@@ -122,6 +151,7 @@ export function EnquiryForm({ initialData, defaultType, onSubmit, onCancel, isLo
             },
           })}
           className={inputClass}
+          data-demo="enquiry-customer"
         >
           <option value="">Select a customer</option>
           {customers.map(c => (
@@ -156,7 +186,7 @@ export function EnquiryForm({ initialData, defaultType, onSubmit, onCancel, isLo
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <label className="text-sm font-medium">Source <span className="text-red-500">*</span></label>
-          <select {...register('source')} className={inputClass}>
+          <select {...register('source')} className={inputClass} data-demo="enquiry-source">
             <option value="">Select source</option>
             <option value="Website">Website</option>
             <option value="Referral">Referral</option>
@@ -168,7 +198,7 @@ export function EnquiryForm({ initialData, defaultType, onSubmit, onCancel, isLo
         </div>
         <div className="space-y-2">
           <label className="text-sm font-medium">Expected Value (₹) <span className="text-red-500">*</span></label>
-          <Input type="number" {...register('expectedValue')} placeholder="50000" />
+          <Input type="number" {...register('expectedValue')} placeholder="50000" data-demo="enquiry-value" />
           {errors.expectedValue && <p className="text-xs text-red-500">{errors.expectedValue.message}</p>}
         </div>
       </div>
@@ -177,6 +207,7 @@ export function EnquiryForm({ initialData, defaultType, onSubmit, onCancel, isLo
         <label className="text-sm font-medium">Requirements <span className="text-red-500">*</span></label>
         <textarea 
           {...register('requirements')} 
+          data-demo="enquiry-requirements"
           className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           placeholder="Detailed client requirements..."
         />
@@ -203,7 +234,7 @@ export function EnquiryForm({ initialData, defaultType, onSubmit, onCancel, isLo
         <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
           Cancel
         </Button>
-        <Button type="submit" disabled={isLoading}>
+        <Button type="submit" disabled={isLoading} data-demo="enquiry-submit">
           {isLoading ? 'Saving...' : 'Save Enquiry'}
         </Button>
       </div>
