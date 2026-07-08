@@ -109,6 +109,7 @@ export const appNavGroups: ErpNavGroup[] = [
     isCollapsible: true,
     icon: Layers,
     items: [
+      { name: 'Purchase Order List', path: p('purchase/orders'), componentKey: 'purchase-orders' },
       { name: 'Gate GRN & Inward Check', path: p('purchase/grn'), componentKey: 'grn' },
       { name: 'Stock Summary', path: p('inventory/summary') },
       { name: 'Stock Register', path: p('inventory/register') },
